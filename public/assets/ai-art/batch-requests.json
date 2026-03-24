@@ -1,0 +1,32 @@
+[
+  {
+    "prompt": "A stunning handcrafted dining table made from reclaimed driftwood in a bright Scandinavian interior. The wood has been treated with a natural oil finish that brings out incredible grain patterns. Morning light streams through a large window. Photorealistic, editorial style.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/ai-art/ai-art-driftwood-table.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A freshly varnished sailboat deck at golden hour in a small harbor. The teak wood gleams with a perfect satin finish, reflecting the warm sunset. Ropes, brass fittings, and calm water visible. The wood grain is beautifully enhanced by the varnish. Cinematic, warm tones.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/ai-art/ai-art-boat-deck-golden.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "An old wooden front door of a charming European cottage being restored. One half is freshly treated with wood stain showing rich walnut tones, the other half still shows the original faded patina. A brush and a tin of stain sit on newspaper below. Natural light, authentic.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/ai-art/ai-art-vintage-door.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A cozy treehouse platform with freshly oiled wooden boards, surrounded by green leaves. A child's blanket and lantern visible. The wood has a warm honey glow from the fresh oil treatment. Dreamy afternoon light filtering through the canopy. Magical atmosphere.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/ai-art/ai-art-treehouse.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Interior of a Finnish-style outdoor sauna with newly treated wooden benches. The wood has a beautiful warm sheen from natural oil treatment. Steam rising, soft warm lighting, stones on the heater. Minimalist Scandinavian design. The wood grain is rich and detailed.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/ai-art/ai-art-sauna-bench.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]
