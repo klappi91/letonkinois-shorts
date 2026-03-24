@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* Le Tonkinois Brand Colors */
+  --color-brand-red: #B50606;
+  --color-brand-red-light: rgba(181, 6, 6, 0.08);
+  --color-brand-red-hover: #9A0505;
+
+  /* Warm Wood Tones */
+  --color-wood-amber: #D4A76A;
+  --color-wood-honey: #E8B84B;
+  --color-wood-walnut: #6B4226;
+
+  /* Text */
+  --color-text-dark: #3E2723;
+  --color-text-muted: #8B7355;
+  --color-text-light: #FFFFFF;
+
+  /* Backgrounds */
+  --color-bg-cream: #FFF8F0;
+  --color-bg-sepia: #F5E6C8;
+  --color-bg-dark: #2A1B14;
+  --color-bg-card: #FFFFFF;
+
+  /* Overlays */
+  --color-overlay-dark: rgba(62, 39, 35, 0.7);
+
+  /* Fonts */
+  --font-headline: "Lora", Georgia, serif;
+  --font-body: "Lato", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-dark);
+  background-color: var(--color-bg-cream);
+}
