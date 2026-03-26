@@ -10,12 +10,12 @@
 
 ### Supabase Foundation
 
-- [ ] **SUPA-01**: Supabase-Projekt ist konfiguriert mit korrekten Umgebungsvariablen (SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY) in Vercel und lokal
-- [ ] **SUPA-02**: `@supabase/ssr` ist integriert mit Browser-Client, Server-Client und Admin-Client nach Three-Client-Pattern
-- [ ] **SUPA-03**: Datenbank-Schema existiert mit `videos`-Tabelle (id, title, caption_de, caption_fr, hashtags, type, duration, pipeline, status, prompt_version, video_url, created_at)
-- [ ] **SUPA-04**: Datenbank-Schema existiert mit `feedback`-Tabelle (id, video_id FK, user_id FK, stars 1-5, pros text, cons text, created_at, processed_at nullable)
-- [ ] **SUPA-05**: Datenbank-Schema existiert mit `prompt_versions`-Tabelle (id, version_number, content jsonb, created_at, created_by)
-- [ ] **SUPA-06**: Row Level Security ist aktiviert auf allen Tabellen mit getesteten Policies (Videos: jeder auth'd User kann lesen; Feedback: User kann eigene erstellen/lesen, Admin kann alle lesen)
+- [x] **SUPA-01**: Supabase-Projekt ist konfiguriert mit korrekten Umgebungsvariablen (SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY) in Vercel und lokal
+- [x] **SUPA-02**: `@supabase/ssr` ist integriert mit Browser-Client, Server-Client und Admin-Client nach Three-Client-Pattern
+- [x] **SUPA-03**: Datenbank-Schema existiert mit `videos`-Tabelle (id, title, caption_de, caption_fr, hashtags, type, duration, pipeline, status, prompt_version, video_url, created_at)
+- [x] **SUPA-04**: Datenbank-Schema existiert mit `feedback`-Tabelle (id, video_id FK, user_id FK, stars 1-5, pros text, cons text, created_at, processed_at nullable)
+- [x] **SUPA-05**: Datenbank-Schema existiert mit `prompt_versions`-Tabelle (id, version_number, content jsonb, created_at, created_by)
+- [x] **SUPA-06**: Row Level Security ist aktiviert auf allen Tabellen mit getesteten Policies (Videos: jeder auth'd User kann lesen; Feedback: User kann eigene erstellen/lesen, Admin kann alle lesen)
 
 ### Auth
 
@@ -76,12 +76,12 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| SUPA-01 | Phase 1 | Pending |
-| SUPA-02 | Phase 1 | Pending |
-| SUPA-03 | Phase 1 | Pending |
-| SUPA-04 | Phase 1 | Pending |
-| SUPA-05 | Phase 1 | Pending |
-| SUPA-06 | Phase 1 | Pending |
+| SUPA-01 | Phase 1 | Complete |
+| SUPA-02 | Phase 1 | Complete |
+| SUPA-03 | Phase 1 | Complete |
+| SUPA-04 | Phase 1 | Complete |
+| SUPA-05 | Phase 1 | Complete |
+| SUPA-06 | Phase 1 | Complete |
 | AUTH-01 | Phase 2 | Pending |
 | AUTH-02 | Phase 2 | Pending |
 | AUTH-03 | Phase 2 | Pending |
