@@ -76,25 +76,25 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| SUPA-01 | — | Pending |
-| SUPA-02 | — | Pending |
-| SUPA-03 | — | Pending |
-| SUPA-04 | — | Pending |
-| SUPA-05 | — | Pending |
-| SUPA-06 | — | Pending |
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| AUTH-05 | — | Pending |
-| DATA-01 | — | Pending |
-| DATA-02 | — | Pending |
-| DATA-03 | — | Pending |
-| DATA-04 | — | Pending |
-| FEED-01 | — | Pending |
-| FEED-02 | — | Pending |
-| FEED-03 | — | Pending |
-| FEED-04 | — | Pending |
-| PROM-01 | — | Pending |
-| PROM-02 | — | Pending |
-| PROM-03 | — | Pending |
+| SUPA-01 | Phase 1 | Pending |
+| SUPA-02 | Phase 1 | Pending |
+| SUPA-03 | Phase 1 | Pending |
+| SUPA-04 | Phase 1 | Pending |
+| SUPA-05 | Phase 1 | Pending |
+| SUPA-06 | Phase 1 | Pending |
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| AUTH-05 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Pending |
+| DATA-02 | Phase 2 | Pending |
+| DATA-03 | Phase 2 | Pending |
+| DATA-04 | Phase 2 | Pending |
+| FEED-01 | Phase 3 | Pending |
+| FEED-02 | Phase 3 | Pending |
+| FEED-03 | Phase 3 | Pending |
+| FEED-04 | Phase 3 | Pending |
+| PROM-01 | Phase 4 | Pending |
+| PROM-02 | Phase 4 | Pending |
+| PROM-03 | Phase 4 | Pending |
