@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. The `videos`, `feedback`, and `prompt_versions` tables exist in Supabase with the correct columns and foreign keys
   3. RLS is enabled on all three tables and policies are active — a query from the JS browser client as an authenticated user returns rows; the same query as an unauthenticated user returns zero rows (not an error)
   4. The three-client pattern (browser client, server client, admin client) is importable from `src/lib/supabase/` without TypeScript errors
-**Plans:** 1/2 plans executed
+**Plans:** 2 plans
 Plans:
 - [x] 01-01-PLAN.md — Install Supabase packages, create three-client pattern, proxy, SQL schema, types
 - [x] 01-02-PLAN.md — Create Supabase project, run schema SQL, set real credentials
@@ -43,7 +43,10 @@ Plans:
   3. A logged-in reviewer can log out from any page and is redirected to /login
   4. The gallery (/) and video detail (/video/[id]) pages display the same videos that were previously in videos.json, now fetched from Supabase
   5. Gallery filter by type and status works correctly with Supabase data
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 02-01-PLAN.md — Auth infrastructure: proxy.ts auth guard, login page, LogoutButton + CopyButton components
+- [ ] 02-02-PLAN.md — Data migration: seed script, page/component migration to Supabase queries, wire LogoutButton
 **UI hint**: yes
 
 ### Phase 3: Feedback UI
@@ -75,7 +78,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Supabase Foundation | 1/2 | In Progress|  |
-| 2. Auth + Data Migration | 0/? | Not started | - |
+| 1. Supabase Foundation | 2/2 | Complete |  |
+| 2. Auth + Data Migration | 0/2 | Not started | - |
 | 3. Feedback UI | 0/? | Not started | - |
 | 4. Prompt Versioning | 0/? | Not started | - |
