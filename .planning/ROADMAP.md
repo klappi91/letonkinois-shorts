@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 1/2 plans executed
 Plans:
 - [x] 01-01-PLAN.md — Install Supabase packages, create three-client pattern, proxy, SQL schema, types
-- [ ] 01-02-PLAN.md — Create Supabase project, run schema SQL, set real credentials
+- [x] 01-02-PLAN.md — Create Supabase project, run schema SQL, set real credentials
 
 ### Phase 2: Auth + Data Migration
 **Goal**: Invite-only authentication gates every dashboard page, and all video metadata is served from Supabase instead of videos.json
