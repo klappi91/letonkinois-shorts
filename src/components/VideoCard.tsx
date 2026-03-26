@@ -5,12 +5,12 @@ import { VideoEntry, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
 
 function RatingBadge({ rating }: { rating: VideoEntry["rating"] }) {
   const styles = {
-    pending: "bg-bg-sepia text-text-muted",
+    draft: "bg-bg-sepia text-text-muted",
     approved: "bg-green-100 text-green-800",
     rejected: "bg-red-100 text-red-800",
   };
   const labels = {
-    pending: "Ausstehend",
+    draft: "Entwurf",
     approved: "Freigegeben",
     rejected: "Abgelehnt",
   };

@@ -8,7 +8,7 @@ const videos = videosData as VideoEntry[];
 export default function Home() {
   const stats = {
     total: videos.length,
-    pending: videos.filter((v) => v.rating === "pending").length,
+    pending: videos.filter((v) => v.rating === "draft").length,
     approved: videos.filter((v) => v.rating === "approved").length,
   };
 
