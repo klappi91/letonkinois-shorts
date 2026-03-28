@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase (completed 2026-03-28)
 - [x] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video (completed 2026-03-28)
 - [x] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display (completed 2026-03-28)
-- [ ] **Phase 5: Tech Debt Cleanup** - Dead code entfernen, npm-Script ergänzen, Frontmatter-Fixes, Schema-FK
+- [x] **Phase 5: Tech Debt Cleanup** - Dead code entfernen, npm-Script ergänzen, Frontmatter-Fixes, Schema-FK (completed 2026-03-28)
 
 ## Phase Details
 
@@ -86,9 +86,9 @@ Plans:
   2. `VideoEntry` Deprecated-Alias ist aus `types.ts` entfernt
   3. `PromptVersion` und `PromptVersionContent` Interfaces sind aus `types.ts` entfernt (oder tatsächlich importiert)
   4. 02-02-SUMMARY.md Frontmatter enthält DATA-01 bis DATA-04 in `requirements_completed`
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 05-01-PLAN.md — Remove dead code from types.ts, add seed:prompts npm script, update schema.sql FK
+- [x] 05-01-PLAN.md — Remove dead code from types.ts, add seed:prompts npm script, update schema.sql FK
 
 ## Progress
 
@@ -101,4 +101,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
 | 3. Feedback UI | 1/1 | Complete   | 2026-03-28 |
 | 4. Prompt Versioning | 1/1 | Complete   | 2026-03-28 |
-| 5. Tech Debt Cleanup | 0/1 | Pending |  |
+| 5. Tech Debt Cleanup | 1/1 | Complete   | 2026-03-28 |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-28T10:24:29.125Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-28T11:52:55.402Z"
 last_activity: 2026-03-28
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 6
-  completed_plans: 6
+  total_phases: 5
+  completed_phases: 5
+  total_plans: 7
+  completed_plans: 7
   percent: 0
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** The feedback loop must run — Shorts generieren → Team bewertet → Feedback verbessert die nächste Generation
-**Current focus:** Phase 04 — prompt-versioning
+**Current focus:** Phase 05 — tech-debt-cleanup
 
 ## Current Position
 
-Phase: 04
-Plan: Not started
+Phase: 05 (tech-debt-cleanup) — EXECUTING
+Plan: 1 of 1
 Status: Phase complete — ready for verification
 Last activity: 2026-03-28
 
@@ -57,6 +57,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-auth-data-migration P02 | 3 | 2 tasks | 8 files |
 | Phase 03-feedback-ui P01 | 15 | 2 tasks | 2 files |
 | Phase 04-prompt-versioning P01 | 2 | 2 tasks | 2 files |
+| Phase 05-tech-debt-cleanup P01 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,8 @@ Recent decisions affecting current work:
 - [Phase 03-feedback-ui]: processed_at NOT set in upsert — stays null until Phase 4 improvement workflow processes it
 - [Phase 04-prompt-versioning]: version_number is integer in DB, display convention adds .0 suffix (v1.0) on frontend
 - [Phase 04-prompt-versioning]: Unproduced video types stored as null in v1.0 content JSONB — marks them as unimplemented rather than absent
+- [Phase 05-tech-debt-cleanup]: schema.sql FK change is documentation-only — live DB migration is a separate step via Supabase SQL Editor
+- [Phase 05-tech-debt-cleanup]: PromptVersion/PromptVersionContent removed from types.ts — scripts use their own inline types, not shared app types
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-28T10:21:47.239Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-28T11:52:55.398Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
