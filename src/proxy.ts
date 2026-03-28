@@ -27,27 +27,23 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  // Use getClaims() — verifies JWT against published public keys (not spoofable).
-  // Falls back gracefully if no session exists.
-  await supabase.auth.getClaims()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
   const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p))
 
-  if (!isPublic) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+  if (isPublic && user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    return NextResponse.redirect(url)
+  }
 
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      const redirectResponse = NextResponse.redirect(url)
-      supabaseResponse.cookies
-        .getAll()
-        .forEach(({ name, value }) => redirectResponse.cookies.set(name, value))
-      return redirectResponse
-    }
+  if (!isPublic && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
   }
 
   return supabaseResponse

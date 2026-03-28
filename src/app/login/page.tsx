@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -16,20 +14,24 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (authError) {
-      setError('Ungueltige Anmeldedaten');
+      if (authError) {
+        setError('Ungueltige Anmeldedaten');
+        setLoading(false);
+        return;
+      }
+
+      window.location.href = '/';
+    } catch {
+      setError('Verbindungsfehler — bitte erneut versuchen');
       setLoading(false);
-      return;
     }
-
-    router.push('/');
-    router.refresh();
   };
 
   return (
