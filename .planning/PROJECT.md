@@ -27,6 +27,7 @@ Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback 
 - [ ] Pros/Cons Textfeedback pro Video
 - [ ] Feedback-Persistenz in Supabase (Bewertungen, Kommentare)
 - [ ] Feedback-Status-Tracking (neu vs. eingearbeitet)
+- ✓ Prompt-Versioning: Jede Prompt-Änderung als tracked record, Videos verlinkt auf Prompt-Version — Validated in Phase 04
 - [ ] Cron-Job: Tägliche Short-Generierung (Claude Code + Remotion + Gemini)
 - [ ] Cron-Job: Improvement-Workflow (Claude Code liest neues Feedback → verbessert Prompts)
 - [ ] Video-Metadaten Migration von JSON zu Supabase
@@ -84,4 +85,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-26 after initialization*
+*Last updated: 2026-03-28 after Phase 04 completion*
