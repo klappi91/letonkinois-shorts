@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Supabase Foundation** - Supabase project, DB schema, RLS policies, three-client pattern
 - [x] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase (completed 2026-03-28)
-- [ ] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video
+- [x] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video (completed 2026-03-28)
 - [ ] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display
 
 ## Phase Details
@@ -58,9 +58,9 @@ Plans:
   2. A reviewer can type pros and cons text and submit — text is visible after a page reload
   3. If the same reviewer rates the same video again, the previous rating is overwritten (not duplicated) in the database
   4. Every feedback row in the database has a `processed_at` column that is null after submission
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 03-01-PLAN.md — FeedbackForm component + video detail page integration (star rating, pros/cons, upsert)
+- [x] 03-01-PLAN.md — FeedbackForm component + video detail page integration (star rating, pros/cons, upsert)
 **UI hint**: yes
 
 ### Phase 4: Prompt Versioning
@@ -82,5 +82,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Supabase Foundation | 2/2 | Complete |  |
 | 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
-| 3. Feedback UI | 0/1 | In Progress | - |
+| 3. Feedback UI | 1/1 | Complete   | 2026-03-28 |
 | 4. Prompt Versioning | 0/? | Not started | - |

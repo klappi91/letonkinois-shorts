@@ -34,10 +34,10 @@
 
 ### Feedback
 
-- [ ] **FEED-01**: User kann auf der Video-Detail-Seite ein Star-Rating (1-5) vergeben
-- [ ] **FEED-02**: User kann auf der Video-Detail-Seite Pros und Cons als Freitext eingeben
-- [ ] **FEED-03**: Bewertung wird per Upsert gespeichert — erneutes Bewerten überschreibt die vorherige Bewertung
-- [ ] **FEED-04**: Feedback-Rows haben ein `processed_at`-Feld das null ist bis der Improvement-Workflow sie verarbeitet hat
+- [x] **FEED-01**: User kann auf der Video-Detail-Seite ein Star-Rating (1-5) vergeben
+- [x] **FEED-02**: User kann auf der Video-Detail-Seite Pros und Cons als Freitext eingeben
+- [x] **FEED-03**: Bewertung wird per Upsert gespeichert — erneutes Bewerten überschreibt die vorherige Bewertung
+- [x] **FEED-04**: Feedback-Rows haben ein `processed_at`-Feld das null ist bis der Improvement-Workflow sie verarbeitet hat
 
 ### Prompt-Versioning
 
@@ -91,10 +91,10 @@
 | DATA-02 | Phase 2 | Complete |
 | DATA-03 | Phase 2 | Complete |
 | DATA-04 | Phase 2 | Complete |
-| FEED-01 | Phase 3 | Pending |
-| FEED-02 | Phase 3 | Pending |
-| FEED-03 | Phase 3 | Pending |
-| FEED-04 | Phase 3 | Pending |
+| FEED-01 | Phase 3 | Complete |
+| FEED-02 | Phase 3 | Complete |
+| FEED-03 | Phase 3 | Complete |
+| FEED-04 | Phase 3 | Complete |
 | PROM-01 | Phase 4 | Pending |
 | PROM-02 | Phase 4 | Pending |
 | PROM-03 | Phase 4 | Pending |
