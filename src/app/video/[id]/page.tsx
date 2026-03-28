@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { Video, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
+import { Video, Feedback, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
 import CopyButton from "@/components/CopyButton";
 import LogoutButton from "@/components/LogoutButton";
+import FeedbackForm from "@/components/FeedbackForm";
 
 export default async function VideoDetail({
   params,
@@ -30,6 +31,16 @@ export default async function VideoDetail({
       </div>
     );
   }
+
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: existingFeedback } = user
+    ? await supabase
+        .from("feedback")
+        .select("*")
+        .eq("video_id", id)
+        .eq("user_id", user.id)
+        .single<Feedback>()
+    : { data: null };
 
   const fullCaption = `${video.caption_de ?? ""}\n\n${video.hashtags.join(" ")}`;
 
@@ -153,22 +164,10 @@ export default async function VideoDetail({
               </div>
             </div>
 
-            {/* Rating Actions */}
+            {/* Feedback Form */}
             <div className="bg-bg-card rounded-lg p-4 border border-bg-sepia/50">
-              <h2 className="font-bold text-sm text-text-dark mb-3">
-                Bewertung
-              </h2>
-              <div className="flex gap-3">
-                <button className="flex-1 py-2.5 rounded-lg bg-green-600 text-white font-bold text-sm hover:bg-green-700 transition-colors">
-                  Freigeben
-                </button>
-                <button className="flex-1 py-2.5 rounded-lg bg-red-600 text-white font-bold text-sm hover:bg-red-700 transition-colors">
-                  Ablehnen
-                </button>
-                <button className="flex-1 py-2.5 rounded-lg bg-bg-sepia text-text-muted font-bold text-sm hover:bg-wood-amber/30 transition-colors">
-                  Zur Seite legen
-                </button>
-              </div>
+              <h2 className="font-bold text-sm text-text-dark mb-3">Bewertung</h2>
+              <FeedbackForm videoId={video.id} existingFeedback={existingFeedback ?? null} />
             </div>
           </div>
         </div>
