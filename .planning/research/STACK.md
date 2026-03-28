@@ -20,7 +20,7 @@
 | @remotion/noise | 4.0.x (match current) | Organic animation movement — floating particles, grain textures, subtle camera-shake feel | Provides `noise2D()`, `noise3D()` for smooth pseudo-random values. Replaces `Math.random()` (which recomputes every frame) with deterministic, temporally coherent movement. Essential for premium organic feel. |
 | @remotion/shapes | 4.0.x (match current) | SVG shape primitives — geometric wipes, reveal masks, product frame elements | Triangle, Star, Pie, Circle as React components. Dependency-free, animatable. Use for custom wipe masks and branded graphic elements without external SVG files. |
 | @remotion/lottie | 4.0.x (match current) | Import After Effects animations — checkmarks, arrows, product highlight loops | LottieFiles.com has 400K+ free animations (MIT-licensed). Critical for adding professional motion elements (e.g., a "sparkle" appear on product reveal) without building everything from scratch. |
-| @remotion/three | 4.0.x (match current) | 3D product scene rendering — can-rotation, depth effects, glb model playback | Wraps React Three Fiber with Remotion's `useCurrentFrame()`. Enables building a 3D rotating Kodok can scene. Requires `renderer: 'angle'` in `renderMedia()` config. Use ThreeCanvas component. |
+| @remotion/three | 4.0.x (match current) | 3D product scene rendering — can-rotation, depth effects, glb model playback | Wraps React Three Fiber with Remotion's `useCurrentFrame()`. Enables building a 3D rotating Vernis can scene. Requires `renderer: 'angle'` in `renderMedia()` config. Use ThreeCanvas component. |
 | sharp | 0.34.5 | Pre-process real product photos — resize to 9:16 safe zone, convert to WebP, composite backgrounds | The fastest Node.js image processor (libvips). Handles compositing a product PNG onto a generated background before feeding into Remotion. Required because Remotion can't resize/convert images before render. |
 
 ---
@@ -32,7 +32,7 @@
 | @remotion/captions | 4.0.x (match current) | Word-level animated captions — for how-to and educational reels | Use when compositions need synchronized burned-in text. Pairs with @remotion/install-whisper-cpp if voiceover is added later. Not needed for pure visual Product Showcase reels. |
 | @remotion/media-utils | 4.0.x (match current) | Audio waveform data for audio-reactive animations | Use when adding background music sync. `useAudioData()` returns per-frame frequency data. Enables beat-synced cuts. Defer until audio pipeline is built. |
 | fluent-ffmpeg | 2.1.3 | Post-process rendered MP4 — apply LUT-based warm color grade, normalize audio | FFmpeg wrapper for Node.js. After Remotion renders the base MP4, apply a warm golden LUT (`.cube` file) via `colortemperature` and `curves` filters to achieve the "golden hour" look defined in research. Not in the render path — runs as a post-process step. |
-| @splinetools/r3f-spline | latest | Import Spline 3D scenes into @remotion/three compositions | Only install if using Spline for 3D design. Spline free tier allows 3 exports/month — sufficient for a single Kodok can model. Labeled experimental in Remotion docs. |
+| @splinetools/r3f-spline | latest | Import Spline 3D scenes into @remotion/three compositions | Only install if using Spline for 3D design. Spline free tier allows 3 exports/month — sufficient for a single Vernis can model. Labeled experimental in Remotion docs. |
 
 ---
 
@@ -42,7 +42,7 @@
 |------|---------|-------|
 | remotion upgrade | Keep all @remotion/* packages in sync | Run `cd remotion && npx remotion upgrade` — ALL @remotion packages MUST share the same exact version. Never use `^` prefix on Remotion packages. Current project is at 4.0.261 but latest is 4.0.441 — upgrade before adding new packages. |
 | LottieFiles.com | Free Lottie animation source | Filter by "Free", license: "LottieFiles Free License" (allows commercial use). Download as `.lottie` or `.json`. Categories: "Product Marketing", "Product Promotion" have relevant animations. |
-| Spline (spline.design) | 3D web-first design tool | Design Kodok can model in browser, export as react-three-fiber code. Free tier: 3 scene exports/month. Export: Code (Experimental) → react-three-fiber. Remove `OrthographicCamera` from exported code for Remotion. |
+| Spline (spline.design) | 3D web-first design tool | Design Vernis can model in browser, export as react-three-fiber code. Free tier: 3 scene exports/month. Export: Code (Experimental) → react-three-fiber. Remove `OrthographicCamera` from exported code for Remotion. |
 | ffmpeg (system) | Required by fluent-ffmpeg | Must be installed on render machine (`brew install ffmpeg` or `apt install ffmpeg`). Not available in Vercel Functions — post-processing runs locally only. |
 
 ---
@@ -114,9 +114,9 @@ npm install -D @types/fluent-ffmpeg
 
 ## Stack Patterns by Variant
 
-**For the Kodok Product Showcase composition (primary v1.1 deliverable):**
+**For the Vernis Product Showcase composition (primary v1.1 deliverable):**
 - Use @remotion/three for a slowly rotating 3D can scene (if 3D model available)
-- OR use sharp to composite the real Kodok product photo onto a Gemini-generated warm background scene
+- OR use sharp to composite the real Vernis product photo onto a Gemini-generated warm background scene
 - Apply CSS filter warm grade: `filter: sepia(0.2) saturate(1.3) hue-rotate(-5deg) brightness(1.05)` on ImageScene wrapper
 - Use @remotion/noise for subtle camera drift (noise2D on translateX/Y, amplitude: 3-5px)
 - Use @remotion/shapes for geometric reveal masks (circle iris reveal from center)
@@ -188,9 +188,9 @@ Based on the research findings (golden hour, warm honey tones, "before = cool/gr
 Apply a `.cube` LUT file after Remotion renders the base MP4. This allows cinema-grade warm grading without rebuilding the composition. The LUT approach is non-destructive and reversible.
 
 ```bash
-ffmpeg -i out/kodok-showcase.mp4 \
+ffmpeg -i out/vernis-showcase.mp4 \
   -vf "lut3d=warm-golden.cube,colortemperature=temperature=5800" \
-  out/kodok-showcase-graded.mp4
+  out/vernis-showcase-graded.mp4
 ```
 
 Recommendation: Start with CSS tier. Only add fluent-ffmpeg post-processing if the CSS approach feels insufficient after testing.
@@ -199,7 +199,7 @@ Recommendation: Start with CSS tier. Only add fluent-ffmpeg post-processing if t
 
 ## Background Removal for Product Photos
 
-Real Kodok product photos may need background removal before compositing onto Gemini-generated scenes.
+Real Vernis product photos may need background removal before compositing onto Gemini-generated scenes.
 
 **Best option: remove.bg API**
 - $0.18 per full-res image (50 free/month for testing)
@@ -219,7 +219,7 @@ npm install remove.bg
 - Requires Python 3.8+ environment
 - Quality is good but slightly below remove.bg for complex backgrounds
 
-For v1.1 (single Kodok showcase), the free tier of remove.bg (50 images/month) is sufficient. No install cost.
+For v1.1 (single Vernis showcase), the free tier of remove.bg (50 images/month) is sufficient. No install cost.
 
 ---
 

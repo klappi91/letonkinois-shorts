@@ -141,7 +141,7 @@ Remotion renders to raw video dimensions (1080x1920). The developer positions el
 - EndCard logo placed in the bottom 25% of the frame
 - StepBadge positioned at the very edge of the frame
 
-**Phase to address:** First composition phase for v1.1 (Kodok Product Showcase). Establish safe zone constants as TypeScript exports in the first composition and import them in all subsequent ones.
+**Phase to address:** First composition phase for v1.1 (Vernis Product Showcase). Establish safe zone constants as TypeScript exports in the first composition and import them in all subsequent ones.
 
 ---
 
@@ -203,7 +203,7 @@ A generation prompt for a "product showcase" scene accidentally describes the pr
 This constraint is non-negotiable and was explicitly validated from day one: **NIEMALS KI-generierte Produktdosen — immer echte Fotos aus dem Katalog.**
 
 **Why it happens:**
-When writing prompts for product showcase content (the Kodok video), it is natural to want to show the product can in context — on a garden table next to the treated wood, for example. The prompt says "Le Tonkinois can on a wooden surface" and Gemini generates a plausible-looking but incorrect can. The developer may not notice the label text is wrong or the proportions are slightly off.
+When writing prompts for product showcase content (the Vernis video), it is natural to want to show the product can in context — on a garden table next to the treated wood, for example. The prompt says "Le Tonkinois can on a wooden surface" and Gemini generates a plausible-looking but incorrect can. The developer may not notice the label text is wrong or the proportions are slightly off.
 
 **How to avoid:**
 1. Every prompt for scenes that might include a product must explicitly include: `NO product cans, NO bottles, NO product packaging in this image`
@@ -212,11 +212,11 @@ When writing prompts for product showcase content (the Kodok video), it is natur
 4. Code review rule: any Remotion composition that shows a product must trace the product image source to `assets/products/` — never to a generated or placeholder image
 
 **Warning signs:**
-- A Gemini prompt contains product names (Kodok, Marine N°1, Vernis) without the explicit `NO packaging` exclusion
+- A Gemini prompt contains product names (Vernis, Marine N°1, Parquets) without the explicit `NO packaging` exclusion
 - A composition imports a product image from anywhere other than `assets/products/`
 - Generated images contain any cylinder, tin can, or bottle-shaped object
 
-**Phase to address:** Kodok Product Showcase phase. This rule must be enforced in the composition architecture, not just in prompt writing.
+**Phase to address:** Vernis Product Showcase phase. This rule must be enforced in the composition architecture, not just in prompt writing.
 
 ---
 
@@ -249,7 +249,7 @@ Temporal consistency remains a known limitation of current video generation mode
 ### Pitfall 10: Style Variants Tested Without a Comparative Framework — "We Tried 5 Things and Can't Remember What We Liked"
 
 **What goes wrong:**
-The v1.1 milestone requires testing multiple style variants of the Kodok Product Showcase. Without a defined comparison framework, testing devolves into: generate something, show it to Chris, adjust based on verbal feedback, generate something new, compare vaguely to the previous. After 5 iterations, there is no record of what the first version looked like, what specifically was wrong with version 3, or why version 4 was closer. The team converges on "looks good enough" instead of "satisfies the defined quality bar."
+The v1.1 milestone requires testing multiple style variants of the Vernis Product Showcase. Without a defined comparison framework, testing devolves into: generate something, show it to Chris, adjust based on verbal feedback, generate something new, compare vaguely to the previous. After 5 iterations, there is no record of what the first version looked like, what specifically was wrong with version 3, or why version 4 was closer. The team converges on "looks good enough" instead of "satisfies the defined quality bar."
 
 **Why it happens:**
 Testing creative variants is inherently subjective. Without a structured approach, each iteration is evaluated against memory of previous iterations (which fades) rather than against defined criteria.
@@ -265,7 +265,7 @@ Testing creative variants is inherently subjective. Without a structured approac
 - Iteration feedback is "feels warmer" without specifying what changed
 - Team can no longer remember what was different between v2 and v3
 
-**Phase to address:** Kodok Product Showcase phase. Write the evaluation criteria before generating the first test image.
+**Phase to address:** Vernis Product Showcase phase. Write the evaluation criteria before generating the first test image.
 
 ---
 
@@ -367,7 +367,7 @@ Testing creative variants is inherently subjective. Without a structured approac
 | Ken Burns easing missing | Every composition phase | Search composition files for `interpolate(` without adjacent `easing:`; any hit needs easing added |
 | Product can rule violated | Every composition phase | Audit every image source in the composition; anything not from `assets/products/` is a violation |
 | Gemini Video temporal inconsistency | Technical Pipeline Testing phase | Watch every Gemini Video clip at 0.5x speed before compositing; flag any frame where the subject changes shape or texture |
-| Style variant testing without framework | Kodok Product Showcase phase | Confirm evaluation criteria are written down before the first test generation is requested |
+| Style variant testing without framework | Vernis Product Showcase phase | Confirm evaluation criteria are written down before the first test generation is requested |
 
 ---
 

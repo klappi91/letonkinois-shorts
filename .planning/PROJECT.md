@@ -10,12 +10,12 @@ Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback 
 
 ## Current Milestone: v1.1 Content Quality Foundation
 
-**Goal:** Einen definierten Instagram-Kanal-Stil entwickeln und den ersten postbaren Product Showcase (Kodok) produzieren — als Proof-of-Concept für alle zukünftigen Video-Typen.
+**Goal:** Einen definierten Instagram-Kanal-Stil entwickeln und den ersten postbaren Product Showcase (Vernis) produzieren — als Proof-of-Concept für alle zukünftigen Video-Typen.
 
 **Target features:**
 - Instagram-Kanal-Identität: Recherche, Referenzen, visuelles Konzept-Design das für allen Content gilt
 - Skill-Audit & -Aufbau: Vorhandene Skills inventarisieren, fehlende identifizieren/installieren
-- Kodok Product Showcase: Stil-Varianten testen, iterieren bis postbar
+- Vernis Product Showcase: Stil-Varianten testen, iterieren bis postbar
 - Technische Pipeline-Tests: Echte Fotos vs. Gemini-Bilder vs. 3D vs. Video-Sequenzen im definierten Stil
 
 ## Requirements
@@ -41,7 +41,7 @@ Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback 
 
 - [ ] Instagram-Kanal-Stil: Recherche, Referenzen, visuelles Konzept-Design für den gesamten Kanal
 - [ ] Skill-Fundament: Inventar vorhandener Skills, fehlende Skills identifizieren und aufbauen
-- [ ] Kodok Product Showcase: Erste postbare Composition im definierten Kanal-Stil
+- [ ] Vernis Product Showcase: Erste postbare Composition im definierten Kanal-Stil
 - [ ] Technische Pipelines: Echte Fotos, Gemini-Bilder, 3D, Video-Sequenzen — jeweils im Stil durchtesten
 
 ### Out of Scope

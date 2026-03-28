@@ -51,7 +51,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- Kodok accent color (Navy? Gold?) not yet decided — Phase 6 must resolve before Phase 7 can begin
+- Vernis accent color (Navy? Gold?) not yet decided — Phase 6 must resolve before Phase 7 can begin
 - Gemini Image model choice (2.0-flash vs. imagen-3) needs empirical test in Phase 7
 - Vercel Hobby tier: 1 cron/day limit — Cron-Jobs deferred to v1.2+
 - @remotion/three render performance at 1080x1920 unknown — measure in Phase 9 before committing to 3D pipeline

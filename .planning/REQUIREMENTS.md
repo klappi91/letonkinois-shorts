@@ -9,19 +9,19 @@ Requirements for Content Quality Foundation milestone. Each maps to roadmap phas
 
 ### Channel Identity
 
-- [ ] **IDENT-01**: Maschinenlesbarer Style Guide als TypeScript/JSON — Hex-Codes, Fonts, Kodok-Akzentfarbe, verbotene Ästhetik
+- [ ] **IDENT-01**: Maschinenlesbarer Style Guide als TypeScript/JSON — Hex-Codes, Fonts, Vernis-Akzentfarbe, verbotene Ästhetik
 - [ ] **IDENT-02**: Instagram Safe Zone Constants als TypeScript-Konstanten für alle Compositions
 - [ ] **IDENT-03**: Color Grading Preset — CSS-Filter-Formel für warmen Golden-Hour-Look als wiederverwendbarer Wrapper
 - [ ] **IDENT-04**: Referenz-Moodboard mit 5+ Screenshots von Instagram-Accounts die den Ziel-Stil zeigen
 
 ### Composition
 
-- [ ] **COMP-01**: KodokShowcase Remotion-Composition mit parametrisierter Hook→Szenen→Produkt→EndCard Struktur
+- [ ] **COMP-01**: ProductShowcase Remotion-Composition mit parametrisierter Hook→Szenen→Produkt→EndCard Struktur
 - [ ] **COMP-02**: "The Soak" Money Shot — Macro-Szene wo Öl trockenes Holz trifft, als viraler Moment
 
 ### AI Generation
 
-- [ ] **GEN-01**: 5-7 Gemini-Image-Szenen für Kodok per JSON-Mode-Prompting generiert
+- [ ] **GEN-01**: 5-7 Gemini-Image-Szenen für Vernis per JSON-Mode-Prompting generiert
 - [ ] **GEN-02**: Wiederverwendbare JSON-Prompt-Templates für konsistente Szenen-Generierung
 - [ ] **GEN-03**: Echte Produktfotos via sharp auf generierte Hintergründe composited
 - [ ] **GEN-04**: Gemini Video Test — Kamerabewegung auf statischer Szene (nur Ambience)
@@ -29,7 +29,7 @@ Requirements for Content Quality Foundation milestone. Each maps to roadmap phas
 ### Pipeline Tests
 
 - [ ] **PIPE-01**: Foto vs. Gemini Vergleich — gleiche Szene, Side-by-Side im Dashboard reviewbar
-- [ ] **PIPE-02**: 3D-Modell Test — @remotion/three + einfaches Kodok-Modell, Machbarkeit und Performance
+- [ ] **PIPE-02**: 3D-Modell Test — @remotion/three + einfaches Vernis-Modell, Machbarkeit und Performance
 - [ ] **PIPE-03**: Variant-Management — video_group in Supabase + Dashboard-Filter für Varianten-Vergleich
 
 ## v1.2+ Requirements

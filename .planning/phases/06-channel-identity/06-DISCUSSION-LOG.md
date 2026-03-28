@@ -5,13 +5,13 @@
 
 **Date:** 2026-03-28
 **Phase:** 06-channel-identity
-**Areas discussed:** Kodok Akzentfarbe, Color Grading Umsetzung, Style Guide Architektur, Moodboard Format
+**Areas discussed:** Vernis Akzentfarbe, Color Grading Umsetzung, Style Guide Architektur, Moodboard Format
 
 ---
 
-## Kodok Akzentfarbe
+## Vernis Akzentfarbe
 
-**Critical finding:** "Kodok" existiert nicht als Le Tonkinois Produkt. War ein halluzinierter Name aus der Roadmap-Erstellung. Entscheidung: durch "Vernis" ersetzen.
+**Critical finding:** "Kodok" war ein halluzinierter Produktname aus der Roadmap-Erstellung. Alle Referenzen wurden durch "Vernis" ersetzt.
 
 ### Welches Produkt bekommt den ersten Showcase?
 
@@ -139,4 +139,4 @@
 ## Deferred Ideas
 
 - Vollständiges Produktfarben-System für alle 13+ Produkte
-- "Kodok" → "Vernis" Umbenennung in ROADMAP.md, REQUIREMENTS.md, STATE.md
+- ~~"Kodok" → "Vernis" Umbenennung~~ — ERLEDIGT

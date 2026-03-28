@@ -8,7 +8,7 @@
 
 Ein maschinenlesbares visuelles Fundament existiert, das alle KI-Generierung und alle Remotion-Compositions eindeutig steuert. Liefert: Style Guide (TypeScript), Safe Zone Constants, Color Grading Preset, Referenz-Moodboard.
 
-**WICHTIG:** "Kodok" existiert nicht als Produkt. Alle Roadmap-Referenzen auf "Kodok" meinen **Vernis** — das Flaggschiff-Produkt von Le Tonkinois.
+**WICHTIG:** "Kodok" war ein halluzinierter Produktname. Alle Referenzen meinen **Vernis** — das Flaggschiff-Produkt von Le Tonkinois.
 
 </domain>
 
@@ -16,7 +16,7 @@ Ein maschinenlesbares visuelles Fundament existiert, das alle KI-Generierung und
 ## Implementation Decisions
 
 ### Produkt-Identität
-- **D-01:** Erster Product Showcase wird **Vernis** (klassischer Bootslack, Flaggschiff). "Kodok" war halluziniert und wird durchgehend durch "Vernis" ersetzt.
+- **D-01:** Erster Product Showcase wird **Vernis** (klassischer Bootslack, Flaggschiff).
 - **D-02:** Vernis Akzentfarbe = Brand Red #B50606 (Vernis IST die Marke)
 - **D-03:** Marine No.1 Akzentfarbe = Navy #1A2744 (maritimes Produkt)
 - **D-04:** Weitere Produktfarben werden später bei Bedarf ergänzt, kein vollständiges Farbschema für alle Produkte nötig
@@ -114,7 +114,7 @@ Ein maschinenlesbares visuelles Fundament existiert, das alle KI-Generierung und
 
 - Vollständiges Produktfarben-System für alle 13+ Produkte — erst wenn weitere Product Showcases gebaut werden
 - Sound Design / ASMR-Layer — REQUIREMENTS.md Out of Scope
-- "Kodok" Roadmap-Korrektur: Alle Referenzen auf "Kodok" in ROADMAP.md, REQUIREMENTS.md, STATE.md durch "Vernis" ersetzen (vor Phase 7)
+- ~~"Kodok" Roadmap-Korrektur~~ — ERLEDIGT: Alle Referenzen auf "Kodok" wurden durch "Vernis" bzw. "ProductShowcase" ersetzt
 
 </deferred>
 

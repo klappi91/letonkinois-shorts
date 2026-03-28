@@ -62,7 +62,7 @@ The architectural question is: **how does a "test multiple variants and pick the
 │                                                                      │
 │  Root.tsx  — Now uses <Folder> to group variants                    │
 │  ┌────────────────────────────────────────────────────────────┐     │
-│  │  <Folder name="showcase-kodok">                            │     │
+│  │  <Folder name="showcase-vernis">                            │     │
 │  │    StyleA-FilmNoir      (dark moodboard, dramatic shadows) │     │
 │  │    StyleB-GoldenHour    (warm light, outdoor Vorstadt)     │     │
 │  │    StyleC-CleanStudio   (white BG, product-first)          │     │
@@ -77,8 +77,8 @@ The architectural question is: **how does a "test multiple variants and pick the
 │                                                                      │
 │  compositions/                                                       │
 │  ├── (existing: Gartenmoebel, BootDeck — unchanged)                 │
-│  ├── KodokShowcase.tsx      NEW — parametrized Kodok composition    │
-│  ├── KodokStyle[A/B/C].tsx  NEW — style variant wrappers            │
+│  ├── ProductShowcase.tsx      NEW — parametrized showcase composition  │
+│  ├── ProductStyle[A/B/C].tsx  NEW — style variant wrappers            │
 │  └── ThreeDModelTest.tsx    NEW — @remotion/three integration test  │
 │                                                                      │
 │  components/                                                         │
@@ -107,7 +107,7 @@ The architectural question is: **how does a "test multiple variants and pick the
 ┌─────────────────────────────────────────────────────────────────────┐
 │  Supabase — No schema changes for v1.1                              │
 │  Variant videos stored as individual rows in videos table.          │
-│  Variants linked via: title prefix ("Kodok StyleA") or             │
+│  Variants linked via: title prefix ("Vernis StyleA") or            │
 │  a new video_group text column (optional, low-cost addition).       │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -143,10 +143,10 @@ remotion/src/
 └── compositions/
     ├── GartenmobelRenovation.tsx     # UNCHANGED
     ├── BootDeckRenovation.tsx        # UNCHANGED
-    ├── KodokShowcase.tsx             # NEW — base parametrized showcase
-    ├── KodokStyleA.tsx               # NEW — Film Noir wrapper
-    ├── KodokStyleB.tsx               # NEW — Golden Hour wrapper
-    ├── KodokStyleC.tsx               # NEW — Clean Studio wrapper
+    ├── ProductShowcase.tsx             # NEW — base parametrized showcase
+    ├── ProductStyleA.tsx               # NEW — Film Noir wrapper
+    ├── ProductStyleB.tsx               # NEW — Golden Hour wrapper
+    ├── ProductStyleC.tsx               # NEW — Clean Studio wrapper
     └── PipelineTest/
         ├── TestRealPhoto.tsx         # NEW — test with real catalog photos
         ├── TestGeminiImage.tsx       # NEW — test with AI scenes
@@ -177,7 +177,7 @@ scripts/
 ### Structure Rationale
 
 - **`remotion/src/utils/styles/`:** The style preset system is a thin abstraction — a TypeScript object with palette values, gradient strings, and typography scale. No framework. Each style file exports a `StylePreset` that compositions spread into their components. This keeps components generic and style swapping to a single import change.
-- **`KodokShowcase.tsx` + style wrappers:** The base composition is parametrized with a `StylePreset` prop. Each style wrapper (`KodokStyleA`, `KodokStyleB`, `KodokStyleC`) is a thin wrapper that imports the base and provides a specific style preset as `defaultProps`. This means one composition to maintain, three to render and compare.
+- **`ProductShowcase.tsx` + style wrappers:** The base composition is parametrized with a `StylePreset` prop. Each style wrapper (`ProductStyleA`, `ProductStyleB`, `ProductStyleC`) is a thin wrapper that imports the base and provides a specific style preset as `defaultProps`. This means one composition to maintain, three to render and compare.
 - **`compositions/PipelineTest/`:** Pipeline tests are not permanent — they are exploration compositions that can be deleted after the best pipeline is identified. Grouping them under a subfolder keeps the Root.tsx clean.
 - **`scripts/`:** Image generation scripts live at the monorepo root, not inside either app. They are orchestration scripts run locally or via GitHub Actions, not part of the Next.js or Remotion build.
 
@@ -220,16 +220,16 @@ export const goldenHour: StylePreset = {
   accentColor: "#FBBC34",
 };
 
-// remotion/src/compositions/KodokStyleB.tsx
-import { KodokShowcase } from "./KodokShowcase";
+// remotion/src/compositions/ProductStyleB.tsx
+import { ProductShowcase } from "./ProductShowcase";
 import { goldenHour } from "../utils/styles/golden-hour";
 // Wrap with style preset as defaultProps
-export const KodokStyleB: React.FC = () => <KodokShowcase style={goldenHour} />;
+export const ProductStyleB: React.FC = () => <ProductShowcase style={goldenHour} />;
 ```
 
 ### Pattern 2: Parametrized Base Composition with Style Wrappers
 
-**What:** The base composition (`KodokShowcase`) is fully parametrized. It accepts all variable inputs as props (scene images, product name, hook text, style preset). Style variant compositions are thin wrappers that provide these props via `defaultProps` in the `<Composition>` registry.
+**What:** The base composition (`ProductShowcase`) is fully parametrized. It accepts all variable inputs as props (scene images, product name, hook text, style preset). Style variant compositions are thin wrappers that provide these props via `defaultProps` in the `<Composition>` registry.
 
 **When to use:** Whenever multiple renders of the same composition structure are needed for comparison. The Remotion Studio shows each wrapper as a separate composition entry, each with its own preview and render command.
 
@@ -237,8 +237,8 @@ export const KodokStyleB: React.FC = () => <KodokShowcase style={goldenHour} />;
 
 **Example:**
 ```typescript
-// remotion/src/compositions/KodokShowcase.tsx
-interface KodokShowcaseProps {
+// remotion/src/compositions/ProductShowcase.tsx
+interface ProductShowcaseProps {
   style: StylePreset;
   hookText: string;
   scenes: { src: string; label?: string }[];
@@ -246,19 +246,19 @@ interface KodokShowcaseProps {
   productName: string;
 }
 
-export const KodokShowcase: React.FC<KodokShowcaseProps> = ({ style, hookText, scenes, productImage, productName }) => { ... };
+export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ style, hookText, scenes, productImage, productName }) => { ... };
 
 // remotion/src/Root.tsx — register variants with Folder grouping
-<Folder name="showcase-kodok">
+<Folder name="showcase-vernis">
   <Composition
-    id="KodokStyleA-FilmNoir"
-    component={KodokStyleA}
+    id="ProductStyleA-FilmNoir"
+    component={ProductStyleA}
     defaultProps={{ style: filmNoir, hookText: "Teak wie neu.", ... }}
     durationInFrames={736} fps={30} width={1080} height={1920}
   />
   <Composition
-    id="KodokStyleB-GoldenHour"
-    component={KodokStyleB}
+    id="ProductStyleB-GoldenHour"
+    component={ProductStyleB}
     defaultProps={{ style: goldenHour, hookText: "Teak wie neu.", ... }}
     durationInFrames={736} fps={30} width={1080} height={1920}
   />
@@ -269,7 +269,7 @@ export const KodokShowcase: React.FC<KodokShowcaseProps> = ({ style, hookText, s
 
 **What:** `@remotion/three` provides `<ThreeCanvas>` which allows Remotion's `useCurrentFrame()` to control Three.js animations instead of the incompatible `useFrame()` hook. A product can model (GLB or manually constructed geometry) rotates or is lit based on the current frame number.
 
-**When to use:** For a single dedicated test composition (`TestThreeDModel.tsx`). The Kodok can shape is cylindrical — constructable with Three.js geometry without a real 3D file. Use it to test whether 3D product reveals look more premium than the current 2D `ProductReveal` component.
+**When to use:** For a single dedicated test composition (`TestThreeDModel.tsx`). The Vernis can shape is cylindrical — constructable with Three.js geometry without a real 3D file. Use it to test whether 3D product reveals look more premium than the current 2D `ProductReveal` component.
 
 **Trade-offs:** Pro: full 3D control, can simulate dramatic studio lighting that's impossible with flat images. Con: adds `three`, `@react-three/fiber`, `@remotion/three` dependencies; OpenGL rendering requires special Chromium config for server-side renders (`chromiumOptions: { gl: "angle" }`); adds ~200ms render overhead per frame. Use only where the visual quality justifies it.
 
@@ -314,7 +314,7 @@ export const ThreeProductModel: React.FC<{ productColor: string }> = ({ productC
 **Example:**
 ```bash
 # scripts/render-variants.sh
-VARIANTS=("KodokStyleA-FilmNoir" "KodokStyleB-GoldenHour" "KodokStyleC-CleanStudio")
+VARIANTS=("ProductStyleA-FilmNoir" "ProductStyleB-GoldenHour" "ProductStyleC-CleanStudio")
 for VARIANT in "${VARIANTS[@]}"; do
   echo "Rendering $VARIANT..."
   cd remotion && npx remotion render src/index.ts "$VARIANT" "out/${VARIANT}.mp4" && cd ..
@@ -331,20 +331,20 @@ done
 ```
 Developer defines StylePreset (style/golden-hour.ts)
     ↓
-KodokStyleB.tsx wraps KodokShowcase with goldenHour preset
+ProductStyleB.tsx wraps ProductShowcase with goldenHour preset
     ↓
-Root.tsx registers KodokStyleB inside <Folder name="showcase-kodok">
+Root.tsx registers ProductStyleB inside <Folder name="showcase-vernis">
     ↓
 scripts/render-variants.sh calls:
-  npx remotion render src/index.ts KodokStyleB-GoldenHour out/KodokStyleB-GoldenHour.mp4
+  npx remotion render src/index.ts ProductStyleB-GoldenHour out/ProductStyleB-GoldenHour.mp4
     ↓
-MP4 copied to public/videos/kodok-style-b-golden-hour.mp4
+MP4 copied to public/videos/vernis-style-b-golden-hour.mp4
     ↓
 scripts/seed-variant-videos.ts inserts row to Supabase videos table:
-  { id: "kodok-style-b-golden-hour", type: "showcase", pipeline: "remotion-only",
-    status: "draft", video_url: "/videos/kodok-style-b-golden-hour.mp4" }
+  { id: "vernis-style-b-golden-hour", type: "showcase", pipeline: "remotion-only",
+    status: "draft", video_url: "/videos/vernis-style-b-golden-hour.mp4" }
     ↓
-Reviewer opens Next.js Dashboard (/), sees all three Kodok variants in gallery
+Reviewer opens Next.js Dashboard (/), sees all three Vernis variants in gallery
     ↓
 Reviewer opens each variant, rates 1-5 stars + pros/cons → Supabase feedback table
     ↓
@@ -374,7 +374,7 @@ Decision: adopt 3D for product reveals, or keep 2D cutout photos
 scripts/generate-gemini-scene.ts is run locally by developer:
   - Takes: style preset name, scene description prompt, output path
   - Calls: Gemini Image API (gemini-2.0-flash or imagen-3)
-  - Writes: PNG to assets/scenes/kodok/[style-a]/[scene-name].png
+  - Writes: PNG to assets/scenes/vernis/[style-a]/[scene-name].png
     ↓
 Remotion symlink (remotion/public/ → ../assets/) makes assets available to compositions
     ↓
@@ -409,10 +409,10 @@ Render → compare against real photo and 3D alternatives
 
 | Composition | File | Type | Description |
 |-------------|------|------|-------------|
-| `KodokShowcase` | `compositions/KodokShowcase.tsx` | Base (parametrized) | Hook → Soak Shot → Application → Product Reveal → EndCard. Accepts `StylePreset`, scene paths, product metadata. |
-| `KodokStyleA` | `compositions/KodokStyleA.tsx` | Style variant wrapper | Film Noir style: dark background, high contrast, dramatic shadows |
-| `KodokStyleB` | `compositions/KodokStyleB.tsx` | Style variant wrapper | Golden Hour style: warm tones, outdoor Vorstadt atmosphere |
-| `KodokStyleC` | `compositions/KodokStyleC.tsx` | Style variant wrapper | Clean Studio style: white/cream background, product-first clarity |
+| `ProductShowcase` | `compositions/ProductShowcase.tsx` | Base (parametrized) | Hook → Soak Shot → Application → Product Reveal → EndCard. Accepts `StylePreset`, scene paths, product metadata. |
+| `ProductStyleA` | `compositions/ProductStyleA.tsx` | Style variant wrapper | Film Noir style: dark background, high contrast, dramatic shadows |
+| `ProductStyleB` | `compositions/ProductStyleB.tsx` | Style variant wrapper | Golden Hour style: warm tones, outdoor Vorstadt atmosphere |
+| `ProductStyleC` | `compositions/ProductStyleC.tsx` | Style variant wrapper | Clean Studio style: white/cream background, product-first clarity |
 | `TestRealPhoto` | `compositions/PipelineTest/TestRealPhoto.tsx` | Pipeline test | Uses images from `assets/products/` and `assets/blog/` only — no AI |
 | `TestGeminiImage` | `compositions/PipelineTest/TestGeminiImage.tsx` | Pipeline test | Uses AI-generated scenes from Gemini Image API |
 | `TestGeminiVideo` | `compositions/PipelineTest/TestGeminiVideo.tsx` | Pipeline test | Uses Gemini Video clips composited via `<Video>` component |
@@ -424,8 +424,8 @@ Render → compare against real photo and 3D alternatives
 
 | Boundary | Communication | Notes |
 |----------|---------------|-------|
-| `KodokShowcase` ↔ `StylePreset` | Direct prop passing | Style preset is a plain JS object — no context, no module-level state |
-| `KodokStyleA/B/C` ↔ `KodokShowcase` | Wrapper passes style as defaultProps | Style wrappers are registration shims, not real components |
+| `ProductShowcase` ↔ `StylePreset` | Direct prop passing | Style preset is a plain JS object — no context, no module-level state |
+| `ProductStyleA/B/C` ↔ `ProductShowcase` | Wrapper passes style as defaultProps | Style wrappers are registration shims, not real components |
 | New components ↔ existing components | New components compose on top of `ImageScene`. Never modify `ImageScene`'s internal Ken Burns logic. | Keeps existing renders stable |
 | `ThreeProductModel` ↔ React Three Fiber | `ThreeCanvas` wrapper required — do NOT use R3F's `useFrame()` | `useCurrentFrame()` is the only animation driver in Remotion |
 | Remotion compositions ↔ asset files | `staticFile(path)` for image/video files; path relative to `remotion/public/` | Symlinks in `remotion/public/` point to `../assets/` — already in place |
@@ -453,7 +453,7 @@ Render → compare against real photo and 3D alternatives
 | SDK | `@google/generative-ai` or `@google-cloud/vertexai` |
 | Where scripts run | Locally (developer machine) or GitHub Actions — never inside Vercel |
 | Output | PNG files to `assets/scenes/[style]/[composition-name]/` |
-| Constraint from memory | Never generate Kodok/Le Tonkinois product cans with Gemini — always use real catalog photos from `assets/products/` |
+| Constraint from memory | Never generate Le Tonkinois product cans with Gemini — always use real catalog photos from `assets/products/` |
 
 ### Supabase — Variant Tracking
 
@@ -483,14 +483,14 @@ Dependencies between new components determine this sequence:
 - Create `FiftyFiftySplit.tsx` — split reveal for before/after
 - Test each in isolation: create a temporary single-scene composition per component, verify in Remotion Studio
 
-**Step 3 — KodokShowcase Base Composition (depends on Steps 1-2)**
-- Define `KodokShowcaseProps` interface (StylePreset + scene paths + product + hookText)
-- Build `KodokShowcase.tsx` using existing `ImageScene`, `ProductReveal`, `EndCard` plus new `SoakScene` and `HookText`
+**Step 3 — ProductShowcase Base Composition (depends on Steps 1-2)**
+- Define `ProductShowcaseProps` interface (StylePreset + scene paths + product + hookText)
+- Build `ProductShowcase.tsx` using existing `ImageScene`, `ProductReveal`, `EndCard` plus new `SoakScene` and `HookText`
 - Register one instance in `Root.tsx` with default props — must preview in Remotion Studio
 
 **Step 4 — Style Variant Wrappers (depends on Step 3)**
-- Create `KodokStyleA.tsx`, `KodokStyleB.tsx`, `KodokStyleC.tsx` as thin wrappers
-- Add `<Folder name="showcase-kodok">` to `Root.tsx`
+- Create `ProductStyleA.tsx`, `ProductStyleB.tsx`, `ProductStyleC.tsx` as thin wrappers
+- Add `<Folder name="showcase-vernis">` to `Root.tsx`
 - Render all three to MP4, copy to `public/videos/`, seed to Supabase
 
 **Step 5 — Generate Asset Inputs (depends on Steps 1-2, parallel with 3-4)**
@@ -523,7 +523,7 @@ Dependencies between new components determine this sequence:
 
 ### Anti-Pattern 2: Putting Style Logic Inside Composition Files
 
-**What people do:** Define `const filmNoirPalette = { background: "#0D0D0D", ... }` directly inside `KodokStyleA.tsx`.
+**What people do:** Define `const filmNoirPalette = { background: "#0D0D0D", ... }` directly inside `ProductStyleA.tsx`.
 
 **Why it's wrong:** The style data cannot be reused by other compositions. If a second composition needs Film Noir style, you copy-paste the object. When the style evolves based on feedback, you update it in two places.
 
@@ -545,11 +545,11 @@ Dependencies between new components determine this sequence:
 
 **Do this instead:** Separate composition IDs per variant, organized under a `<Folder>`. Each is independently previewable, renderable, and linkable to a Supabase video row.
 
-### Anti-Pattern 5: Generating Kodok/Le Tonkinois Product Cans with Gemini
+### Anti-Pattern 5: Generating Le Tonkinois Product Cans with Gemini
 
-**What people do:** Pass a prompt like "Le Tonkinois Kodok can, yellow and red label, tung oil" to Gemini Image.
+**What people do:** Pass a prompt like "Le Tonkinois Vernis can, yellow and red label, tung oil" to Gemini Image.
 
-**Why it's wrong:** Gemini invents the branding. The real Kodok can has specific label design that Gemini cannot reproduce accurately. The resulting video looks amateurish and misrepresents the brand.
+**Why it's wrong:** Gemini invents the branding. The real Vernis can has specific label design that Gemini cannot reproduce accurately. The resulting video looks amateurish and misrepresents the brand.
 
 **Do this instead:** Always use real product cutout photos from `assets/products/` for any frame showing the can. Gemini Image is only for environmental scenes — hands applying oil, wood grain close-ups, outdoor settings.
 

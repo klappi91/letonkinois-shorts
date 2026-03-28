@@ -1,6 +1,6 @@
 # Feature Research
 
-**Domain:** Instagram product showcase reels — premium heritage wood finish brand (Le Tonkinois / Kodok)
+**Domain:** Instagram product showcase reels — premium heritage wood finish brand (Le Tonkinois / Vernis)
 **Researched:** 2026-03-28
 **Confidence:** HIGH (content formats, visual quality, iteration workflow — verified against multiple sources + existing project research)
 
@@ -8,7 +8,7 @@
 
 ## Context
 
-This research covers the v1.1 milestone: creating the first post-worthy Kodok Product Showcase reel. The pipeline (Remotion, Gemini Image, asset catalog, Supabase) is already built. The gap is entirely on the content side: what does a postable product showcase reel actually look like, what separates it from amateur output, and how do you iterate toward it systematically?
+This research covers the v1.1 milestone: creating the first post-worthy Vernis Product Showcase reel. The pipeline (Remotion, Gemini Image, asset catalog, Supabase) is already built. The gap is entirely on the content side: what does a postable product showcase reel actually look like, what separates it from amateur output, and how do you iterate toward it systematically?
 
 Focus areas from the milestone:
 1. Instagram channel style/identity design
@@ -55,7 +55,7 @@ These separate a good reel from a forgettable one for Le Tonkinois specifically.
 | Product reveal scene (Dose auf Cream-BG) | Connects satisfying content to purchasable product; the dose IS the brand; this moment is what makes the reel an ad without feeling like one | LOW | Already implemented as `ProductReveal` component. Dose prominent 440×440px, red divider, Playfair Display name. |
 | Marine/nautical context shots | No German-language competitor makes Instagram Reels about boat wood care; Le Tonkinois' heritage is French maritime — this niche is completely unoccupied | MEDIUM | Requires Gemini Image prompts for boat deck, teak planks, harbor/water context. Strong differentiator vs. Rubio, Osmo, Biopin. |
 | Heritage story integration ("Seit 1906") | Heritage positioning builds trust without a single word of advertising copy; no other wood finish brand has 120 years of origin story | LOW | Already in EndCard component. Can be extended to Hook scene ("Seit 1906 vertrauen Segler diesem Öl") |
-| Product-specific accent colors | Each Le Tonkinois product variant has a secondary color (Vernis → Gold+Navy; Marine N°1 → Navy+Cream); matching reel style to product reinforces "product family" coherence | LOW | Color map exists in branding memory. Kodok product color scheme needs to be defined before reel production. |
+| Product-specific accent colors | Each Le Tonkinois product variant has a secondary color (Vernis → Gold+Navy; Marine N°1 → Navy+Cream); matching reel style to product reinforces "product family" coherence | LOW | Color map exists in branding memory. Vernis product color scheme needs to be defined before reel production. |
 | Loop-optimized ending | Seamless loop tricks watch-time algorithm into counting repeat views; makes reel feel "infinite" | LOW | End frame should match or deliberately contrast with first frame so replaying feels intentional. |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
@@ -78,12 +78,12 @@ These separate a good reel from a forgettable one for Le Tonkinois specifically.
 
 ```
 [Channel Style Identity Document]
-    └──required by──> [Kodok Product Showcase Reel]
+    └──required by──> [Vernis Product Showcase Reel]
     └──required by──> [Future reel compositions]
     └──required by──> [Style Iteration Framework]
 
 [Remotion Composition Pipeline]  (already exists)
-    └──required by──> [Kodok Product Showcase Reel]
+    └──required by──> [Vernis Product Showcase Reel]
     └──enhanced by──> [ASMR Sound Design Layer]
     └──enhanced by──> [Warm Color Grading Rule]
 
@@ -91,7 +91,7 @@ These separate a good reel from a forgettable one for Le Tonkinois specifically.
     └──required by──> [Product Reveal Scene]
     └──required by──> [Real Product Photo Integration]
 
-[Gemini Image Prompts (Kodok-specific)]
+[Gemini Image Prompts (Vernis-specific)]
     └──required by──> [The Soak Money Shot]
     └──required by──> [50/50 Split Frame]
     └──required by──> [Marine Context Shots]
@@ -117,7 +117,7 @@ These separate a good reel from a forgettable one for Le Tonkinois specifically.
 
 ### Dependency Notes
 
-- **Channel Style Identity Document must come first:** Gemini Image prompts cannot be written without knowing what visual world the reel lives in. Defines: color temperature, scene context (garden/boat/interior), time of day, Kodok-specific accent colors, and "forbidden" aesthetics.
+- **Channel Style Identity Document must come first:** Gemini Image prompts cannot be written without knowing what visual world the reel lives in. Defines: color temperature, scene context (garden/boat/interior), time of day, Vernis-specific accent colors, and "forbidden" aesthetics.
 - **The Soak money shot requires Gemini Image iteration:** The first-attempt macro prompt for oil-into-grain will almost certainly need 2-3 rounds of refinement. This is not a one-shot generation. Build prompt iteration time into the workflow.
 - **ASMR sound design is enhancement, not gate:** A reel without sound design can still be postable (ambient + Remotion-internal audio). ASMR foley elevates to premium but is HIGH complexity for v1. Defer to v1.1 unless real recordings are available.
 - **Trial Reels require 1,000 followers:** Le Tonkinois Instagram account does not currently exist independently. Trial Reels feature available only after account creation and initial growth. For v1, standard posting with manual performance monitoring is the iteration method.
@@ -126,17 +126,17 @@ These separate a good reel from a forgettable one for Le Tonkinois specifically.
 
 ## MVP Definition
 
-### Launch With (v1 — This Milestone: Kodok Product Showcase)
+### Launch With (v1 — This Milestone: Vernis Product Showcase)
 
 The minimum that makes a reel "postable" — not embarrassing for the brand, not visually amateurish, structurally sound.
 
-- [ ] Channel style identity defined — color temperature, scene context choices, Kodok accent color, list of forbidden aesthetics
+- [ ] Channel style identity defined — color temperature, scene context choices, Vernis accent color, list of forbidden aesthetics
 - [ ] 3-5 Gemini Image scenes generated to the defined style (with at least 1 money shot attempt: The Soak or 50/50)
 - [ ] Remotion composition using validated template (Hook→Vorher/Produkt→Szene→Nachher→Produkt→EndCard)
 - [ ] Safe zone compliance verified (top 140px, bottom 380px clear)
 - [ ] Scene timing at minimum 3.3s each
 - [ ] Max 1-3 words text per scene
-- [ ] Real product photo (Kodok can) in ProductReveal scene
+- [ ] Real product photo (Vernis can) in ProductReveal scene
 - [ ] EndCard with logo + "Seit 1906" + CTA
 - [ ] Warm color grading applied to "Nachher" scenes, cool/neutral for "Vorher"
 - [ ] Caption written (German, keywords, "Speicher dir das!" CTA, 20-25 hashtag mix)
@@ -147,7 +147,7 @@ The minimum that makes a reel "postable" — not embarrassing for the brand, not
 Add once v1 reel is posted and performance signal is available.
 
 - [ ] ASMR Foley sound layer — trigger: v1 reel gets good performance but feedback says "audio is missing something"
-- [ ] Marine context variant — boat deck shots with Kodok — trigger: garden showcase is validated, expand to marine niche
+- [ ] Marine context variant — boat deck shots with Le Tonkinois — trigger: garden showcase is validated, expand to marine niche
 - [ ] Loop optimization — end frame matching start frame — trigger: after first iteration data shows watch-time drop-off at end
 - [ ] Style A/B variants — two different color grading or hook approaches in same week — trigger: when team has capacity to review 2 reels simultaneously
 - [ ] Instagram Trial Reels workflow — trigger: account has 1,000+ followers
@@ -168,7 +168,7 @@ Defer until content pipeline is in regular rhythm.
 | Feature | User Value (Audience) | Implementation Cost | Priority |
 |---------|----------------------|---------------------|----------|
 | Channel style identity document | HIGH — foundation for everything | LOW | P1 |
-| Gemini Image prompts (Kodok-specific) | HIGH — determines visual quality | LOW-MEDIUM | P1 |
+| Gemini Image prompts (Vernis-specific) | HIGH — determines visual quality | LOW-MEDIUM | P1 |
 | Money shot: The Soak or 50/50 | HIGH — most viral single element | MEDIUM | P1 |
 | Safe zone + timing compliance | HIGH — postability gate | LOW | P1 |
 | Brand-compliant visual identity | HIGH — brand trust | LOW | P1 |
@@ -184,7 +184,7 @@ Defer until content pipeline is in regular rhythm.
 | UGC compilation | HIGH — community trust | HIGH | P3 |
 
 **Priority key:**
-- P1: Required for first postable Kodok reel
+- P1: Required for first postable Vernis reel
 - P2: Add after v1 is posted and reviewed; enhances quality or iteration speed
 - P3: Future consideration; depends on channel growth or new capabilities
 
@@ -220,7 +220,7 @@ Based on research synthesis, these are the observable differences between a reel
 3. **No text violates the 1-3 word rule** — busy text signals "ad" to trained skip-reflex
 4. **Scene duration never below 3.0 seconds** — strobe effect, loses watch time
 5. **Warm color grade on Nachher scenes** — cold Nachher destroys the transformation impact
-6. **Real Kodok product photo used** — AI-generated can is disqualifying
+6. **Real Vernis product photo used** — AI-generated can is disqualifying
 7. **EndCard has logo + Seit 1906** — brand closure required
 8. **Brand Red #B50606 is present** — without it, the reel has no visual identity
 
@@ -243,16 +243,16 @@ How to systematically move from "first attempt" to "channel style" across multip
 ### Phase 1: Define Before Building
 
 Create a Channel Style Identity Document (1-2 pages) that answers:
-- What is the primary scene context? (garden / marine / interior / workshop — pick one as "hero" for Kodok)
+- What is the primary scene context? (garden / marine / interior / workshop — pick one as "hero" for Vernis)
 - What time of day? (golden hour = warm = right; noon = harsh = wrong)
 - What is the "Vorher" state? (grey/dry/weathered — specific adjectives for Gemini prompts)
 - What is the "Nachher" state? (warm/oiled/glowing — specific adjectives)
-- What is Kodok's secondary accent color? (Navy? Gold? Define now, not during rendering)
+- What is Vernis' secondary accent color? (Navy? Gold? Define now, not during rendering)
 - What is forbidden? (dark backgrounds, amber tones, "modern craft" aesthetic, stock-look imagery)
 
 ### Phase 2: Generate Variants Before Committing
 
-For the Kodok reel, generate at minimum:
+For the Vernis reel, generate at minimum:
 - 3 different hook images (The Soak, 50/50, Golden Hour Glow) — test which feels strongest
 - 2 Vorher images (different weathering levels) — confirm "realistically worn but not ruined"
 - 1 Nachher image with warm grade — confirm the transformation feels significant
@@ -292,5 +292,5 @@ Once the account has 1,000+ followers: use Trial Reels to A/B test hooks with no
 
 ---
 
-*Feature research for: Instagram product showcase reels — Le Tonkinois / Kodok (v1.1 Content Quality Foundation)*
+*Feature research for: Instagram product showcase reels — Le Tonkinois / Vernis (v1.1 Content Quality Foundation)*
 *Researched: 2026-03-28*

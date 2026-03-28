@@ -115,6 +115,15 @@ None — no external service configuration required.
 - Plan 03 (moodboard page) can reference brand tokens via Tailwind classes (--color-navy now available)
 - No blockers
 
+## Self-Check: PASSED
+
+- FOUND: src/lib/brand.ts
+- FOUND: remotion/src/utils/colors.ts (re-export)
+- FOUND: remotion/tsconfig.json (expanded include)
+- FOUND: src/app/globals.css (navy + sync comment)
+- FOUND: .planning/phases/06-channel-identity/06-01-SUMMARY.md
+- Commits 4247be9 and df01bda confirmed in git log
+
 ---
 *Phase: 06-channel-identity*
 *Completed: 2026-03-28*

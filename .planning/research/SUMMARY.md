@@ -7,9 +7,9 @@
 
 ## Executive Summary
 
-Le Tonkinois Shorts v1.1 is a content quality milestone, not a feature milestone. The technical pipeline (Remotion, Supabase, Next.js dashboard, asset catalog) is already validated and running from v1.0. The gap is entirely on the content side: producing the first Kodok product showcase reel that is actually postable to Instagram — visually premium, brand-compliant, and structurally sound. The research makes clear that this requires solving three sequential problems: locking a machine-readable channel style identity (hex codes, font names, prohibited aesthetics), producing premium visual assets anchored to that identity via Gemini Image, and compositing those assets into a Remotion composition that passes the postability gate (safe zones, timing, brand compliance, real product photos).
+Le Tonkinois Shorts v1.1 is a content quality milestone, not a feature milestone. The technical pipeline (Remotion, Supabase, Next.js dashboard, asset catalog) is already validated and running from v1.0. The gap is entirely on the content side: producing the first Vernis product showcase reel that is actually postable to Instagram — visually premium, brand-compliant, and structurally sound. The research makes clear that this requires solving three sequential problems: locking a machine-readable channel style identity (hex codes, font names, prohibited aesthetics), producing premium visual assets anchored to that identity via Gemini Image, and compositing those assets into a Remotion composition that passes the postability gate (safe zones, timing, brand compliance, real product photos).
 
-The recommended approach is a four-phase execution: define the Kodok channel identity before touching a single pixel of composition work; generate and validate AI scene assets against that identity (including "The Soak" macro money shot — oil first touching dry wood grain — which is the strongest unoccupied visual in the category); build a parametrized `KodokShowcase` composition with three style variants (Film Noir, Golden Hour, Clean Studio) for team review; then run technical pipeline tests comparing real photos vs. Gemini Image vs. 3D model approaches to determine the permanent composition pattern. The architecture makes style variants independent, renderable, and reviewable without touching existing compositions or the Supabase schema.
+The recommended approach is a four-phase execution: define the Vernis channel identity before touching a single pixel of composition work; generate and validate AI scene assets against that identity (including "The Soak" macro money shot — oil first touching dry wood grain — which is the strongest unoccupied visual in the category); build a parametrized `ProductShowcase` composition with three style variants (Film Noir, Golden Hour, Clean Studio) for team review; then run technical pipeline tests comparing real photos vs. Gemini Image vs. 3D model approaches to determine the permanent composition pattern. The architecture makes style variants independent, renderable, and reviewable without touching existing compositions or the Supabase schema.
 
 The dominant risk is brand drift — every research file converges on it from a different angle. Pitfalls research documents how v1.0 already failed this way (dark brown backgrounds, Lora used as a headline font, amber accents). The mitigation is non-negotiable: all color references import from `colors.ts`, all font references import from `fonts.ts`, zero inline hex values in composition files, and the style guide must be validated against 5 generated test images before any Remotion work begins. Secondary risk is the AI-generated can constraint: Gemini must never produce product packaging — every product can appearance sources exclusively from `assets/products/`. Third risk is composition timing — scenes under 3.3 seconds and text in unsafe zones will produce a technically broken reel even if the visual quality is excellent.
 
@@ -25,7 +25,7 @@ The existing stack (Next.js 16, Remotion 4.0.261, Supabase, Vercel) requires no 
 - `@remotion/noise@4.0.441`: Deterministic organic animation — camera drift, grain textures. Replaces `Math.random()` which breaks Remotion's frame scrubbing.
 - `@remotion/shapes@4.0.441`: SVG geometric wipes and reveal masks without external SVG files.
 - `@remotion/lottie@4.0.441`: Import LottieFiles.com animations (product sparkle, checkmarks). 400K+ free MIT-licensed animations.
-- `@remotion/three@4.0.441`: 3D Kodok can model test. Requires `three` peer dep + `chromiumOptions: { gl: "angle" }` in remotion config.
+- `@remotion/three@4.0.441`: 3D Vernis can model test. Requires `three` peer dep + `chromiumOptions: { gl: "angle" }` in remotion config.
 - `sharp@0.34.5`: Product photo background removal and compositing. Local/API routes only — Vercel Edge runtime does not support libvips binaries.
 - CSS color grading (Tier 1): `sepia(0.2) saturate(1.35) hue-rotate(-8deg)` for Nachher scenes; `saturate(0.6) brightness(0.92)` for Vorher. Zero additional dependencies.
 
@@ -39,7 +39,7 @@ The research distinguishes sharply between audience-facing features (what makes 
 
 **Must have — postability gates (any failure = not postable):**
 - Strong hook in first 1.5 seconds — algorithm distributes based on watch-time; starting with a logo kills reach to non-followers
-- Real Kodok product photo in `ProductReveal` — AI-generated cans are disqualifying (brand and trust damage)
+- Real Vernis product photo in `ProductReveal` — AI-generated cans are disqualifying (brand and trust damage)
 - All text within Instagram safe zones (top > 220px, bottom < 1600px, right < 960px)
 - Maximum 1-3 words per text overlay — full sentences signal "advertisement" and trigger skip reflex
 - Scene duration minimum 3.3 seconds for text-bearing scenes (validated from v1.0 post-mortem)
@@ -69,11 +69,11 @@ The research distinguishes sharply between audience-facing features (what makes 
 
 ### Architecture Approach
 
-The architecture follows a strict "extend, don't fork" principle applied to the existing Remotion monorepo. All existing compositions, components, and utilities remain unchanged. New functionality layers on top through a `StylePreset` interface system: a TypeScript object capturing all visual variation points (background, hook text color, gradient strength, accent color) that compositions accept as a prop. Three style preset files (`film-noir.ts`, `golden-hour.ts`, `clean-studio.ts`) export constants satisfying this interface. A parametrized base `KodokShowcase` composition accepts a `StylePreset` prop; three thin style wrappers (`KodokStyleA/B/C`) each provide one preset as `defaultProps`. This produces three independently renderable, independently previewable composition IDs in Remotion Studio — one maintenance target, three comparison outputs.
+The architecture follows a strict "extend, don't fork" principle applied to the existing Remotion monorepo. All existing compositions, components, and utilities remain unchanged. New functionality layers on top through a `StylePreset` interface system: a TypeScript object capturing all visual variation points (background, hook text color, gradient strength, accent color) that compositions accept as a prop. Three style preset files (`film-noir.ts`, `golden-hour.ts`, `clean-studio.ts`) export constants satisfying this interface. A parametrized base `ProductShowcase` composition accepts a `StylePreset` prop; three thin style wrappers (`ProductStyleA/B/C`) each provide one preset as `defaultProps`. This produces three independently renderable, independently previewable composition IDs in Remotion Studio — one maintenance target, three comparison outputs.
 
 **Major components (new):**
 1. `StylePreset` interface + three style preset files — visual variation vocabulary; all downstream components consume it
-2. `KodokShowcase.tsx` (parametrized base) + `KodokStyleA/B/C.tsx` (thin wrappers) — the three showcase variants for review
+2. `ProductShowcase.tsx` (parametrized base) + `ProductStyleA/B/C.tsx` (thin wrappers) — the three showcase variants for review
 3. `SoakScene.tsx` — "The Soak" money shot component (animated macro close-up with fade-in)
 4. `FiftyFiftySplit.tsx` — animated clip-path split reveal (50/50 treated vs. untreated wood)
 5. `ThreeProductModel.tsx` — 3D cylindrical can model via `@remotion/three`, frame-controlled rotation
@@ -94,7 +94,7 @@ The architecture follows a strict "extend, don't fork" principle applied to the 
 
 4. **Composition timing violations** — Scenes under 3.3 seconds with text feel stressful, not satisfying. This was the documented failure mode of v1.0's first draft ("zu schnell, zu viel Text"). Prevention: minimum 100 frames (3.3s at 30fps) for any text-bearing scene, enforced by checking `durationInFrames` per scene segment before marking composition done.
 
-5. **AI-generated product cans reaching the pipeline** — A prompt for a "product showcase scene" may produce a plausible-but-wrong Kodok can label. This is brand damage. Prevention: every Gemini prompt that could include a product must explicitly exclude packaging (`NO product cans, NO bottles`). Every product appearance in a composition must trace to `assets/products/`.
+5. **AI-generated product cans reaching the pipeline** — A prompt for a "product showcase scene" may produce a plausible-but-wrong Le Tonkinois can label. This is brand damage. Prevention: every Gemini prompt that could include a product must explicitly exclude packaging (`NO product cans, NO bottles`). Every product appearance in a composition must trace to `assets/products/`.
 
 ---
 
@@ -106,7 +106,7 @@ Based on research, the v1.1 work breaks into four phases with strict dependency 
 
 **Rationale:** Everything downstream depends on this. Gemini prompts cannot be written without knowing the visual world. Remotion style presets cannot be created without hex codes and font choices locked. v1.0 built two compositions that both required revision because this step was skipped.
 
-**Delivers:** A machine-readable Channel Style Identity Document for Kodok: exact hex color scheme (primary `#B50606`, background `#FFF8F0`, Kodok secondary accent color TBD), font usage rules (Playfair Display for headlines, Lora for scene labels, Lato for badges), scene context choices (garden primary, marine secondary), time of day (golden hour), Vorher state descriptors (dull/dusty/grey), Nachher state descriptors (warm/glowing/oiled), explicitly forbidden aesthetics (dark backgrounds, amber tones, rustic craft aesthetic). Validated by generating 5 test images against the spec before any Remotion work begins.
+**Delivers:** A machine-readable Channel Style Identity Document for Vernis: exact hex color scheme (primary `#B50606`, background `#FFF8F0`, Vernis secondary accent color TBD), font usage rules (Playfair Display for headlines, Lora for scene labels, Lato for badges), scene context choices (garden primary, marine secondary), time of day (golden hour), Vorher state descriptors (dull/dusty/grey), Nachher state descriptors (warm/glowing/oiled), explicitly forbidden aesthetics (dark backgrounds, amber tones, rustic craft aesthetic). Validated by generating 5 test images against the spec before any Remotion work begins.
 
 **Addresses:** FEATURES.md P1 — brand-compliant visual identity, style iteration Phase 1 ("Define Before Building")
 
@@ -132,11 +132,11 @@ Based on research, the v1.1 work breaks into four phases with strict dependency 
 
 ---
 
-### Phase 3: KodokShowcase Composition + Style Variants
+### Phase 3: ProductShowcase Composition + Style Variants
 
 **Rationale:** With the style guide locked and assets generated, the Remotion composition can be built to specification without guessing. The style preset system enables three renderable variants from a single composition, which is the team's review mechanism. This phase is the primary deliverable of v1.1.
 
-**Delivers:** `StylePreset` interface + three style presets (Film Noir, Golden Hour, Clean Studio), `KodokShowcase.tsx` base composition, `KodokStyleA/B/C.tsx` wrappers, new components (`SoakScene`, `FiftyFiftySplit`, `HookText`), all three variants rendered to MP4 and seeded to Supabase for team review via the existing dashboard. Every composition passes the full postability gate: safe zones, timing floor, brand compliance, real product photo.
+**Delivers:** `StylePreset` interface + three style presets (Film Noir, Golden Hour, Clean Studio), `ProductShowcase.tsx` base composition, `ProductStyleA/B/C.tsx` wrappers, new components (`SoakScene`, `FiftyFiftySplit`, `HookText`), all three variants rendered to MP4 and seeded to Supabase for team review via the existing dashboard. Every composition passes the full postability gate: safe zones, timing floor, brand compliance, real product photo.
 
 **Uses:** STACK.md — `@remotion/noise` (camera drift), `@remotion/shapes` (wipe masks), upgraded Remotion packages at 4.0.441
 
@@ -150,7 +150,7 @@ Based on research, the v1.1 work breaks into four phases with strict dependency 
 
 ### Phase 4: Technical Pipeline Tests
 
-**Rationale:** The v1.1 milestone requires determining whether the permanent pipeline for future Kodok compositions uses real catalog photos, Gemini Image AI scenes, Gemini Video clips, or 3D model renders. This comparison can only be done after the composition structure is established in Phase 3, so pipeline test compositions have a clear baseline to compare against. The winner becomes the documented pattern for all future showcase compositions.
+**Rationale:** The v1.1 milestone requires determining whether the permanent pipeline for future product showcase compositions uses real catalog photos, Gemini Image AI scenes, Gemini Video clips, or 3D model renders. This comparison can only be done after the composition structure is established in Phase 3, so pipeline test compositions have a clear baseline to compare against. The winner becomes the documented pattern for all future showcase compositions.
 
 **Delivers:** Four pipeline test compositions under `compositions/PipelineTest/`: `TestRealPhoto`, `TestGeminiImage`, `TestGeminiVideo`, `TestThreeDModel`. Each rendered, seeded to Supabase, reviewed by team with star rating and pros/cons. Winner style and pipeline documented in project memory and CLAUDE.md for all future compositions.
 
@@ -160,7 +160,7 @@ Based on research, the v1.1 work breaks into four phases with strict dependency 
 
 **Avoids:** Pitfall 9 (Gemini Video temporal inconsistency — establishes the "camera motion on static subjects only" rule before any video clips are composited into final outputs)
 
-**Research flag:** Needs attention — `@remotion/three` + Spline vs. manual Three.js geometry for Kodok can model; Spline export is labeled experimental in official docs. 3D model render performance at 1080x1920 (potential +200ms/frame overhead) should be benchmarked before committing to the 3D path.
+**Research flag:** Needs attention — `@remotion/three` + Spline vs. manual Three.js geometry for Vernis can model; Spline export is labeled experimental in official docs. 3D model render performance at 1080x1920 (potential +200ms/frame overhead) should be benchmarked before committing to the 3D path.
 
 ---
 
@@ -196,7 +196,7 @@ Phases with standard patterns (skip research-phase):
 
 ### Gaps to Address
 
-- **Kodok accent color:** The Channel Identity Document needs to define Kodok's secondary accent color (Navy? Gold?). This is a product-level design decision not yet made. Address in Phase 1 before any generation.
+- **Vernis accent color:** The Channel Identity Document needs to define Vernis' secondary accent color (Navy? Gold?). This is a product-level design decision not yet made. Address in Phase 1 before any generation.
 - **Gemini Image model choice (2.0-flash vs. imagen-3):** Research does not provide a definitive recommendation for 9:16 portrait product scenes. Test both in Phase 2 with identical prompts.
 - **`@remotion/three` render performance:** The `chromiumOptions: { gl: "angle" }` requirement is documented but per-frame render overhead at 1080x1920 resolution is unknown. Measure in Phase 4 before committing to the 3D pipeline.
 - **Le Tonkinois Instagram account existence:** There is no dedicated @letonkinois account (only @hermannsachse with 3.5K). Instagram Trial Reels (post-1,000 followers) is not immediately available. Manual posting analytics will be the feedback mechanism for the first several compositions.
