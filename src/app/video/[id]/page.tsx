@@ -42,6 +42,19 @@ export default async function VideoDetail({
         .single<Feedback>()
     : { data: null };
 
+  // Fetch prompt version if video has one linked
+  let versionLabel: string | null = null;
+  if (video.prompt_version) {
+    const { data: promptVersion } = await supabase
+      .from("prompt_versions")
+      .select("version_number")
+      .eq("id", video.prompt_version)
+      .single<{ version_number: number }>();
+    if (promptVersion) {
+      versionLabel = `v${promptVersion.version_number}.0`;
+    }
+  }
+
   const fullCaption = `${video.caption_de ?? ""}\n\n${video.hashtags.join(" ")}`;
 
   return (
@@ -89,6 +102,11 @@ export default async function VideoDetail({
               <span className="text-xs text-text-muted">
                 {video.created_at}
               </span>
+              {versionLabel && (
+                <span className="text-xs text-text-muted">
+                  {versionLabel}
+                </span>
+              )}
               <span className="text-xs text-text-muted ml-auto">
                 {video.pipeline}
               </span>
