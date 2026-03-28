@@ -42,7 +42,7 @@
 **Plans:** 4 plans
 Plans:
 - [x] 06-01-PLAN.md — brand.ts single source of truth + colors.ts re-export + globals.css sync (completed 2026-03-28)
-- [ ] 06-02-PLAN.md — ColorGrade wrapper component + StepBadge/SceneLabel SAFE_ZONES migration
+- [x] 06-02-PLAN.md — ColorGrade wrapper component + StepBadge/SceneLabel SAFE_ZONES migration (completed 2026-03-28)
 - [ ] 06-03-PLAN.md — /moodboard page with real reference images + dashboard nav link
 - [ ] 06-04-PLAN.md — 5 Gemini test images generated and validated against Style Guide
 **UI hint**: yes
@@ -91,7 +91,7 @@ Plans:
 | 3. Feedback UI | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 4. Prompt Versioning | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 5. Tech Debt Cleanup | v1.0 | 1/1 | Complete | 2026-03-28 |
-| 6. Channel Identity | v1.1 | 1/4 | Executing | - |
+| 6. Channel Identity | v1.1 | 2/4 | Executing | - |
 | 7. AI Scene Assets | v1.1 | 0/? | Not started | - |
 | 8. KodokShowcase Composition | v1.1 | 0/? | Not started | - |
 | 9. Pipeline Tests | v1.1 | 0/? | Not started | - |
