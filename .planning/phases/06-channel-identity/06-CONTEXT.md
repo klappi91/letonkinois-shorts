@@ -28,7 +28,7 @@ Ein maschinenlesbares visuelles Fundament existiert, das alle KI-Generierung und
 
 ### Style Guide Architektur
 - **D-08:** Single Source of Truth in `src/lib/brand.ts` — eine zentrale TypeScript-Datei definiert ALLE visuellen Werte
-- **D-09:** Bestehende `remotion/src/utils/colors.ts` und `fonts.ts` werden zu Re-Exports aus brand.ts (keine Breaking Changes)
+- **D-09:** Bestehende `remotion/src/utils/colors.ts` wird zu Re-Export aus brand.ts (keine Breaking Changes). `fonts.ts` bleibt Remotion-spezifisch — `loadFont` muss im Remotion-Bundle-Kontext bleiben. `FONTS`-Konstante in brand.ts enthält nur Font-Namen als Strings.
 - **D-10:** `src/app/globals.css` Tailwind @theme wird manuell synchronisiert (CSS kann kein TS importieren)
 - **D-11:** brand.ts enthält: Farben, Fonts, Produktfarben, Instagram Safe Zones, Color Grading Werte, Gemini Prompt Fragments
 
@@ -52,7 +52,7 @@ Ein maschinenlesbares visuelles Fundament existiert, das alle KI-Generierung und
 
 ### Bestehende Brand-Assets
 - `remotion/src/utils/colors.ts` — Aktuelle Farbdefinitionen (wird zu Re-Export)
-- `remotion/src/utils/fonts.ts` — Aktuelle Font-Definitionen (wird zu Re-Export)
+- `remotion/src/utils/fonts.ts` — Aktuelle Font-Definitionen (bleibt Remotion-spezifisch, kein Re-Export)
 - `src/app/globals.css` — Tailwind @theme mit Dashboard-Farben (muss synchronisiert werden)
 
 ### Branding-Regeln (Memory)

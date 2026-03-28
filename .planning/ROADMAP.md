@@ -2,30 +2,30 @@
 
 ## Milestones
 
-- ✅ **v1.0 MVP** — Phases 1-5 (shipped 2026-03-28)
-- 🚧 **v1.1 Content Quality Foundation** — Phases 6-9 (in progress)
+- v1.0 MVP -- Phases 1-5 (shipped 2026-03-28)
+- v1.1 Content Quality Foundation -- Phases 6-9 (in progress)
 
 ## Phases
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-5) — SHIPPED 2026-03-28</summary>
+<summary>v1.0 MVP (Phases 1-5) -- SHIPPED 2026-03-28</summary>
 
-- [x] **Phase 1: Supabase Foundation** — Supabase project, DB schema, RLS policies, three-client pattern (2/2 plans)
-- [x] **Phase 2: Auth + Data Migration** — Invite-only login gates the dashboard; videos.json migrated to Supabase (2/2 plans, completed 2026-03-28)
-- [x] **Phase 3: Feedback UI** — Star rating + pros/cons form persists per reviewer per video (1/1 plan, completed 2026-03-28)
-- [x] **Phase 4: Prompt Versioning** — Prompt version table + video linkage + detail-page display (1/1 plan, completed 2026-03-28)
-- [x] **Phase 5: Tech Debt Cleanup** — Dead code entfernen, npm-Script ergänzen, Schema-FK (1/1 plan, completed 2026-03-28)
+- [x] **Phase 1: Supabase Foundation** -- Supabase project, DB schema, RLS policies, three-client pattern (2/2 plans)
+- [x] **Phase 2: Auth + Data Migration** -- Invite-only login gates the dashboard; videos.json migrated to Supabase (2/2 plans, completed 2026-03-28)
+- [x] **Phase 3: Feedback UI** -- Star rating + pros/cons form persists per reviewer per video (1/1 plan, completed 2026-03-28)
+- [x] **Phase 4: Prompt Versioning** -- Prompt version table + video linkage + detail-page display (1/1 plan, completed 2026-03-28)
+- [x] **Phase 5: Tech Debt Cleanup** -- Dead code entfernen, npm-Script ergänzen, Schema-FK (1/1 plan, completed 2026-03-28)
 
 </details>
 
-### 🚧 v1.1 Content Quality Foundation (In Progress)
+### v1.1 Content Quality Foundation (In Progress)
 
 **Milestone Goal:** Ersten postbaren Kodok Product Showcase produzieren — visuell premium, brand-konform, Instagram-ready. Kanal-Identität als maschinenlesbares Fundament für alle zukünftigen Generierungen.
 
-- [ ] **Phase 6: Channel Identity** — Maschinenlesbarer Style Guide, Safe Zone Constants, Color Grading Preset, Referenz-Moodboard
-- [ ] **Phase 7: AI Scene Assets** — Gemini-Szenen für Kodok generieren, JSON-Prompt-Templates, Produktfoto-Compositing, Gemini Video Test
-- [ ] **Phase 8: KodokShowcase Composition** — Parametrisierte Remotion Composition mit Hook→Szenen→Produkt→EndCard + "The Soak" Money Shot
-- [ ] **Phase 9: Pipeline Tests** — Foto vs. Gemini vs. 3D Vergleich, Variant-Management in Supabase
+- [ ] **Phase 6: Channel Identity** -- Maschinenlesbarer Style Guide, Safe Zone Constants, Color Grading Preset, Referenz-Moodboard
+- [ ] **Phase 7: AI Scene Assets** -- Gemini-Szenen für Kodok generieren, JSON-Prompt-Templates, Produktfoto-Compositing, Gemini Video Test
+- [ ] **Phase 8: KodokShowcase Composition** -- Parametrisierte Remotion Composition mit Hook→Szenen→Produkt→EndCard + "The Soak" Money Shot
+- [ ] **Phase 9: Pipeline Tests** -- Foto vs. Gemini vs. 3D Vergleich, Variant-Management in Supabase
 
 ## Phase Details
 
@@ -39,11 +39,12 @@
   3. Ein Color Grading CSS-Filter-Wrapper ist in Remotion einsetzbar und liefert den definierten Golden-Hour-Look reproduzierbar
   4. Ein Referenz-Moodboard mit 5+ konkreten Instagram-Screenshots dokumentiert den Ziel-Stil visuell und ist im Dashboard verlinkbar
   5. 5 Testbilder gegen den Style Guide generiert und validiert — Style Guide ist damit nicht nur geschrieben sondern bewiesen
-**Plans:** 3 plans
+**Plans:** 4 plans
 Plans:
 - [ ] 06-01-PLAN.md — brand.ts single source of truth + colors.ts re-export + globals.css sync
 - [ ] 06-02-PLAN.md — ColorGrade wrapper component + StepBadge/SceneLabel SAFE_ZONES migration
-- [ ] 06-03-PLAN.md — /moodboard page with reference screenshots + dashboard nav link
+- [ ] 06-03-PLAN.md — /moodboard page with real reference images + dashboard nav link
+- [ ] 06-04-PLAN.md — 5 Gemini test images generated and validated against Style Guide
 **UI hint**: yes
 
 ### Phase 7: AI Scene Assets
@@ -90,7 +91,7 @@ Plans:
 | 3. Feedback UI | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 4. Prompt Versioning | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 5. Tech Debt Cleanup | v1.0 | 1/1 | Complete | 2026-03-28 |
-| 6. Channel Identity | v1.1 | 0/3 | Planned | - |
+| 6. Channel Identity | v1.1 | 0/4 | Planned | - |
 | 7. AI Scene Assets | v1.1 | 0/? | Not started | - |
 | 8. KodokShowcase Composition | v1.1 | 0/? | Not started | - |
 | 9. Pipeline Tests | v1.1 | 0/? | Not started | - |
