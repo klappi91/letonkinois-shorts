@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
+/* MANUELLER SYNC AUS src/lib/brand.ts — zuletzt synchronisiert 2026-03-28 */
 @theme {
   /* Le Tonkinois Brand Colors */
   --color-brand-red: #B50606;
   --color-brand-red-light: rgba(181, 6, 6, 0.08);
   --color-brand-red-hover: #9A0505;
 
-  /* Warm Wood Tones */
+  /* Product Accents */
+  --color-navy: #1A2744;
+
+  /* Warm Wood Tones (Dashboard-only — NOT in brand.ts for Remotion) */
   --color-wood-amber: #D4A76A;
   --color-wood-honey: #E8B84B;
   --color-wood-walnut: #6B4226;
