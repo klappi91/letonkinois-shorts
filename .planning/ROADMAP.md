@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase (completed 2026-03-28)
 - [x] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video (completed 2026-03-28)
 - [x] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display (completed 2026-03-28)
+- [ ] **Phase 5: Tech Debt Cleanup** - Dead code entfernen, npm-Script ergänzen, Frontmatter-Fixes, Schema-FK
 
 ## Phase Details
 
@@ -75,6 +76,18 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Seed v1.0 prompt version with real composition data, link existing videos, display version on detail page
 
+### Phase 5: Tech Debt Cleanup
+**Goal**: Accumulated tech debt from v1.0 phases bereinigen — dead code entfernen, fehlende npm-Scripts ergänzen, Frontmatter-Lücken schließen, Schema-FK hinzufügen
+**Depends on**: Phase 4
+**Requirements**: PROM-01, PROM-02
+**Gap Closure:** Closes gaps from v1.0 audit (PROM-SEED-SCRIPT integration gap, dead code, frontmatter, schema refinement)
+**Success Criteria** (what must be TRUE):
+  1. `npm run seed:prompts` existiert und führt `scripts/seed-prompt-versions.ts` aus
+  2. `VideoEntry` Deprecated-Alias ist aus `types.ts` entfernt
+  3. `PromptVersion` und `PromptVersionContent` Interfaces sind aus `types.ts` entfernt (oder tatsächlich importiert)
+  4. 02-02-SUMMARY.md Frontmatter enthält DATA-01 bis DATA-04 in `requirements_completed`
+**Plans:** 0 plans
+
 ## Progress
 
 **Execution Order:**
@@ -86,3 +99,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
 | 3. Feedback UI | 1/1 | Complete   | 2026-03-28 |
 | 4. Prompt Versioning | 1/1 | Complete   | 2026-03-28 |
+| 5. Tech Debt Cleanup | 0/0 | Pending |  |

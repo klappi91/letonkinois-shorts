@@ -95,6 +95,6 @@
 | FEED-02 | Phase 3 | Complete |
 | FEED-03 | Phase 3 | Complete |
 | FEED-04 | Phase 3 | Complete |
-| PROM-01 | Phase 4 | Complete |
-| PROM-02 | Phase 4 | Complete |
+| PROM-01 | Phase 4, Phase 5 | Complete (operational gap: seed script) |
+| PROM-02 | Phase 4, Phase 5 | Complete (operational gap: seed script) |
 | PROM-03 | Phase 4 | Complete |
