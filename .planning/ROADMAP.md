@@ -13,7 +13,7 @@ The existing Next.js gallery dashboard evolves from a static JSON-driven prototy
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Supabase Foundation** - Supabase project, DB schema, RLS policies, three-client pattern
-- [ ] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase
+- [x] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase (completed 2026-03-28)
 - [ ] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video
 - [ ] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display
 
@@ -43,10 +43,10 @@ Plans:
   3. A logged-in reviewer can log out from any page and is redirected to /login
   4. The gallery (/) and video detail (/video/[id]) pages display the same videos that were previously in videos.json, now fetched from Supabase
   5. Gallery filter by type and status works correctly with Supabase data
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 02-01-PLAN.md — Auth infrastructure: proxy.ts auth guard, login page, LogoutButton + CopyButton components
-- [ ] 02-02-PLAN.md — Data migration: seed script, page/component migration to Supabase queries, wire LogoutButton
+- [x] 02-02-PLAN.md — Data migration: seed script, page/component migration to Supabase queries, wire LogoutButton
 **UI hint**: yes
 
 ### Phase 3: Feedback UI
@@ -79,6 +79,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Supabase Foundation | 2/2 | Complete |  |
-| 2. Auth + Data Migration | 0/2 | Not started | - |
+| 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
 | 3. Feedback UI | 0/? | Not started | - |
 | 4. Prompt Versioning | 0/? | Not started | - |

@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 02-01-PLAN.md — auth guard + login page + LogoutButton + CopyButton
-last_updated: "2026-03-28T07:03:29.307Z"
+status: verifying
+stopped_at: Completed 02-02-PLAN.md — seed script + data migration to Supabase + LogoutButton wired
+last_updated: "2026-03-28T07:09:42.956Z"
 last_activity: 2026-03-28
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-26)
 
 Phase: 02 (auth-data-migration) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-03-28
 
 Progress: [░░░░░░░░░░] 0%
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 01 P01 | 4 | 2 tasks | 9 files |
 | Phase 02-auth-data-migration P01 | 2 | 2 tasks | 4 files |
+| Phase 02-auth-data-migration P02 | 3 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Schema uses TEXT + CHECK for status (not Postgres ENUM) — more extensible (D-04)
 - [Phase 02-01]: Use getUser() not getSession() in proxy.ts — getSession is spoofable, getUser verifies against Supabase server
 - [Phase 02-01]: Cookie propagation on redirect: copy supabaseResponse cookies to redirect response to preserve session state
+- [Phase 02-auth-data-migration]: Supabase videos.id is UUID — JSON slug IDs cannot be upserted; seed script omits id, Supabase auto-generates UUIDs
+- [Phase 02-auth-data-migration]: tsconfig.json excludes scripts/ directory — seed scripts run via tsx directly, not part of Next.js tsc compilation
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-28T07:03:29.304Z
-Stopped at: Completed 02-01-PLAN.md — auth guard + login page + LogoutButton + CopyButton
+Last session: 2026-03-28T07:09:42.953Z
+Stopped at: Completed 02-02-PLAN.md — seed script + data migration to Supabase + LogoutButton wired
 Resume file: None

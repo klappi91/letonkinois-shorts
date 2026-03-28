@@ -27,10 +27,10 @@
 
 ### Daten-Migration
 
-- [ ] **DATA-01**: Alle bestehenden Video-Metadaten aus `videos.json` sind in die Supabase `videos`-Tabelle migriert
-- [ ] **DATA-02**: Gallery-Dashboard (/) liest Video-Daten aus Supabase statt aus JSON
-- [ ] **DATA-03**: Video-Detail-Seite (/video/[id]) liest Daten aus Supabase statt aus JSON
-- [ ] **DATA-04**: Filter-Funktionalität (Typ, Status) funktioniert weiterhin mit Supabase-Daten
+- [x] **DATA-01**: Alle bestehenden Video-Metadaten aus `videos.json` sind in die Supabase `videos`-Tabelle migriert
+- [x] **DATA-02**: Gallery-Dashboard (/) liest Video-Daten aus Supabase statt aus JSON
+- [x] **DATA-03**: Video-Detail-Seite (/video/[id]) liest Daten aus Supabase statt aus JSON
+- [x] **DATA-04**: Filter-Funktionalität (Typ, Status) funktioniert weiterhin mit Supabase-Daten
 
 ### Feedback
 
@@ -87,10 +87,10 @@
 | AUTH-03 | Phase 2 | Complete |
 | AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 2 | Complete |
-| DATA-01 | Phase 2 | Pending |
-| DATA-02 | Phase 2 | Pending |
-| DATA-03 | Phase 2 | Pending |
-| DATA-04 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Complete |
+| DATA-02 | Phase 2 | Complete |
+| DATA-03 | Phase 2 | Complete |
+| DATA-04 | Phase 2 | Complete |
 | FEED-01 | Phase 3 | Pending |
 | FEED-02 | Phase 3 | Pending |
 | FEED-03 | Phase 3 | Pending |
