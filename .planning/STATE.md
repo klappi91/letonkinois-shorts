@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Content Quality Foundation
-status: defining-requirements
+status: ready-to-plan
 stopped_at: null
 last_updated: "2026-03-28T14:00:00.000Z"
 last_activity: 2026-03-28
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,14 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-28)
 
 **Core value:** Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback verbessert die nächste Generation
-**Current focus:** Defining requirements for v1.1
+**Current focus:** Phase 6 — Channel Identity
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-28 — Milestone v1.1 started
+Phase: 6 of 9 (Channel Identity)
+Plan: — of — (not yet planned)
+Status: Ready to plan
+Last activity: 2026-03-28 — v1.1 roadmap created, Phase 6 is next
+
+Progress: [░░░░░░░░░░] 0% (v1.1 milestone)
 
 ## Accumulated Context
 
@@ -37,11 +39,11 @@ Last activity: 2026-03-28 — Milestone v1.1 started
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Use `@supabase/ssr@0.9.0` (not deprecated `@supabase/auth-helpers-nextjs`)
-- Use `getUser()` for all auth guards — never `getSession()` (spoofable)
-- Next.js 16: middleware file is `proxy.ts`, not `middleware.ts`; `cookies()` must be awaited
-- Videos stay in `public/videos/` — no Supabase Storage for video files
-- Content-Qualität vor Automatisierung — erst Stil+Showcase nageln, dann Cron-Jobs
+- v1.0: Use `@supabase/ssr@0.9.0` — never deprecated auth-helpers
+- v1.0: `getUser()` for all auth guards — never `getSession()` (spoofable)
+- v1.0: Videos stay in `public/videos/` — no Supabase Storage for video files
+- v1.1: Channel Identity MUST precede all AI generation (pitfall: style doesn't transfer without machine-readable spec)
+- v1.1: Zero inline hex values in composition .tsx files — all colors from colors.ts, all fonts from fonts.ts
 
 ### Pending Todos
 
@@ -49,4 +51,13 @@ None yet.
 
 ### Blockers/Concerns
 
-- Vercel plan tier: Hobby allows only 1 cron/day — deferred to v1.2+
+- Kodok accent color (Navy? Gold?) not yet decided — Phase 6 must resolve before Phase 7 can begin
+- Gemini Image model choice (2.0-flash vs. imagen-3) needs empirical test in Phase 7
+- Vercel Hobby tier: 1 cron/day limit — Cron-Jobs deferred to v1.2+
+- @remotion/three render performance at 1080x1920 unknown — measure in Phase 9 before committing to 3D pipeline
+
+## Session Continuity
+
+Last session: 2026-03-28
+Stopped at: Roadmap created for v1.1 milestone (Phases 6-9)
+Resume file: None
