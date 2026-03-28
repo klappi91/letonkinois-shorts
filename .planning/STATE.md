@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-26T13:38:52.278Z"
-last_activity: 2026-03-26
+stopped_at: Completed 02-01-PLAN.md — auth guard + login page + LogoutButton + CopyButton
+last_updated: "2026-03-28T07:03:29.307Z"
+last_activity: 2026-03-28
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 4
+  completed_plans: 3
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** The feedback loop must run — Shorts generieren → Team bewertet → Feedback verbessert die nächste Generation
-**Current focus:** Phase 01 — supabase-foundation
+**Current focus:** Phase 02 — auth-data-migration
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
+Phase: 02 (auth-data-migration) — EXECUTING
+Plan: 2 of 2
 Status: Ready to execute
-Last activity: 2026-03-26
+Last activity: 2026-03-28
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01 P01 | 4 | 2 tasks | 9 files |
+| Phase 02-auth-data-migration P01 | 2 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - [Phase 01]: proxy.ts at project root (not middleware.ts) — Next.js 16 renamed convention; export function proxy()
 - [Phase 01]: VideoStatus = draft|approved|rejected — removed 'pending'; VideoEntry kept as deprecated alias for Phase 2 migration
 - [Phase 01]: Schema uses TEXT + CHECK for status (not Postgres ENUM) — more extensible (D-04)
+- [Phase 02-01]: Use getUser() not getSession() in proxy.ts — getSession is spoofable, getUser verifies against Supabase server
+- [Phase 02-01]: Cookie propagation on redirect: copy supabaseResponse cookies to redirect response to preserve session state
 
 ### Pending Todos
 
@@ -80,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T13:38:52.273Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-auth-data-migration/02-CONTEXT.md
+Last session: 2026-03-28T07:03:29.304Z
+Stopped at: Completed 02-01-PLAN.md — auth guard + login page + LogoutButton + CopyButton
+Resume file: None

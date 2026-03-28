@@ -19,11 +19,11 @@
 
 ### Auth
 
-- [ ] **AUTH-01**: User kann sich per Email/Passwort einloggen auf einer dedizierten Login-Seite
-- [ ] **AUTH-02**: Admin kann neue User per `inviteUserByEmail()` einladen (Supabase Dashboard oder Admin-API-Route)
-- [ ] **AUTH-03**: Alle Dashboard-Seiten (/, /video/[id], /assets) sind geschützt — unauthentifizierte User werden auf /login redirected
-- [ ] **AUTH-04**: Next.js proxy.ts (oder middleware.ts) refresht Sessions automatisch und setzt Auth-Cookies korrekt
-- [ ] **AUTH-05**: User kann sich ausloggen von jeder Seite
+- [x] **AUTH-01**: User kann sich per Email/Passwort einloggen auf einer dedizierten Login-Seite
+- [x] **AUTH-02**: Admin kann neue User per `inviteUserByEmail()` einladen (Supabase Dashboard oder Admin-API-Route)
+- [x] **AUTH-03**: Alle Dashboard-Seiten (/, /video/[id], /assets) sind geschützt — unauthentifizierte User werden auf /login redirected
+- [x] **AUTH-04**: Next.js proxy.ts (oder middleware.ts) refresht Sessions automatisch und setzt Auth-Cookies korrekt
+- [x] **AUTH-05**: User kann sich ausloggen von jeder Seite
 
 ### Daten-Migration
 
@@ -82,11 +82,11 @@
 | SUPA-04 | Phase 1 | Complete |
 | SUPA-05 | Phase 1 | Complete |
 | SUPA-06 | Phase 1 | Complete |
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 2 | Pending |
-| AUTH-04 | Phase 2 | Pending |
-| AUTH-05 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
+| AUTH-03 | Phase 2 | Complete |
+| AUTH-04 | Phase 2 | Complete |
+| AUTH-05 | Phase 2 | Complete |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 2 | Pending |
 | DATA-03 | Phase 2 | Pending |

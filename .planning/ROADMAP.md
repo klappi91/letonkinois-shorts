@@ -45,7 +45,7 @@ Plans:
   5. Gallery filter by type and status works correctly with Supabase data
 **Plans:** 2 plans
 Plans:
-- [ ] 02-01-PLAN.md — Auth infrastructure: proxy.ts auth guard, login page, LogoutButton + CopyButton components
+- [x] 02-01-PLAN.md — Auth infrastructure: proxy.ts auth guard, login page, LogoutButton + CopyButton components
 - [ ] 02-02-PLAN.md — Data migration: seed script, page/component migration to Supabase queries, wire LogoutButton
 **UI hint**: yes
 
