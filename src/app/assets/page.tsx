@@ -7,6 +7,7 @@ import {
   AssetCategory,
   CATEGORY_LABELS,
 } from "@/data/asset-catalog";
+import LogoutButton from "@/components/LogoutButton";
 
 const ALL_CATEGORIES: AssetCategory[] = [
   "products",
@@ -58,6 +59,7 @@ export default function AssetsPage() {
               </p>
             </div>
           </div>
+          <LogoutButton />
         </div>
       </header>
 

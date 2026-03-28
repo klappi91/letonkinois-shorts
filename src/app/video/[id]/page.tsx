@@ -1,38 +1,22 @@
-"use client";
-
-import { use, useState } from "react";
 import Link from "next/link";
-import { VideoEntry, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
-import videosData from "@/data/videos.json";
+import { createClient } from "@/lib/supabase/server";
+import { Video, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
+import CopyButton from "@/components/CopyButton";
+import LogoutButton from "@/components/LogoutButton";
 
-const videos = videosData as VideoEntry[];
-
-function CopyButton({ text, label }: { text: string; label: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <button
-      onClick={copy}
-      className="text-xs px-3 py-1 rounded bg-bg-sepia text-text-muted hover:bg-wood-amber/30 transition-colors"
-    >
-      {copied ? "Kopiert!" : label}
-    </button>
-  );
-}
-
-export default function VideoDetail({
+export default async function VideoDetail({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = use(params);
-  const video = videos.find((v) => v.id === id);
+  const { id } = await params;
+
+  const supabase = await createClient();
+  const { data: video } = await supabase
+    .from("videos")
+    .select("*")
+    .eq("id", id)
+    .single<Video>();
 
   if (!video) {
     return (
@@ -47,23 +31,26 @@ export default function VideoDetail({
     );
   }
 
-  const fullCaption = `${video.captionDe}\n\n${video.hashtags.join(" ")}`;
+  const fullCaption = `${video.caption_de ?? ""}\n\n${video.hashtags.join(" ")}`;
 
   return (
     <main className="min-h-screen bg-bg-cream">
       {/* Header */}
       <header className="border-b border-bg-sepia/50 bg-bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Link
-            href="/"
-            className="text-text-muted hover:text-brand-red transition-colors text-sm"
-          >
-            &larr; Dashboard
-          </Link>
-          <span className="text-bg-sepia">/</span>
-          <span className="text-sm text-text-dark font-medium truncate">
-            {video.title}
-          </span>
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-text-muted hover:text-brand-red transition-colors text-sm"
+            >
+              &larr; Dashboard
+            </Link>
+            <span className="text-bg-sepia">/</span>
+            <span className="text-sm text-text-dark font-medium truncate">
+              {video.title}
+            </span>
+          </div>
+          <LogoutButton />
         </div>
       </header>
 
@@ -73,7 +60,7 @@ export default function VideoDetail({
           <div>
             <div className="relative aspect-[9/16] bg-bg-dark rounded-xl overflow-hidden shadow-lg max-w-[360px]">
               <video
-                src={video.videoFile}
+                src={video.video_url ?? ""}
                 controls
                 playsInline
                 className="w-full h-full object-cover"
@@ -89,7 +76,7 @@ export default function VideoDetail({
                 {video.duration}s
               </span>
               <span className="text-xs text-text-muted">
-                {video.createdAt}
+                {video.created_at}
               </span>
               <span className="text-xs text-text-muted ml-auto">
                 {video.pipeline}
@@ -126,21 +113,21 @@ export default function VideoDetail({
                 <CopyButton text={fullCaption} label="Caption + Hashtags kopieren" />
               </div>
               <pre className="text-sm text-text-dark whitespace-pre-wrap font-[family-name:var(--font-body)] leading-relaxed">
-                {video.captionDe}
+                {video.caption_de ?? ""}
               </pre>
             </div>
 
             {/* Instagram Caption FR */}
-            {video.captionFr && (
+            {video.caption_fr && (
               <div className="bg-bg-card rounded-lg p-4 border border-bg-sepia/50">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="font-bold text-sm text-text-dark">
                     Instagram Caption (FR)
                   </h2>
-                  <CopyButton text={video.captionFr} label="Kopieren" />
+                  <CopyButton text={video.caption_fr} label="Kopieren" />
                 </div>
                 <pre className="text-sm text-text-dark whitespace-pre-wrap font-[family-name:var(--font-body)] leading-relaxed">
-                  {video.captionFr}
+                  {video.caption_fr}
                 </pre>
               </div>
             )}
@@ -183,16 +170,6 @@ export default function VideoDetail({
                 </button>
               </div>
             </div>
-
-            {/* Notes */}
-            {video.notes && (
-              <div className="bg-bg-card rounded-lg p-4 border border-bg-sepia/50">
-                <h2 className="font-bold text-sm text-text-dark mb-2">
-                  Notizen
-                </h2>
-                <p className="text-sm text-text-muted">{video.notes}</p>
-              </div>
-            )}
           </div>
         </div>
       </div>

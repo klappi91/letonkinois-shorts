@@ -1,15 +1,21 @@
 import Link from "next/link";
 import VideoGrid from "@/components/VideoGrid";
-import { VideoEntry } from "@/lib/types";
-import videosData from "@/data/videos.json";
+import { createClient } from "@/lib/supabase/server";
+import { Video } from "@/lib/types";
+import LogoutButton from "@/components/LogoutButton";
 
-const videos = videosData as VideoEntry[];
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: videos } = await supabase
+    .from("videos")
+    .select("*")
+    .order("created_at", { ascending: false });
+  const videoList: Video[] = videos ?? [];
 
-export default function Home() {
   const stats = {
-    total: videos.length,
-    pending: videos.filter((v) => v.rating === "draft").length,
-    approved: videos.filter((v) => v.rating === "approved").length,
+    total: videoList.length,
+    pending: videoList.filter((v) => v.status === "draft").length,
+    approved: videoList.filter((v) => v.status === "approved").length,
   };
 
   return (
@@ -35,6 +41,7 @@ export default function Home() {
             >
               Bild-Bibliothek
             </Link>
+            <LogoutButton />
             <div className="text-center">
               <div className="font-bold text-text-dark">{stats.total}</div>
               <div className="text-xs text-text-muted">Videos</div>
@@ -53,7 +60,7 @@ export default function Home() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <VideoGrid videos={videos} />
+        <VideoGrid videos={videoList} />
       </div>
     </main>
   );

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { VideoEntry, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
+import { Video, VIDEO_TYPE_LABELS, VIDEO_TYPE_COLORS } from "@/lib/types";
 
-function RatingBadge({ rating }: { rating: VideoEntry["rating"] }) {
+function RatingBadge({ rating }: { rating: Video["status"] }) {
   const styles = {
     draft: "bg-bg-sepia text-text-muted",
     approved: "bg-green-100 text-green-800",
@@ -21,14 +21,14 @@ function RatingBadge({ rating }: { rating: VideoEntry["rating"] }) {
   );
 }
 
-export default function VideoCard({ video }: { video: VideoEntry }) {
+export default function VideoCard({ video }: { video: Video }) {
   return (
     <Link href={`/video/${video.id}`} className="group block">
       <div className="bg-bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 border border-bg-sepia/50">
         {/* Video Preview / Thumbnail */}
         <div className="relative aspect-[9/16] bg-bg-dark overflow-hidden max-h-[400px]">
           <video
-            src={video.videoFile}
+            src={video.video_url ?? ''}
             muted
             playsInline
             preload="metadata"
@@ -60,8 +60,8 @@ export default function VideoCard({ video }: { video: VideoEntry }) {
             {video.title}
           </h3>
           <div className="flex items-center justify-between mt-2">
-            <span className="text-xs text-text-muted">{video.createdAt}</span>
-            <RatingBadge rating={video.rating} />
+            <span className="text-xs text-text-muted">{video.created_at}</span>
+            <RatingBadge rating={video.status} />
           </div>
         </div>
       </div>

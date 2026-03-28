@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { VideoEntry, VideoType, VIDEO_TYPE_LABELS } from "@/lib/types";
+import { Video, VideoType, VIDEO_TYPE_LABELS } from "@/lib/types";
 import VideoCard from "./VideoCard";
 
 const ALL_TYPES: VideoType[] = [
@@ -13,7 +13,7 @@ const ALL_TYPES: VideoType[] = [
   "lifestyle",
 ];
 
-export default function VideoGrid({ videos }: { videos: VideoEntry[] }) {
+export default function VideoGrid({ videos }: { videos: Video[] }) {
   const [filter, setFilter] = useState<VideoType | "all">("all");
 
   const filtered =
