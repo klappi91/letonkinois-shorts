@@ -8,6 +8,16 @@ Eine automatisierte Content-Pipeline für Le Tonkinois Instagram Reels & Shorts.
 
 Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback verbessert die nächste Generation.
 
+## Current Milestone: v1.1 Content Quality Foundation
+
+**Goal:** Einen definierten Instagram-Kanal-Stil entwickeln und den ersten postbaren Product Showcase (Kodok) produzieren — als Proof-of-Concept für alle zukünftigen Video-Typen.
+
+**Target features:**
+- Instagram-Kanal-Identität: Recherche, Referenzen, visuelles Konzept-Design das für allen Content gilt
+- Skill-Audit & -Aufbau: Vorhandene Skills inventarisieren, fehlende identifizieren/installieren
+- Kodok Product Showcase: Stil-Varianten testen, iterieren bis postbar
+- Technische Pipeline-Tests: Echte Fotos vs. Gemini-Bilder vs. 3D vs. Video-Sequenzen im definierten Stil
+
 ## Requirements
 
 ### Validated
@@ -29,8 +39,10 @@ Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback 
 
 ### Active
 
-- [ ] Cron-Job: Tägliche Short-Generierung (Claude Code + Remotion + Gemini)
-- [ ] Cron-Job: Improvement-Workflow (Claude Code liest neues Feedback → verbessert Prompts)
+- [ ] Instagram-Kanal-Stil: Recherche, Referenzen, visuelles Konzept-Design für den gesamten Kanal
+- [ ] Skill-Fundament: Inventar vorhandener Skills, fehlende Skills identifizieren und aufbauen
+- [ ] Kodok Product Showcase: Erste postbare Composition im definierten Kanal-Stil
+- [ ] Technische Pipelines: Echte Fotos, Gemini-Bilder, 3D, Video-Sequenzen — jeweils im Stil durchtesten
 
 ### Out of Scope
 
@@ -39,6 +51,8 @@ Der Feedback-Loop muss laufen: Shorts generieren → Team bewertet → Feedback 
 - Echtzeit-Kollaboration / Chat — kein Mehrwert für Review-Workflow
 - Mobile App — Web reicht für Review-Workflow
 - Video-Editing im Browser — Remotion rendert serverseitig
+- Cron-Job: Tägliche Short-Generierung — erst wenn Content-Qualität steht (v1.2+)
+- Cron-Job: Improvement-Workflow — erst wenn Content-Qualität steht (v1.2+)
 
 ## Context
 
@@ -90,4 +104,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-28 after v1.0 milestone*
+*Last updated: 2026-03-28 after v1.1 milestone start*
