@@ -39,7 +39,11 @@
   3. Ein Color Grading CSS-Filter-Wrapper ist in Remotion einsetzbar und liefert den definierten Golden-Hour-Look reproduzierbar
   4. Ein Referenz-Moodboard mit 5+ konkreten Instagram-Screenshots dokumentiert den Ziel-Stil visuell und ist im Dashboard verlinkbar
   5. 5 Testbilder gegen den Style Guide generiert und validiert — Style Guide ist damit nicht nur geschrieben sondern bewiesen
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 06-01-PLAN.md — brand.ts single source of truth + colors.ts re-export + globals.css sync
+- [ ] 06-02-PLAN.md — ColorGrade wrapper component + StepBadge/SceneLabel SAFE_ZONES migration
+- [ ] 06-03-PLAN.md — /moodboard page with reference screenshots + dashboard nav link
 **UI hint**: yes
 
 ### Phase 7: AI Scene Assets
@@ -86,7 +90,7 @@
 | 3. Feedback UI | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 4. Prompt Versioning | v1.0 | 1/1 | Complete | 2026-03-28 |
 | 5. Tech Debt Cleanup | v1.0 | 1/1 | Complete | 2026-03-28 |
-| 6. Channel Identity | v1.1 | 0/? | Not started | - |
+| 6. Channel Identity | v1.1 | 0/3 | Planned | - |
 | 7. AI Scene Assets | v1.1 | 0/? | Not started | - |
 | 8. KodokShowcase Composition | v1.1 | 0/? | Not started | - |
 | 9. Pipeline Tests | v1.1 | 0/? | Not started | - |
