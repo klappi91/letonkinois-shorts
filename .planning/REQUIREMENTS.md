@@ -41,9 +41,9 @@
 
 ### Prompt-Versioning
 
-- [ ] **PROM-01**: Jedes generierte Video hat eine Referenz auf die Prompt-Version die es erzeugt hat (`prompt_version` auf videos-Tabelle)
-- [ ] **PROM-02**: Prompt-Versionen werden in einer `prompt_versions`-Tabelle gespeichert mit Versionsnummer und Inhalt
-- [ ] **PROM-03**: Auf der Video-Detail-Seite ist sichtbar welche Prompt-Version das Video erzeugt hat
+- [x] **PROM-01**: Jedes generierte Video hat eine Referenz auf die Prompt-Version die es erzeugt hat (`prompt_version` auf videos-Tabelle)
+- [x] **PROM-02**: Prompt-Versionen werden in einer `prompt_versions`-Tabelle gespeichert mit Versionsnummer und Inhalt
+- [x] **PROM-03**: Auf der Video-Detail-Seite ist sichtbar welche Prompt-Version das Video erzeugt hat
 
 ---
 
@@ -95,6 +95,6 @@
 | FEED-02 | Phase 3 | Complete |
 | FEED-03 | Phase 3 | Complete |
 | FEED-04 | Phase 3 | Complete |
-| PROM-01 | Phase 4 | Pending |
-| PROM-02 | Phase 4 | Pending |
-| PROM-03 | Phase 4 | Pending |
+| PROM-01 | Phase 4 | Complete |
+| PROM-02 | Phase 4 | Complete |
+| PROM-03 | Phase 4 | Complete |

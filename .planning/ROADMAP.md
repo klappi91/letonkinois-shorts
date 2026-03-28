@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Supabase Foundation** - Supabase project, DB schema, RLS policies, three-client pattern
 - [x] **Phase 2: Auth + Data Migration** - Invite-only login gates the dashboard; videos.json migrated to Supabase (completed 2026-03-28)
 - [x] **Phase 3: Feedback UI** - Star rating + pros/cons form persists per reviewer per video (completed 2026-03-28)
-- [ ] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display
+- [x] **Phase 4: Prompt Versioning** - Prompt version table + video linkage + detail-page display (completed 2026-03-28)
 
 ## Phase Details
 
@@ -71,9 +71,9 @@ Plans:
   1. The `prompt_versions` table exists in Supabase and contains at least one seed row representing the current prompt baseline
   2. Every video row in the `videos` table has a non-null `prompt_version` reference pointing to a valid entry in `prompt_versions`
   3. The video detail page shows the prompt version identifier (e.g., "v1.0") for the displayed video
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 04-01-PLAN.md — Seed v1.0 prompt version with real composition data, link existing videos, display version on detail page
+- [x] 04-01-PLAN.md — Seed v1.0 prompt version with real composition data, link existing videos, display version on detail page
 
 ## Progress
 
@@ -85,4 +85,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Supabase Foundation | 2/2 | Complete |  |
 | 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
 | 3. Feedback UI | 1/1 | Complete   | 2026-03-28 |
-| 4. Prompt Versioning | 0/1 | Not started | - |
+| 4. Prompt Versioning | 1/1 | Complete   | 2026-03-28 |
