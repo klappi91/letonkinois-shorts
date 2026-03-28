@@ -1,181 +1,27 @@
 # Stack Research
 
-**Domain:** Next.js app — adding Supabase Auth + DB, persistent ratings/feedback, cron-based AI content pipeline
-**Researched:** 2026-03-26
-**Confidence:** HIGH (all critical claims verified against official docs)
+**Domain:** Instagram-quality Product Showcase Reels — new capabilities for Content Quality Foundation (v1.1)
+**Researched:** 2026-03-28
+**Confidence:** HIGH (Remotion packages verified via npmjs.com; image processing verified via official docs; architecture reasoning MEDIUM for pipeline orchestration)
+
+---
+
+> **Scope note:** This document covers ONLY new capabilities needed for v1.1. The following are already validated and must NOT be re-added:
+> Next.js 16, React 19, TypeScript, Tailwind CSS v4, Remotion 4.0.261 (core, cli, google-fonts, player, transitions), Supabase Auth+DB, Vercel, Gemini Image skill, Gemini Video skill, Remotion Best Practices skill.
 
 ---
 
 ## Recommended Stack
 
-### Core Technologies
+### Core Technologies — New Additions
 
 | Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| @supabase/supabase-js | 2.100.0 | Supabase client — DB queries, auth, admin operations | Current stable. The one client that works across Server Components, Client Components, and Route Handlers. Use it everywhere via wrapper functions. |
-| @supabase/ssr | 0.9.0 | Cookie-based auth for Next.js SSR | The official replacement for deprecated `@supabase/auth-helpers-nextjs`. Provides `createServerClient` (for server) and `createBrowserClient` (for browser). Required for session persistence across RSC/client boundary. |
-
-**Source:** npmjs.org registry, Supabase official docs — HIGH confidence
-
----
-
-### Auth Pattern for Next.js 16
-
-Next.js 16 renamed `middleware.ts` to `proxy.ts` and the exported function from `middleware` to `proxy`. This is a **breaking change** from Next.js 15. The edge runtime is NOT supported in `proxy.ts` — it runs Node.js only.
-
-**Source:** nextjs.org/docs/app/guides/upgrading/version-16 — HIGH confidence (official docs, updated 2026-03-20)
-
-Supabase's `@supabase/ssr` proxy setup requires:
-
-1. `src/lib/supabase/server.ts` — `createServerClient` wrapper using `cookies()` from `next/headers`
-2. `src/lib/supabase/client.ts` — `createBrowserClient` wrapper for Client Components
-3. `src/proxy.ts` — Refreshes Supabase session tokens on every request using `supabase.auth.getClaims()` (NOT `getSession()` — `getSession` is deprecated server-side because it doesn't validate with Supabase's servers)
-
-**Invite-Only implementation:**
-
-Supabase Admin API (`supabase.auth.admin.inviteUserByEmail`) sends an invite email. Admin calls this from a protected Server Action using the `SUPABASE_SERVICE_ROLE_KEY`. No self-registration. Disable "Enable Signups" in Supabase Auth Settings.
-
-**Source:** supabase.com/docs/reference/javascript/auth-admin-createuser — HIGH confidence
-
----
-
-### Database / Schema
-
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| Supabase (PostgreSQL) | — | Videos table, ratings table, feedback table | Already chosen per PROJECT.md constraints. Free tier sufficient for this project scale (2-5 reviewers, ~daily video generation). |
-| Row Level Security (RLS) | — | Per-user data access control | Mandatory when using Supabase with browser-side client. Without RLS, anon key exposes all data. Enable on every table from day one — retrofitting is painful. |
-
-**Recommended table design:**
-
-```sql
--- videos: migrated from videos.json
-CREATE TABLE videos (
-  id          TEXT PRIMARY KEY,
-  title       TEXT NOT NULL,
-  type        TEXT NOT NULL,         -- 'showcase', 'before-after', etc.
-  duration    INTEGER,               -- seconds
-  file_path   TEXT NOT NULL,         -- relative path in /public/videos/
-  captions    JSONB,                 -- { de: "...", fr: "..." }
-  hashtags    TEXT[],
-  status      TEXT DEFAULT 'draft',  -- 'draft', 'reviewed', 'published'
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ratings: one row per user per video
-CREATE TABLE ratings (
-  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  video_id    TEXT REFERENCES videos(id) ON DELETE CASCADE,
-  user_id     UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  stars       INTEGER CHECK (stars BETWEEN 1 AND 5),
-  created_at  TIMESTAMPTZ DEFAULT NOW(),
-  updated_at  TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(video_id, user_id)  -- upsert-friendly
-);
-
--- feedback: pros/cons per user per video
-CREATE TABLE feedback (
-  id           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  video_id     TEXT REFERENCES videos(id) ON DELETE CASCADE,
-  user_id      UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  pros         TEXT,
-  cons         TEXT,
-  incorporated BOOLEAN DEFAULT FALSE,  -- improvement-workflow reads WHERE incorporated = false
-  created_at   TIMESTAMPTZ DEFAULT NOW(),
-  updated_at   TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(video_id, user_id)
-);
-```
-
-The `incorporated` flag on `feedback` is how the improvement cron job knows which feedback to process. After writing improved prompts, it sets `incorporated = TRUE`.
-
-**Source:** Supabase RLS docs, PostgreSQL UNIQUE constraint patterns — HIGH confidence for schema design
-
----
-
-### Cron Jobs (Vercel)
-
-**CRITICAL CONSTRAINT: Vercel Hobby plan = once per day maximum.**
-
-| Plan | Min Interval | Max Function Duration | Scheduling Precision |
-|------|-------------|----------------------|---------------------|
-| Hobby | Once per day | 300s (5 min) | ±59 min within hour |
-| Pro | Every minute | 800s (13 min) | Per-minute |
-
-**Decision:** Use Vercel Pro plan OR accept once-per-day generation. For an Instagram content pipeline (target: 1 video/day), Hobby is technically sufficient but the ±59min timing imprecision is acceptable.
-
-**Source:** vercel.com/docs/cron-jobs/usage-and-pricing — HIGH confidence
-
-**Cron configuration pattern (`vercel.json`):**
-
-```json
-{
-  "crons": [
-    {
-      "path": "/api/cron/generate-video",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/improve-prompts",
-      "schedule": "0 9 * * *"
-    }
-  ]
-}
-```
-
-**Security pattern (mandatory — do not skip):**
-
-Vercel injects `Authorization: Bearer $CRON_SECRET` on every cron invocation. Verify it in every cron Route Handler:
-
-```ts
-// src/app/api/cron/generate-video/route.ts
-export const maxDuration = 300  // 5 min max on Hobby, 800 on Pro
-
-export function GET(request: Request) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Unauthorized', { status: 401 })
-  }
-  // ... trigger generation
-}
-```
-
-Set `CRON_SECRET` in Vercel environment variables — never in git.
-
-**Source:** vercel.com/docs/cron-jobs/manage-cron-jobs (official code example) — HIGH confidence
-
-**Important cron behavior:**
-- Vercel does NOT retry on failure — build in retry logic or idempotent re-runs
-- Cron invocations are HTTP GET requests — no request body
-- Crons run against production deployment only (not preview)
-- Duration limit is the hard ceiling — AI generation must complete within 300s (Hobby) or 800s (Pro)
-
----
-
-### AI Content Pipeline
-
-The cron Route Handler cannot run Claude Code directly inside Vercel's serverless functions — Claude Code is a CLI tool, not a Node.js library. The pipeline architecture must decouple trigger from execution:
-
-**Pattern A — Vercel cron triggers, Claude Code runs on a separate machine (recommended):**
-
-```
-Vercel Cron (daily) → POST /api/cron/generate-video → writes "generation_requested" to Supabase
-Long-running worker (separate VPS/local machine) → polls Supabase → spawns claude --print ... → uploads result
-```
-
-This sidesteps the 300s function limit entirely. The Vercel cron is just a trigger that writes a job record to Supabase. A separate persistent process (can be a local machine or cheap VPS) polls for pending jobs and runs Claude Code.
-
-**Pattern B — Vercel cron calls @anthropic-ai/sdk directly (no Claude Code):**
-
-```
-Vercel Cron → Route Handler → @anthropic-ai/sdk → Gemini API → Remotion render
-```
-
-Drawback: Remotion renders require a full Node.js environment with ffmpeg. Vercel serverless functions don't support ffmpeg. Remotion rendering cannot run inside Vercel Functions.
-
-**Conclusion: Use Pattern A.** The cron job is a lightweight trigger. The actual `claude` invocation and Remotion render happen on a machine with full CLI access.
-
-**Source:** Research synthesis — MEDIUM confidence (architectural reasoning, not a single official source)
+| @remotion/noise | 4.0.x (match current) | Organic animation movement — floating particles, grain textures, subtle camera-shake feel | Provides `noise2D()`, `noise3D()` for smooth pseudo-random values. Replaces `Math.random()` (which recomputes every frame) with deterministic, temporally coherent movement. Essential for premium organic feel. |
+| @remotion/shapes | 4.0.x (match current) | SVG shape primitives — geometric wipes, reveal masks, product frame elements | Triangle, Star, Pie, Circle as React components. Dependency-free, animatable. Use for custom wipe masks and branded graphic elements without external SVG files. |
+| @remotion/lottie | 4.0.x (match current) | Import After Effects animations — checkmarks, arrows, product highlight loops | LottieFiles.com has 400K+ free animations (MIT-licensed). Critical for adding professional motion elements (e.g., a "sparkle" appear on product reveal) without building everything from scratch. |
+| @remotion/three | 4.0.x (match current) | 3D product scene rendering — can-rotation, depth effects, glb model playback | Wraps React Three Fiber with Remotion's `useCurrentFrame()`. Enables building a 3D rotating Kodok can scene. Requires `renderer: 'angle'` in `renderMedia()` config. Use ThreeCanvas component. |
+| sharp | 0.34.5 | Pre-process real product photos — resize to 9:16 safe zone, convert to WebP, composite backgrounds | The fastest Node.js image processor (libvips). Handles compositing a product PNG onto a generated background before feeding into Remotion. Required because Remotion can't resize/convert images before render. |
 
 ---
 
@@ -183,8 +29,10 @@ Drawback: Remotion renders require a full Node.js environment with ffmpeg. Verce
 
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| @anthropic-ai/sdk | latest (~0.x) | Call Claude API directly from Node.js (for improvement-workflow scripts) | When running prompt improvement as a standalone Node.js script, not as a Vercel function |
-| zod | ^3.x | Runtime schema validation for cron payloads and Supabase inserts | Validate all data before writing to DB; prevents bad data from corrupting the feedback loop |
+| @remotion/captions | 4.0.x (match current) | Word-level animated captions — for how-to and educational reels | Use when compositions need synchronized burned-in text. Pairs with @remotion/install-whisper-cpp if voiceover is added later. Not needed for pure visual Product Showcase reels. |
+| @remotion/media-utils | 4.0.x (match current) | Audio waveform data for audio-reactive animations | Use when adding background music sync. `useAudioData()` returns per-frame frequency data. Enables beat-synced cuts. Defer until audio pipeline is built. |
+| fluent-ffmpeg | 2.1.3 | Post-process rendered MP4 — apply LUT-based warm color grade, normalize audio | FFmpeg wrapper for Node.js. After Remotion renders the base MP4, apply a warm golden LUT (`.cube` file) via `colortemperature` and `curves` filters to achieve the "golden hour" look defined in research. Not in the render path — runs as a post-process step. |
+| @splinetools/r3f-spline | latest | Import Spline 3D scenes into @remotion/three compositions | Only install if using Spline for 3D design. Spline free tier allows 3 exports/month — sufficient for a single Kodok can model. Labeled experimental in Remotion docs. |
 
 ---
 
@@ -192,25 +40,46 @@ Drawback: Remotion renders require a full Node.js environment with ffmpeg. Verce
 
 | Tool | Purpose | Notes |
 |------|---------|-------|
-| Supabase CLI | Local dev with Supabase (migrations, type generation) | `npx supabase gen types typescript --project-id ...` generates TypeScript types from DB schema. Run after every migration. |
-| Supabase Studio | Inspect/manage DB, create invite-only users | Admin creates users via Auth → Users tab — no code needed for invite-only setup |
-| vercel env | Manage secrets (CRON_SECRET, SUPABASE keys) | `vercel env add CRON_SECRET production` — never commit secrets |
+| remotion upgrade | Keep all @remotion/* packages in sync | Run `cd remotion && npx remotion upgrade` — ALL @remotion packages MUST share the same exact version. Never use `^` prefix on Remotion packages. Current project is at 4.0.261 but latest is 4.0.441 — upgrade before adding new packages. |
+| LottieFiles.com | Free Lottie animation source | Filter by "Free", license: "LottieFiles Free License" (allows commercial use). Download as `.lottie` or `.json`. Categories: "Product Marketing", "Product Promotion" have relevant animations. |
+| Spline (spline.design) | 3D web-first design tool | Design Kodok can model in browser, export as react-three-fiber code. Free tier: 3 scene exports/month. Export: Code (Experimental) → react-three-fiber. Remove `OrthographicCamera` from exported code for Remotion. |
+| ffmpeg (system) | Required by fluent-ffmpeg | Must be installed on render machine (`brew install ffmpeg` or `apt install ffmpeg`). Not available in Vercel Functions — post-processing runs locally only. |
 
 ---
 
 ## Installation
 
 ```bash
-# In src/ (Next.js project root)
+# In remotion/ directory — add to Remotion project
+# IMPORTANT: First upgrade all existing packages to latest, then add new ones at same version
+cd remotion
 
-# Core Supabase
-npm install @supabase/supabase-js@2.100.0 @supabase/ssr@0.9.0
+# Step 1: Upgrade existing packages to latest
+npx remotion upgrade
 
-# Validation (recommended)
-npm install zod
+# Step 2: Install new Remotion packages AT THE SAME version as after upgrade
+# (Check version with: cat node_modules/remotion/package.json | grep '"version"')
+npm install @remotion/noise@4.0.441 @remotion/shapes@4.0.441 @remotion/lottie@4.0.441 @remotion/three@4.0.441
 
-# Dev: Supabase CLI for type generation
-npm install -D supabase
+# Step 3: Install Three.js peer dependency for @remotion/three
+npm install three @types/three
+
+# Optional: Captions (defer until audio pipeline needed)
+npm install @remotion/captions@4.0.441
+
+# Optional: Spline integration (only if using Spline for 3D)
+npm install @splinetools/r3f-spline
+
+
+# In the repo root (outside remotion/) — image processing and video post-processing
+cd /home/chris/projects/letonkinois-shorts
+
+# Image pre-processing (product photo compositing)
+npm install sharp
+
+# Video post-processing (color grading)
+npm install fluent-ffmpeg
+npm install -D @types/fluent-ffmpeg
 ```
 
 ---
@@ -219,12 +88,13 @@ npm install -D supabase
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| @supabase/ssr | @supabase/auth-helpers-nextjs | Never — auth-helpers is deprecated, all bugfixes go to @supabase/ssr only |
-| proxy.ts (Next.js 16) | middleware.ts | Only if staying on Next.js 15 or below |
-| Vercel Cron | External cron (cron-job.org, GitHub Actions) | If on Hobby plan but need more than daily frequency — external crons can call Vercel Route Handlers on any schedule |
-| Pattern A (external worker) | Pattern B (Vercel Function renders) | Never — Remotion requires ffmpeg which Vercel Functions do not have |
-| Supabase Auth (invite) | NextAuth / Auth.js | If you need OAuth providers (Google, GitHub) — overkill for a 2-5 person internal tool |
-| Zod | Yup, io-ts | If the team already uses Yup — Zod is simpler, faster, has better TypeScript inference |
+| @remotion/three + ThreeCanvas | Three.js directly without wrapper | Never for Remotion — ThreeCanvas is required to sync with `useCurrentFrame()`. Raw Three.js will not respect Remotion's timeline. |
+| @remotion/lottie | Custom SVG animations in React | Use custom if you need brand-specific micro-animations not available on LottieFiles. Custom has more control but takes 10x longer to build. |
+| sharp (Node.js) | Canvas API / Jimp | sharp is 4-5x faster than Jimp and supports proper compositing. Jimp has no libvips dependency which is simpler to install, but its quality/performance is worse for product photography compositing. |
+| fluent-ffmpeg LUT post-process | CSS filter in Remotion (`filter: sepia(0.3) saturate(1.4)`) | CSS filters are fine for subtle warm tones. Use CSS approach first — it renders inside Remotion without external tools. Only reach for fluent-ffmpeg LUT when you need cinema-grade color grading that CSS filters cannot replicate. |
+| remove.bg API | Gemini image inpainting, local rembg Python | remove.bg: $0.18/image, clean results, no setup. Gemini inpainting: slower, less precise for product photography. Local rembg: free but requires Python env setup. remove.bg is best for batch product photo cleanup at low cost. |
+| @remotion/noise | Math.random() with seeding | Math.random() is not deterministic across frames — same frame will render differently on re-render. @remotion/noise gives the same value every time for the same frame number (required for Remotion's scrubbing). |
+| Spline | Blender + GLTF export | Blender produces better quality GLTF models. Use Blender if you have 3D modeling skills or can hire a modeler. Spline is faster for simple product mockups. Spline export to R3F is experimental. |
 
 ---
 
@@ -232,31 +102,41 @@ npm install -D supabase
 
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
-| @supabase/auth-helpers-nextjs | Officially deprecated — bugfixes stopped, will eventually break on newer Next.js | @supabase/ssr |
-| supabase.auth.getSession() server-side | Does not validate JWT with Supabase servers — can be spoofed | supabase.auth.getClaims() (verifies signature locally) or supabase.auth.getUser() |
-| middleware.ts with function named `middleware` | Deprecated in Next.js 16 — still works but triggers build warnings, will be removed | proxy.ts with export function proxy() |
-| Remotion rendering inside Vercel Functions | ffmpeg is not available in serverless environments — render will fail | Render on a local machine or a VPS with full Node.js environment |
-| getServerSideProps for auth | Pages Router pattern — not applicable to App Router | Server Components + Server Actions |
-| Vercel Hobby cron for sub-daily generation | Hobby enforces once-per-day maximum — deployment fails if expression would run more often | Vercel Pro OR external cron calling your Route Handler |
+| Framer Motion | Not compatible with Remotion's timeline model — animations run on real time, not frame-by-frame | Remotion's built-in `spring()` and `interpolate()` functions |
+| react-spring | Same issue as Framer Motion — real-time not frame-based | Remotion's `spring()` |
+| Matter.js physics | Physics engines run in real-time, not deterministically by frame number | Pre-calculate physics trajectories into keyframes and use `interpolate()` |
+| GIF output for Instagram | GIF is 256 colors, huge file size, no audio, rejected by Instagram API | Render to MP4 via Remotion CLI |
+| @remotion/lambda | Serverless Lambda rendering — adds cost, complexity, and AWS account requirement | Local machine rendering is free and already working. Lambda only if scaling to 10+ videos/day |
+| Framer / Webflow exports | HTML-based animation not renderable to video by Remotion | Build animations directly in Remotion React components |
+| AI-generated product bottles/cans | Constraint from PROJECT.md: "NIEMALS KI-generierte Dosen/Flaschen" | Always use real product photos from assets/products/ catalog |
 
 ---
 
 ## Stack Patterns by Variant
 
-**If staying on Vercel Hobby:**
-- Cron runs once per day at a fixed UTC time
-- Accept ±59 minute timing imprecision
-- Budget 300s max for the cron function execution
-- The cron just triggers a Supabase job record; actual generation runs elsewhere
+**For the Kodok Product Showcase composition (primary v1.1 deliverable):**
+- Use @remotion/three for a slowly rotating 3D can scene (if 3D model available)
+- OR use sharp to composite the real Kodok product photo onto a Gemini-generated warm background scene
+- Apply CSS filter warm grade: `filter: sepia(0.2) saturate(1.3) hue-rotate(-5deg) brightness(1.05)` on ImageScene wrapper
+- Use @remotion/noise for subtle camera drift (noise2D on translateX/Y, amplitude: 3-5px)
+- Use @remotion/shapes for geometric reveal masks (circle iris reveal from center)
+- End with existing EndCard component
 
-**If upgrading to Vercel Pro:**
-- Cron can run every minute
-- maxDuration can be set to 800s
-- Still cannot run Remotion/ffmpeg inside the function
+**For educational/how-to reels (text-heavy):**
+- Pure Remotion — existing components + Tailwind
+- No new packages needed
+- Use @remotion/transitions: clockWipe() or wipe() between step scenes
+- CSS color grade in ImageScene wrapper
 
-**If the team wants to review in the evening (German timezone, UTC+1/+2):**
-- Schedule generation cron at `0 6 * * *` UTC (= 7:00-8:00 CET / 8:00-9:00 CEST)
-- Schedule improvement cron at `0 7 * * *` UTC (runs after generation)
+**For before/after transformation reels:**
+- sharp to pre-crop/composite before+after image pair
+- Wipe transition (horizontal) using @remotion/transitions wipe()
+- @remotion/noise for subtle horizontal scan line on the wipe reveal (premium feel)
+
+**For audio-reactive reels (future):**
+- Add @remotion/media-utils when audio track pipeline exists
+- Pair with @remotion/captions for burned-in word captions
+- Defer to v1.2+
 
 ---
 
@@ -264,74 +144,105 @@ npm install -D supabase
 
 | Package | Compatible With | Notes |
 |---------|-----------------|-------|
-| @supabase/ssr@0.9.0 | Next.js 16.2.1, React 19 | Uses `cookies()` from `next/headers` async API — must await cookies() in Next.js 16 (breaking change from v15 where sync access existed) |
-| @supabase/supabase-js@2.100.0 | @supabase/ssr@0.9.0 | Always keep both in sync — install together |
-| Next.js 16 proxy.ts | @supabase/ssr@0.9.0 | @supabase/ssr docs reference "proxy" not "middleware" for Next.js 16 — compatible |
-| Vercel cron | Next.js Route Handlers (app/) | Official support — Vercel recommends App Router Route Handlers for cron endpoints |
+| @remotion/noise@4.0.x | remotion@4.0.x, React 19 | Must match exact Remotion version. Run `npx remotion versions` to verify alignment. |
+| @remotion/shapes@4.0.x | remotion@4.0.x | Same version lock rule. |
+| @remotion/lottie@4.0.x | remotion@4.0.x | Same version lock rule. |
+| @remotion/three@4.0.x | remotion@4.0.x, three@^0.170.0 | three is a peer dep — install separately. |
+| sharp@0.34.5 | Node.js >=18.17.0 (verified) | Uses libvips binary. Vercel does NOT support sharp in Edge Runtime — only in Node.js API routes or local scripts. |
+| fluent-ffmpeg@2.1.3 | System ffmpeg (any version >=4.x) | Requires system ffmpeg binary — not available in Vercel. Local/VPS only. |
+| @remotion/three + Spline | @splinetools/r3f-spline@latest | Remove OrthographicCamera from Spline export. Use `renderer: 'angle'` in renderMedia config. |
 
-**Next.js 16 async APIs — breaking change affecting Supabase setup:**
+**Critical version rule for Remotion:**
 
-In Next.js 16, `cookies()` and `headers()` are async-only (synchronous access removed). The `@supabase/ssr` `createServerClient` call must use `await cookies()`:
+All @remotion/* packages MUST be at the same exact version. The current project uses 4.0.261 but npm latest is 4.0.441. Before adding any new @remotion packages, upgrade all existing ones first:
 
-```ts
-// Next.js 16 — must be async
-import { cookies } from 'next/headers'
-import { createServerClient } from '@supabase/ssr'
-
-export async function createClient() {
-  const cookieStore = await cookies()  // await required in Next.js 16
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-}
+```bash
+cd remotion && npx remotion upgrade
 ```
 
-**Source:** Next.js 16 upgrade guide (official, 2026-03-20) — HIGH confidence
+Then install new packages at the post-upgrade version number. NEVER mix versions.
 
 ---
 
-## Environment Variables Required
+## Color Grading Strategy (CSS-first, ffmpeg-optional)
+
+Based on the research findings (golden hour, warm honey tones, "before = cool/grey, after = warm/golden"):
+
+**Tier 1 — CSS filters inside Remotion (zero dependencies, renders in composition):**
+
+```tsx
+// In ImageScene.tsx wrapper — apply to "after" scenes
+// "After" scenes: warm, golden
+<AbsoluteFill style={{
+  filter: 'sepia(0.2) saturate(1.35) hue-rotate(-8deg) brightness(1.08)'
+}}>
+
+// "Before" scenes: cool, desaturated
+<AbsoluteFill style={{
+  filter: 'saturate(0.6) brightness(0.92) hue-rotate(15deg)'
+}}>
+```
+
+**Tier 2 — ffmpeg LUT post-processing (only if CSS tier is insufficient):**
+
+Apply a `.cube` LUT file after Remotion renders the base MP4. This allows cinema-grade warm grading without rebuilding the composition. The LUT approach is non-destructive and reversible.
 
 ```bash
-# Supabase (from Supabase project dashboard)
-NEXT_PUBLIC_SUPABASE_URL=https://[project].supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...           # safe to expose to browser
-SUPABASE_SERVICE_ROLE_KEY=eyJ...               # server-only, never expose to browser
-
-# Vercel Cron security
-CRON_SECRET=[random 16+ char string]           # set in Vercel dashboard, not in .env
-
-# AI (for improvement workflow scripts)
-ANTHROPIC_API_KEY=sk-ant-...                   # server-only
+ffmpeg -i out/kodok-showcase.mp4 \
+  -vf "lut3d=warm-golden.cube,colortemperature=temperature=5800" \
+  out/kodok-showcase-graded.mp4
 ```
+
+Recommendation: Start with CSS tier. Only add fluent-ffmpeg post-processing if the CSS approach feels insufficient after testing.
+
+---
+
+## Background Removal for Product Photos
+
+Real Kodok product photos may need background removal before compositing onto Gemini-generated scenes.
+
+**Best option: remove.bg API**
+- $0.18 per full-res image (50 free/month for testing)
+- Node.js wrapper available (`remove.bg` npm package)
+- Clean, ML-based cutouts optimized for product photography
+- One-time preprocessing step — results cached in assets/products/
+
+**Setup:**
+```bash
+npm install remove.bg
+# Set REMOVE_BG_API_KEY env var
+```
+
+**Alternative (free, local): rembg Python CLI**
+- `pip install rembg && rembg i input.png output.png`
+- No API cost, runs locally
+- Requires Python 3.8+ environment
+- Quality is good but slightly below remove.bg for complex backgrounds
+
+For v1.1 (single Kodok showcase), the free tier of remove.bg (50 images/month) is sufficient. No install cost.
 
 ---
 
 ## Sources
 
-- [Supabase SSR package docs](https://supabase.com/docs/guides/auth/server-side/creating-a-client) — createServerClient/createBrowserClient API — HIGH confidence
-- [Supabase Next.js SSR guide](https://supabase.com/docs/guides/auth/server-side/nextjs) — proxy.ts setup for Next.js 16 — HIGH confidence
-- [npmjs.org @supabase/ssr](https://registry.npmjs.org/@supabase/ssr/latest) — version 0.9.0 verified — HIGH confidence
-- [npmjs.org @supabase/supabase-js](https://registry.npmjs.org/@supabase/supabase-js/latest) — version 2.100.0 verified — HIGH confidence
-- [Next.js 16 upgrade guide](https://nextjs.org/docs/app/guides/upgrading/version-16) — proxy.ts breaking change, async cookies() — HIGH confidence (official, 2026-03-20)
-- [Vercel cron docs](https://vercel.com/docs/cron-jobs) — cron expression format — HIGH confidence
-- [Vercel cron usage and pricing](https://vercel.com/docs/cron-jobs/usage-and-pricing) — Hobby once/day limit, Pro every minute — HIGH confidence
-- [Vercel managing cron jobs](https://vercel.com/docs/cron-jobs/manage-cron-jobs) — CRON_SECRET security pattern — HIGH confidence
-- [Vercel function duration](https://vercel.com/docs/functions/configuring-functions/duration) — Hobby 300s, Pro 800s — HIGH confidence
-- [Supabase admin inviteUserByEmail](https://supabase.com/docs/reference/javascript/auth-admin-createuser) — invite-only pattern — HIGH confidence
+- [npmjs.com/package/remotion](https://www.npmjs.com/package/remotion) — latest version 4.0.441 verified 2026-03-28 — HIGH confidence
+- [npmjs.com/package/@remotion/media-utils](https://www.npmjs.com/package/@remotion/media-utils) — version 4.0.381 verified — HIGH confidence
+- [remotion.dev/docs/third-party](https://www.remotion.dev/docs/third-party) — official @remotion package list — HIGH confidence
+- [remotion.dev/docs/spline](https://www.remotion.dev/docs/spline) — Spline integration docs, experimental export — HIGH confidence
+- [remotion.dev/docs/three](https://www.remotion.dev/docs/three) — ThreeCanvas API, renderer config — HIGH confidence
+- [remotion.dev/docs/transitions/](https://www.remotion.dev/docs/transitions/) — transition types: fade, slide, wipe, flip, clockWipe, iris — HIGH confidence
+- [remotion.dev/docs/noise](https://www.remotion.dev/docs/noise) — noise2D/noise3D deterministic frame API — HIGH confidence
+- [remotion.dev/docs/captions/api](https://www.remotion.dev/docs/captions/api) — @remotion/captions word-level API — HIGH confidence
+- [remotion.dev/docs/install-whisper-cpp/](https://www.remotion.dev/docs/install-whisper-cpp/) — @remotion/install-whisper-cpp transcription — HIGH confidence
+- [sharp.pixelplumbing.com](https://sharp.pixelplumbing.com/) — sharp 0.34.5 image processing — HIGH confidence
+- [npmjs.com/package/sharp](https://www.npmjs.com/package/sharp) — version 0.34.5, Node.js >=18.17.0 — HIGH confidence
+- [remove.bg/api](https://www.remove.bg/api) — pricing $0.18/image, 50 free/month — HIGH confidence
+- [github.com/fluent-ffmpeg/node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg) — fluent-ffmpeg 2.1.3 Node.js wrapper — HIGH confidence
+- [github.com/Maartenlouis/remotion-ads](https://github.com/Maartenlouis/remotion-ads) — remotion-ads Claude Code skill for Instagram Reels — MEDIUM confidence (community skill)
+- Research doc: `research/car-detailing-aesthetic-transfer.md` — color grading strategy, warm golden grade — HIGH confidence (internal)
+- Research doc: `research/instagram-reels-strategy-2026.md` — format specs, transition techniques — MEDIUM confidence (WebSearch aggregated)
 
 ---
 
-*Stack research for: Le Tonkinois Shorts — Supabase Auth + DB + Vercel Cron + AI pipeline*
-*Researched: 2026-03-26*
+*Stack research for: Le Tonkinois Shorts v1.1 — Instagram-grade Product Showcase new capabilities*
+*Researched: 2026-03-28*

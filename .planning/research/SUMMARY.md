@@ -1,215 +1,239 @@
 # Project Research Summary
 
-**Project:** Le Tonkinois Shorts — Supabase Auth + DB + Feedback Loop + Cron Pipeline
-**Domain:** Internal content review dashboard with AI-driven generation and feedback-to-prompt loop
-**Researched:** 2026-03-26
+**Project:** Le Tonkinois Shorts — v1.1 Content Quality Foundation
+**Domain:** AI-generated product showcase content pipeline for Instagram Reels (premium heritage brand)
+**Researched:** 2026-03-28
 **Confidence:** HIGH
 
 ## Executive Summary
 
-Le Tonkinois Shorts is an existing Next.js 16 video dashboard that now needs to evolve from a static JSON-driven gallery into a persistent, multi-user feedback system with an automated AI content generation pipeline. The existing foundation (gallery, video detail pages, Remotion compositions, Vercel deployment) is solid. The new milestone adds exactly four capabilities in strict dependency order: Supabase as the data layer replacing videos.json, invite-only authentication gating the dashboard, a structured star-rating plus pros/cons feedback UI that persists per reviewer per video, and two Vercel cron jobs — one that generates new Shorts daily and one that reads accumulated feedback to improve generation prompts weekly.
+Le Tonkinois Shorts v1.1 is a content quality milestone, not a feature milestone. The technical pipeline (Remotion, Supabase, Next.js dashboard, asset catalog) is already validated and running from v1.0. The gap is entirely on the content side: producing the first Kodok product showcase reel that is actually postable to Instagram — visually premium, brand-compliant, and structurally sound. The research makes clear that this requires solving three sequential problems: locking a machine-readable channel style identity (hex codes, font names, prohibited aesthetics), producing premium visual assets anchored to that identity via Gemini Image, and compositing those assets into a Remotion composition that passes the postability gate (safe zones, timing, brand compliance, real product photos).
 
-The recommended approach is to treat Supabase as the single source of truth for both video metadata and reviewer feedback, use `@supabase/ssr@0.9.0` with Next.js 16's `proxy.ts` pattern for cookie-based auth, and keep all AI generation and Remotion rendering off Vercel serverless functions entirely. The cron endpoint on Vercel is a lightweight trigger only; actual Claude Code invocation and Remotion rendering must happen on a separate machine (local or VPS) that polls Supabase for pending generation jobs. This decoupled architecture sidesteps the Vercel 300s function limit and the absence of ffmpeg in the serverless runtime — both hard blockers for in-function rendering.
+The recommended approach is a four-phase execution: define the Kodok channel identity before touching a single pixel of composition work; generate and validate AI scene assets against that identity (including "The Soak" macro money shot — oil first touching dry wood grain — which is the strongest unoccupied visual in the category); build a parametrized `KodokShowcase` composition with three style variants (Film Noir, Golden Hour, Clean Studio) for team review; then run technical pipeline tests comparing real photos vs. Gemini Image vs. 3D model approaches to determine the permanent composition pattern. The architecture makes style variants independent, renderable, and reviewable without touching existing compositions or the Supabase schema.
 
-The primary risk is attempting to run the full generation pipeline inline in a Vercel serverless function. This will fail silently or with timeouts on Hobby tier (300s limit, no ffmpeg). Secondary risks are RLS misconfiguration (silently empty results with no errors), using the deprecated `getSession()` for route protection (spoofable auth), and prompt drift from the automated improvement loop degrading brand quality over time. All three risks have clear mitigations: define RLS policies in the same task as schema creation, always use `getUser()` for auth guards, and implement append-only prompt versioning with human approval before activation.
+The dominant risk is brand drift — every research file converges on it from a different angle. Pitfalls research documents how v1.0 already failed this way (dark brown backgrounds, Lora used as a headline font, amber accents). The mitigation is non-negotiable: all color references import from `colors.ts`, all font references import from `fonts.ts`, zero inline hex values in composition files, and the style guide must be validated against 5 generated test images before any Remotion work begins. Secondary risk is the AI-generated can constraint: Gemini must never produce product packaging — every product can appearance sources exclusively from `assets/products/`. Third risk is composition timing — scenes under 3.3 seconds and text in unsafe zones will produce a technically broken reel even if the visual quality is excellent.
+
+---
 
 ## Key Findings
 
 ### Recommended Stack
 
-The stack adds Supabase on top of the existing Next.js 16 + Vercel setup. Two packages handle everything: `@supabase/supabase-js@2.100.0` as the universal client and `@supabase/ssr@0.9.0` for cookie-based session management across the RSC/client boundary. The deprecated `@supabase/auth-helpers-nextjs` must not be used — it received no bugfixes since June 2025 and will break on Next.js 16. Next.js 16 introduced a breaking change: `middleware.ts` is now `proxy.ts` with `export function proxy()`, and `cookies()` from `next/headers` must be awaited (async-only). The `@supabase/ssr` docs already reflect this for Next.js 16 compatibility.
+The existing stack (Next.js 16, Remotion 4.0.261, Supabase, Vercel) requires no architectural changes. New packages are additive, not replacement. The most important first step is upgrading all `@remotion/*` packages from 4.0.261 to the current 4.0.441 before installing any new ones — version mismatch across Remotion packages causes silent render failures. After upgrade, add `@remotion/noise` (organic camera movement, deterministic across frames), `@remotion/shapes` (geometric wipe masks, reveal effects), `@remotion/lottie` (LottieFiles.com motion elements), and `@remotion/three` (3D product can model test). For image pre-processing: `sharp` (product photo compositing, background replacement — Node.js API routes only, not Vercel Edge). For color grading: CSS filters inside Remotion compositions first; reach for `fluent-ffmpeg` LUT post-processing only if CSS grade is insufficient for cinema-grade results.
 
-For cron scheduling, Vercel Hobby allows only one execution per day — sufficient for daily Short generation but requiring the two cron jobs (generate + improve) to either share a single daily slot or use GitHub Actions as an alternative scheduler. Vercel Pro allows per-minute scheduling and 800s function duration. Zod is recommended for runtime validation of all cron payloads and Supabase inserts.
+**Core technologies (new additions):**
+- `@remotion/noise@4.0.441`: Deterministic organic animation — camera drift, grain textures. Replaces `Math.random()` which breaks Remotion's frame scrubbing.
+- `@remotion/shapes@4.0.441`: SVG geometric wipes and reveal masks without external SVG files.
+- `@remotion/lottie@4.0.441`: Import LottieFiles.com animations (product sparkle, checkmarks). 400K+ free MIT-licensed animations.
+- `@remotion/three@4.0.441`: 3D Kodok can model test. Requires `three` peer dep + `chromiumOptions: { gl: "angle" }` in remotion config.
+- `sharp@0.34.5`: Product photo background removal and compositing. Local/API routes only — Vercel Edge runtime does not support libvips binaries.
+- CSS color grading (Tier 1): `sepia(0.2) saturate(1.35) hue-rotate(-8deg)` for Nachher scenes; `saturate(0.6) brightness(0.92)` for Vorher. Zero additional dependencies.
 
-**Core technologies:**
-- `@supabase/ssr@0.9.0`: Cookie-based auth for Next.js 16 SSR — the official replacement for deprecated auth-helpers
-- `@supabase/supabase-js@2.100.0`: Universal Supabase client for DB queries and admin operations
-- `proxy.ts` (Next.js 16): Session token refresh on every request — replaces middleware.ts naming
-- Vercel Cron (vercel.json): Daily trigger for generation and improvement — lightweight trigger only, not the runner
-- `@anthropic-ai/sdk` (standalone Node.js script): Prompt improvement analysis outside of Vercel functions
-- Zod: Runtime validation of all DB writes and cron payloads
+**What not to install:** Framer Motion, react-spring (both time-based, incompatible with Remotion frame model), `@remotion/lambda` (adds AWS cost/complexity with no benefit at current scale).
+
+---
 
 ### Expected Features
 
-The feature set has a strict dependency chain. Supabase integration is the foundation gate — nothing else works without it. Auth must exist before feedback can be attributed to a user. Video metadata must be in Supabase (not JSON) before feedback rows can reference videos via foreign key. Feedback status tracking (`processed_at` column) must exist before the improvement cron can de-duplicate safely.
+The research distinguishes sharply between audience-facing features (what makes a reel postable) and production features (what makes the pipeline workable). Both matter for v1.1.
 
-**Must have (table stakes — feedback loop does not function without these):**
-- Supabase project setup (Auth + DB schema with RLS) — the foundation for everything
-- Video metadata migration from videos.json to Supabase `videos` table — required for feedback foreign keys
-- Invite-only auth: admin sends invite email, reviewer clicks link, session stored in HTTP-only cookies
-- Star rating (1-5) per video per user, persisted to Supabase with upsert on re-rating
-- Pros/Cons text feedback per video per user, persisted — qualitative signal for prompt improvement
-- Feedback-status tracking: `processed_at` nullable timestamp — enables cron de-duplication
-- Cron: daily video generation (Vercel cron triggers, separate worker executes)
-- Cron: weekly prompt improvement from unprocessed feedback with append-only prompt versioning
+**Must have — postability gates (any failure = not postable):**
+- Strong hook in first 1.5 seconds — algorithm distributes based on watch-time; starting with a logo kills reach to non-followers
+- Real Kodok product photo in `ProductReveal` — AI-generated cans are disqualifying (brand and trust damage)
+- All text within Instagram safe zones (top > 220px, bottom < 1600px, right < 960px)
+- Maximum 1-3 words per text overlay — full sentences signal "advertisement" and trigger skip reflex
+- Scene duration minimum 3.3 seconds for text-bearing scenes (validated from v1.0 post-mortem)
+- Brand Red `#B50606` present — without it, the reel has no visual identity
+- Warm color grade on Nachher scenes, cool/desaturated on Vorher scenes
+- EndCard with logo + "Seit 1906" + single CTA
 
-**Should have (add after core loop is validated):**
-- Aggregate star rating display on VideoCard gallery thumbnails — needs 5+ ratings to be meaningful
-- Prompt version history UI — after improvement workflow has run 3-5 cycles
-- Per-video generation metadata display (pipeline used, composition name, assets) — after reviewers ask for it
+**Should have — competitive differentiators:**
+- "The Soak" money shot: macro close-up of oil first soaking into dry wood grain. No competitor owns this shot. Equivalent to car detailing's "water beading" moment.
+- 50/50 split frame: single image showing treated vs. untreated wood with the boundary line animated across the frame. Most powerful thumbnail composition in the category.
+- Warm/cool color contrast amplifying the Vorher-Nachher transformation beyond what the actual product difference delivers
+- Marine/nautical context shots (boat deck, teak planks): unoccupied niche in German wood care Instagram
+- Heritage anchoring in hook text ("Seit 1906 vertrauen Segler diesem Öl") — builds trust without advertising copy
 
-**Defer (v2+):**
-- Instagram API one-click publish — already a separate roadmap milestone
-- Admin UI for user management — Supabase dashboard is sufficient for 2-5 users
-- Slack webhook notification on new generation — low value for current team size
-- Real-time collaborative review — overkill for async 2-5 person team
+**Defer to v1.x (after first reel is posted and performance data exists):**
+- ASMR Foley sound layer (brush-on-wood, oil drip, wood tap) — HIGH complexity, requires curated recording library
+- Loop-optimized ending (last frame connects to first frame for re-watch signal)
+- Marine context variant as standalone composition
+- Style A/B testing via Instagram Trial Reels (requires 1,000+ followers — account does not yet exist independently)
 
-**Anti-features (never build for this milestone):**
-- Self-service account registration — defeats invite-only security requirement
-- Per-frame timestamp comments — overkill for 25-30s Reels with fixed Remotion scene structure
-- Video storage in Supabase Storage — videos stay in `public/videos/` on Vercel CDN (metadata only in Supabase)
-- Parallel voting/upvote system alongside star rating — creates conflicting signals for the prompt improvement agent
+**Defer to v2+:**
+- UGC compilation format (requires active community with tagged content)
+- Voiceover narration track (adds production complexity without proven payoff for satisfying-content genre)
+- Automated split-test infrastructure (premature before 10+ reels posted)
+
+---
 
 ### Architecture Approach
 
-The system splits into four clearly bounded layers: the Next.js App Router frontend (Server Components for reads, Server Actions for mutations, no direct DB calls from client components), Supabase as the auth and data layer (three distinct clients: browser, server, admin/service_role — never mixed), Vercel cron endpoints as lightweight triggers that write job records to Supabase, and a separate persistent worker that polls Supabase for pending jobs and executes Claude Code + Remotion rendering. Remotion remains a standalone npm project in `remotion/` with no runtime coupling to the Next.js app — only the output MP4 files are shared via the filesystem.
+The architecture follows a strict "extend, don't fork" principle applied to the existing Remotion monorepo. All existing compositions, components, and utilities remain unchanged. New functionality layers on top through a `StylePreset` interface system: a TypeScript object capturing all visual variation points (background, hook text color, gradient strength, accent color) that compositions accept as a prop. Three style preset files (`film-noir.ts`, `golden-hour.ts`, `clean-studio.ts`) export constants satisfying this interface. A parametrized base `KodokShowcase` composition accepts a `StylePreset` prop; three thin style wrappers (`KodokStyleA/B/C`) each provide one preset as `defaultProps`. This produces three independently renderable, independently previewable composition IDs in Remotion Studio — one maintenance target, three comparison outputs.
 
-**Major components:**
-1. `proxy.ts` (middleware) — Refreshes Supabase auth tokens on every request, protects all routes, sets `Cache-Control: private, no-store` on auth responses
-2. `src/lib/supabase/` (three clients) — `client.ts` for browser components, `server.ts` for Server Components, `admin.ts` for cron/admin operations only
-3. `src/actions/feedback.ts` + `src/actions/admin.ts` — Server Actions for all mutations (feedback submit, user invite)
-4. `/api/cron/generate` + `/api/cron/improve` — Route Handlers secured by CRON_SECRET; trigger only, never execute the pipeline inline
-5. External worker (local machine or VPS) — Polls Supabase for pending generation jobs, runs `claude` CLI and Remotion render, uploads result
-6. `supabase/migrations/` — SQL migrations tracked in version control, including seed migration from videos.json
+**Major components (new):**
+1. `StylePreset` interface + three style preset files — visual variation vocabulary; all downstream components consume it
+2. `KodokShowcase.tsx` (parametrized base) + `KodokStyleA/B/C.tsx` (thin wrappers) — the three showcase variants for review
+3. `SoakScene.tsx` — "The Soak" money shot component (animated macro close-up with fade-in)
+4. `FiftyFiftySplit.tsx` — animated clip-path split reveal (50/50 treated vs. untreated wood)
+5. `ThreeProductModel.tsx` — 3D cylindrical can model via `@remotion/three`, frame-controlled rotation
+6. `scripts/` (monorepo root) — `generate-gemini-scene.ts`, `render-variants.sh`, `seed-variant-videos.ts` — local orchestration, never on Vercel
+7. Supabase schema: no changes required; variants are regular `videos` rows (optional: `video_group` text column for dashboard filtering)
+
+**Build order is strictly sequential:** style presets first (unblocks everything) → new scene components → base composition → style wrappers → Gemini asset generation (can run parallel with composition) → pipeline test compositions → team review.
+
+---
 
 ### Critical Pitfalls
 
-1. **RLS enabled with no policies — silently returns empty results** — Define all RLS policies in the same task as the schema migration. Test every query through the JS client as an authenticated user, never via the SQL editor (which bypasses RLS as postgres superuser).
+1. **Style definition doesn't transfer to AI generation** — Natural language adjectives ("warm", "heritage") are interpreted by Gemini according to its training distribution, not the letonkinois.de brand. "Heritage" generates sepia tones; "premium" generates dark dramatic backgrounds — both wrong. Prevention: define the style guide in machine-readable terms only (hex codes, font names, explicit negative prompts: `NOT rustic, NOT dark background, NOT brown wood tones, NOT amber`). Validate by generating 5 test images before starting any Remotion composition.
 
-2. **Using `getSession()` for route protection** — `getSession()` does not validate the JWT signature; use `supabase.auth.getUser()` exclusively for auth guards in middleware and Server Components. Document this in code comments at every use point.
+2. **Branding entropy — compositions drift until the feed looks incoherent** — Inline hex values and font strings in composition files are the root cause. After 3-4 compositions, the feed looks like multiple brands. v1.0 experienced this directly (dark brown backgrounds, Lora as headline font). Prevention: zero inline hex values in any `.tsx` composition file, all colors from `colors.ts`, all fonts from `fonts.ts`, lint check for `#` characters in composition files.
 
-3. **Running Remotion render inside a Vercel serverless function** — Vercel functions do not include ffmpeg. Even if the timeout were not an issue, the render would fail. The cron endpoint must only write a job record to Supabase and return 200. A separate worker with full Node.js + ffmpeg executes the pipeline.
+3. **AI-generated content looks like stock photography** — Gemini suppresses ugly mundane reality. "Before" wood looks artistically weathered rather than neglected. Prevention: JSON-mode prompting for all multi-image sequences (single scene description, controlled delta per image), reference actual `assets/blog/` photos as generation anchors, require `photojournalistic realism, NOT styled, NOT magazine shoot`.
 
-4. **Prompt drift from automated improvement loop** — Small-team feedback (2-5 reviewers) is a thin sample. Never overwrite prompt files in place. Always write a new prompt version to the database (append-only) and require human approval before activating it. Tag every generated video with its prompt version.
+4. **Composition timing violations** — Scenes under 3.3 seconds with text feel stressful, not satisfying. This was the documented failure mode of v1.0's first draft ("zu schnell, zu viel Text"). Prevention: minimum 100 frames (3.3s at 30fps) for any text-bearing scene, enforced by checking `durationInFrames` per scene segment before marking composition done.
 
-5. **Vercel Hobby cron limitations** — Hobby plan allows only one execution per day per cron expression, with ±59 minute timing imprecision. Two cron jobs (generate + improve) require either Pro plan or GitHub Actions as the scheduler. Decide deployment tier before designing the cron schedule; deploying with sub-daily expressions on Hobby causes deployment failure.
+5. **AI-generated product cans reaching the pipeline** — A prompt for a "product showcase scene" may produce a plausible-but-wrong Kodok can label. This is brand damage. Prevention: every Gemini prompt that could include a product must explicitly exclude packaging (`NO product cans, NO bottles`). Every product appearance in a composition must trace to `assets/products/`.
+
+---
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure:
+Based on research, the v1.1 work breaks into four phases with strict dependency ordering. The temptation to build the Remotion composition first must be resisted — the style guide and AI asset generation must precede composition work, otherwise the composition will need to be rebuilt when it doesn't match the brand.
 
-### Phase 1: Supabase Foundation (Auth + DB Schema)
+### Phase 1: Channel Identity Definition
 
-**Rationale:** Every subsequent feature depends on the Supabase data layer. Auth must exist before feedback can be attributed. The `videos` table must exist before any feedback rows can reference videos. This is the dependency gate — nothing else ships until this is done.
+**Rationale:** Everything downstream depends on this. Gemini prompts cannot be written without knowing the visual world. Remotion style presets cannot be created without hex codes and font choices locked. v1.0 built two compositions that both required revision because this step was skipped.
 
-**Delivers:** Working Supabase project with `videos` and `feedback` tables, RLS policies, invite-only auth with middleware route protection, login page, auth callback route, videos.json data migrated to Supabase, gallery reads from Supabase instead of JSON.
+**Delivers:** A machine-readable Channel Style Identity Document for Kodok: exact hex color scheme (primary `#B50606`, background `#FFF8F0`, Kodok secondary accent color TBD), font usage rules (Playfair Display for headlines, Lora for scene labels, Lato for badges), scene context choices (garden primary, marine secondary), time of day (golden hour), Vorher state descriptors (dull/dusty/grey), Nachher state descriptors (warm/glowing/oiled), explicitly forbidden aesthetics (dark backgrounds, amber tones, rustic craft aesthetic). Validated by generating 5 test images against the spec before any Remotion work begins.
 
-**Addresses features:** Supabase integration, invite-only auth, video metadata migration, status persistence.
+**Addresses:** FEATURES.md P1 — brand-compliant visual identity, style iteration Phase 1 ("Define Before Building")
 
-**Avoids pitfalls:** RLS-with-no-policies (define policies same task as schema), `getSession()` anti-pattern (use `getUser()` from day one), missing middleware (implement before any protected route ships), CDN caching auth responses (add `Cache-Control: private, no-store` in middleware).
+**Avoids:** Pitfall 1 (style definition doesn't transfer to AI), Pitfall 6 (branding entropy)
 
-**Research flag:** Standard patterns — well-documented in official Supabase + Next.js 16 docs. No additional research needed.
-
----
-
-### Phase 2: Feedback UI + Persistence
-
-**Rationale:** With auth and the `videos` table live, the feedback layer can be built. This phase closes the human side of the feedback loop: reviewers can rate videos and their ratings persist across sessions. Building auth and feedback together would have been possible, but this ordering ensures data integrity (foreign keys on a live table) before any UX is exposed.
-
-**Delivers:** `FeedbackForm` client component (star rating + pros/cons), `submitFeedback` Server Action, feedback rows persisted to Supabase with upsert semantics, reviewer's existing rating shown on revisit, `processed_at` column enabling cron de-duplication, "pending feedbacks" counter visible in dashboard header.
-
-**Addresses features:** Star rating, pros/cons text feedback, feedback persistence, my-rating-visible-on-return, feedback-status tracking.
-
-**Avoids pitfalls:** Direct DB calls from client components (all mutations via Server Action), rating endpoint without ownership check (RLS `WITH CHECK (auth.uid() = user_id)` enforced), no optimistic updates (update local React state immediately on star click, persist async).
-
-**Research flag:** Standard patterns — no additional research needed.
+**Research flag:** Standard patterns — brand system is fully documented in `colors.ts`, `fonts.ts`, and `feedback_branding_identity.md`. Define and validate against known sources; no additional research needed.
 
 ---
 
-### Phase 3: Generation Cron (Content Rhythm)
+### Phase 2: AI Scene Asset Generation
 
-**Rationale:** Once the data layer is solid and feedback is flowing, the generation pipeline can be added without blocking the human review workflow. The cron architecture must be designed for idempotency before a single line of generation code is written. This phase establishes the daily content rhythm that gives reviewers something new to rate each morning.
+**Rationale:** Composition work requires assets to exist. "The Soak" money shot specifically requires 2-3 rounds of Gemini prompt iteration — it will not succeed on the first attempt. Generating assets in parallel with or after composition development creates a blocking dependency at render time. Assets must be validated against the Phase 1 style guide before proceeding.
 
-**Delivers:** `vercel.json` cron configuration, `/api/cron/generate` route handler (CRON_SECRET-secured, trigger-only), Supabase `generation_jobs` table for the decoupled worker pattern, external worker script that polls for pending jobs and executes Gemini + Remotion pipeline, rendered MP4 copied to `public/videos/`, new video row inserted into Supabase with `status: 'pending'`.
+**Delivers:** 5-7 Gemini Image scenes keyed to the defined style: 3 hook candidates (The Soak, 50/50, Golden Hour Glow), 2 Vorher scenes (different weathering severity), 1-2 Nachher scenes (warm-graded), 1 product reveal background test (cream vs. white). All generated at 1080x1920 using JSON-mode scene descriptions with explicit scene-locking (same table, same garden, controlled delta per image). All validated against Phase 1 style guide before proceeding to composition.
 
-**Addresses features:** Cron-based daily video generation.
+**Uses:** STACK.md — Gemini Image generation scripts (`scripts/generate-gemini-scene.ts`), `sharp` for background removal/compositing if needed
 
-**Avoids pitfalls:** Remotion inside Vercel function (worker runs on external machine), duplicate cron runs (idempotency lock in Supabase before any generation starts), Hobby tier limit (configure exactly one generation cron per day; consider GitHub Actions if more flexibility needed).
+**Implements:** ARCHITECTURE.md — Gemini Image Scene Generation Flow, `scripts/` orchestration layer
 
-**Research flag:** Needs attention — the decoupled cron-trigger + external-worker pattern is MEDIUM confidence (architectural reasoning). The specific mechanism for the worker to receive jobs (polling Supabase vs. GitHub Actions `repository_dispatch`) should be decided during phase planning. `@remotion/lambda` is an alternative worth evaluating if a VPS is undesirable.
+**Avoids:** Pitfall 2 (uncanny clean AI aesthetic), Pitfall 3 (scene inconsistency across multi-image sequences)
+
+**Research flag:** Needs attention during planning — Gemini Image 2.0-flash vs. imagen-3 quality difference for 9:16 portrait product scenes is not definitively resolved. Test both with identical prompts in early Phase 2 execution; keep whichever produces better consistency.
 
 ---
 
-### Phase 4: Prompt Improvement Cron (Closing the Loop)
+### Phase 3: KodokShowcase Composition + Style Variants
 
-**Rationale:** This is the most complex phase and the last in the dependency chain. It requires working feedback data (Phase 2) and established content generation (Phase 3). The improvement cron reads unprocessed feedback, updates prompts, and marks feedback as processed. Prompt versioning must be append-only — never overwrite — with human approval before activation.
+**Rationale:** With the style guide locked and assets generated, the Remotion composition can be built to specification without guessing. The style preset system enables three renderable variants from a single composition, which is the team's review mechanism. This phase is the primary deliverable of v1.1.
 
-**Delivers:** `/api/cron/improve` route handler, prompt version history in Supabase (`prompt_versions` table), improvement logic that groups feedback by video type and passes to Claude for prompt refinement, new prompt version written to DB and flagged for human review, feedback rows marked `processed_at = now()` in the same transaction as the prompt write, dashboard indicator showing last improvement run date and pending feedback count.
+**Delivers:** `StylePreset` interface + three style presets (Film Noir, Golden Hour, Clean Studio), `KodokShowcase.tsx` base composition, `KodokStyleA/B/C.tsx` wrappers, new components (`SoakScene`, `FiftyFiftySplit`, `HookText`), all three variants rendered to MP4 and seeded to Supabase for team review via the existing dashboard. Every composition passes the full postability gate: safe zones, timing floor, brand compliance, real product photo.
 
-**Addresses features:** Automated prompt improvement workflow, prompt version history, feedback-status tracking closure.
+**Uses:** STACK.md — `@remotion/noise` (camera drift), `@remotion/shapes` (wipe masks), upgraded Remotion packages at 4.0.441
 
-**Avoids pitfalls:** Feedback status flag not set on crash (atomic transaction: prompt write + mark processed together), prompt drift (append-only versioning, human approval before activation, "golden baseline" prompt never auto-modified), reprocessing old feedback (`processed_at IS NULL` filter, `processed_in_prompt_version` idempotency field).
+**Implements:** ARCHITECTURE.md — Style Preset System (Pattern 1), Parametrized Base Composition with Style Wrappers (Pattern 2), Style Variant Build-Review Flow
 
-**Research flag:** Needs attention — the exact mechanism for Claude to update prompt files (in-process with `@anthropic-ai/sdk` vs. spawning `claude --print`) needs validation. Prompt versioning schema design should be validated against actual prompt structure before implementation.
+**Avoids:** Pitfall 4 (composition timing violations), Pitfall 5 (Instagram safe zone violations), Pitfall 6 (branding entropy), Pitfall 7 (Ken Burns easing missing), Pitfall 8 (product can rule violated), Pitfall 10 (style variants without comparison framework)
+
+**Research flag:** Standard patterns — Remotion composition patterns are fully documented in official docs and validated in the existing codebase. The `StylePreset` system architecture is fully specified in ARCHITECTURE.md.
+
+---
+
+### Phase 4: Technical Pipeline Tests
+
+**Rationale:** The v1.1 milestone requires determining whether the permanent pipeline for future Kodok compositions uses real catalog photos, Gemini Image AI scenes, Gemini Video clips, or 3D model renders. This comparison can only be done after the composition structure is established in Phase 3, so pipeline test compositions have a clear baseline to compare against. The winner becomes the documented pattern for all future showcase compositions.
+
+**Delivers:** Four pipeline test compositions under `compositions/PipelineTest/`: `TestRealPhoto`, `TestGeminiImage`, `TestGeminiVideo`, `TestThreeDModel`. Each rendered, seeded to Supabase, reviewed by team with star rating and pros/cons. Winner style and pipeline documented in project memory and CLAUDE.md for all future compositions.
+
+**Uses:** STACK.md — `@remotion/three` + `three` + `@react-three/fiber` for 3D test, `@remotion/lottie` for motion elements
+
+**Implements:** ARCHITECTURE.md — 3D Model Test Flow, Pipeline Test Compositions structure, `compositions/PipelineTest/` subfolder
+
+**Avoids:** Pitfall 9 (Gemini Video temporal inconsistency — establishes the "camera motion on static subjects only" rule before any video clips are composited into final outputs)
+
+**Research flag:** Needs attention — `@remotion/three` + Spline vs. manual Three.js geometry for Kodok can model; Spline export is labeled experimental in official docs. 3D model render performance at 1080x1920 (potential +200ms/frame overhead) should be benchmarked before committing to the 3D path.
 
 ---
 
 ### Phase Ordering Rationale
 
-- **Foundation-first:** Every phase depends on the Supabase DB schema being live. There is no shortcut around this dependency.
-- **Auth before feedback:** Anonymous ratings are noise. The invite-only model requires auth to be complete before any reviewer-facing UI is built.
-- **Data migration in Phase 1, not later:** videos.json must be migrated before feedback rows can reference video IDs as foreign keys. Deferring migration creates a two-source-of-truth problem (videos.json + Supabase) that complicates every subsequent phase.
-- **Generation before improvement:** The improvement cron needs real feedback data from real generated videos. Building improvement first means testing against synthetic data, which increases drift risk.
-- **Separate trigger from execution throughout:** The Vercel cron endpoint is always a trigger, never a runner. This architectural decision made in Phase 3 carries through to Phase 4.
+- **Style before assets, assets before composition:** This is the dependency chain that v1.0 violated. Each phase is a prerequisite for the next — no phase can start without the prior phase output validated.
+- **Style variants as independent composition IDs, not conditional branches:** Each variant gets its own Remotion composition ID, independently previewable and renderable. The "one giant composition with if-style branches" anti-pattern prevents this.
+- **Pipeline tests after composition:** Test compositions need a validated composition structure to compare against. Running pipeline tests without a known-good baseline produces noise, not signal.
+- **Supabase schema unchanged throughout:** All variants are standard `videos` rows; the existing dashboard feedback UI handles review without modification. Engineering surface stays small.
 
 ### Research Flags
 
-Phases needing deeper research during planning:
-- **Phase 3 (Generation Cron):** The external worker implementation pattern needs a concrete decision — polling Supabase vs. GitHub Actions `repository_dispatch` vs. `@remotion/lambda`. Each has different cost and operational complexity tradeoffs.
-- **Phase 4 (Prompt Improvement):** The Claude integration mechanism (SDK vs. CLI subprocess) and the prompt versioning schema need validation against the actual prompt structure used by current Remotion compositions.
+Phases likely needing deeper research during planning:
+- **Phase 2 (AI Asset Generation):** Gemini Image 2.0-flash vs. imagen-3 for portrait 9:16 product scenes; current best practices for multi-image consistency prompting need iteration-based validation.
+- **Phase 4 (3D Pipeline):** `@remotion/three` performance at 1080x1920 and Spline export reliability need empirical measurement before committing 3D to the permanent pipeline.
 
 Phases with standard patterns (skip research-phase):
-- **Phase 1 (Supabase Foundation):** Official docs are comprehensive and HIGH confidence. Follow the Next.js 16 + `@supabase/ssr` guide exactly.
-- **Phase 2 (Feedback UI):** Standard Server Action + Supabase upsert pattern. No novel integration needed.
+- **Phase 1 (Channel Identity):** Brand system is fully documented. Define and validate against known sources.
+- **Phase 3 (Composition):** Remotion parametrized rendering patterns are fully documented in official docs and validated in the existing codebase.
+
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All versions verified against npmjs.org and official docs. Next.js 16 breaking changes confirmed via official upgrade guide (2026-03-20). |
-| Features | HIGH | Core features well-defined with clear dependency chain. Competitor analysis (Frame.io, Filestage, Planable) confirms feature set is appropriate. |
-| Architecture | HIGH (Supabase + Next.js), MEDIUM (cron pipeline) | SSR auth, RLS, Server Actions patterns are well-documented. Decoupled cron-worker architecture is architectural reasoning, not a single official source. |
-| Pitfalls | HIGH (auth/RLS pitfalls), MEDIUM (cron/pipeline pitfalls) | RLS pitfalls backed by CVE post-mortems and official docs. Cron pitfalls backed by Vercel official docs + community sources. Prompt drift backed by multiple expert sources. |
+| Stack | HIGH | All new packages verified on npmjs.com and official Remotion docs 2026-03-28. Version compatibility rules confirmed. CSS color grading approach validated against existing working compositions. |
+| Features | HIGH | Table stakes features validated against v1.0 post-mortem (direct failure evidence). Differentiators validated against competitor analysis (TotalBoat 163K, Rubio Monocoat) + viral content case studies (38M views). "The Soak" money shot identified as unoccupied visual niche. |
+| Architecture | HIGH (composition patterns) / MEDIUM (3D integration) | Remotion parametrized rendering and Folder grouping from official docs — HIGH. `@remotion/three` integration is documented but Spline export path is explicitly labeled experimental — MEDIUM for 3D specifically. |
+| Pitfalls | HIGH | Top 6 pitfalls derived from direct v1.0 post-mortem failures (observed, not theoretical). Pitfall 9 (Gemini Video temporal inconsistency) from official Google docs + community evidence — MEDIUM. |
 
-**Overall confidence:** HIGH for Phases 1-2, MEDIUM for Phases 3-4.
+**Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **External worker mechanism:** The research recommends Pattern A (cron trigger writes to Supabase, worker polls and executes) but does not prescribe the exact worker implementation. Options include: a local cron job on a development machine, a GitHub Actions `repository_dispatch` workflow, or `@remotion/lambda`. Decision needed before Phase 3 implementation begins.
+- **Kodok accent color:** The Channel Identity Document needs to define Kodok's secondary accent color (Navy? Gold?). This is a product-level design decision not yet made. Address in Phase 1 before any generation.
+- **Gemini Image model choice (2.0-flash vs. imagen-3):** Research does not provide a definitive recommendation for 9:16 portrait product scenes. Test both in Phase 2 with identical prompts.
+- **`@remotion/three` render performance:** The `chromiumOptions: { gl: "angle" }` requirement is documented but per-frame render overhead at 1080x1920 resolution is unknown. Measure in Phase 4 before committing to the 3D pipeline.
+- **Le Tonkinois Instagram account existence:** There is no dedicated @letonkinois account (only @hermannsachse with 3.5K). Instagram Trial Reels (post-1,000 followers) is not immediately available. Manual posting analytics will be the feedback mechanism for the first several compositions.
 
-- **`@supabase/ssr` API name for JWT validation:** Research references both `getClaims()` and `getUser()` for JWT validation. The official API name must be verified against `@supabase/ssr@0.9.0` documentation before implementing middleware and Server Component auth guards.
-
-- **Prompt versioning schema:** The improvement cron's prompt versioning design (database table vs. git-tracked JSON files vs. both) is not fully specified. The decision affects Phase 4 complexity significantly and should be made during Phase 4 planning.
-
-- **Vercel plan tier:** The research documents the Hobby (1 cron/day) vs. Pro trade-off but does not confirm the current deployment tier. If both generation and improvement crons are needed independently, Pro plan or GitHub Actions is required. Confirm before Phase 3 begins.
+---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- [Supabase Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs) — proxy.ts setup, createServerClient/createBrowserClient
-- [Supabase SSR package (npmjs)](https://registry.npmjs.org/@supabase/ssr/latest) — version 0.9.0 verified
-- [Supabase supabase-js package (npmjs)](https://registry.npmjs.org/@supabase/supabase-js/latest) — version 2.100.0 verified
-- [Next.js 16 upgrade guide](https://nextjs.org/docs/app/guides/upgrading/version-16) — proxy.ts breaking change, async cookies() (official, 2026-03-20)
-- [Vercel Cron Jobs docs](https://vercel.com/docs/cron-jobs) — cron expression format, CRON_SECRET pattern
-- [Vercel Cron Usage and Pricing](https://vercel.com/docs/cron-jobs/usage-and-pricing) — Hobby once/day limit, Pro per-minute
-- [Vercel Managing Cron Jobs](https://vercel.com/docs/cron-jobs/manage-cron-jobs) — idempotency, concurrency, duration limits
-- [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security) — RLS policies and patterns
-- [Supabase auth.admin.inviteUserByEmail](https://supabase.com/docs/reference/javascript/auth-admin-createuser) — invite-only pattern
-- [Supabase RLS Hidden Dangers (DEV Community, CVE-2025-48757)](https://dev.to/fabio_a26a4e58d4163919a53/supabase-security-the-hidden-dangers-of-rls-and-how-to-audit-your-api-29e9) — RLS misconfiguration post-mortem
-- [Remotion Chrome Headless Shell](https://www.remotion.dev/docs/miscellaneous/chrome-headless-shell) — server rendering requirements
+
+- `.planning/research/STACK.md` — Remotion package versions, sharp/ffmpeg integration, CSS color grading strategy (verified npmjs.com + official docs 2026-03-28)
+- `.planning/research/FEATURES.md` — Content format features, postability gate, competitor comparison (verified against multi-source synthesis + actual account data)
+- `.planning/research/ARCHITECTURE.md` — StylePreset system, composition patterns, 3D integration (verified against official Remotion docs + existing codebase analysis)
+- `.planning/research/PITFALLS.md` — Brand drift, timing violations, safe zones (verified against v1.0 post-mortem direct failure evidence)
+- `memory/feedback_branding_identity.md` — Brand red+white+Playfair Display constraint, what was rejected in v1.0
+- `memory/feedback_reel_composition_template.md` — Validated composition template, timing floors, safe zone positions
+- `memory/feedback_reel_design_rules.md` — Min 3.3s/scene, max 1-3 words text, hook requirements
+- `memory/feedback_gemini_image_realismus.md` — Anti-stock-photography prompting rules
+- `memory/feedback_before_after_realismus.md` — JSON-mode prompting for scene consistency
+- [remotion.dev](https://www.remotion.dev/docs/) — Official Remotion 4.0.x documentation for @remotion/three, Folder, parametrized rendering
 
 ### Secondary (MEDIUM confidence)
-- [Vercel Functions Limitations](https://vercel.com/docs/functions/limitations) — maxDuration per plan
-- [Remotion + Claude Code integration](https://www.remotion.dev/docs/ai/claude-code) — AI integration patterns
-- [Next.js + Supabase CDN Caching Issue](https://github.com/vercel/next.js/discussions/81445) — Cache-Control requirement
-- [AI Prompt Drift Prevention (Maxim AI, 2025)](https://www.getmaxim.ai/articles/a-comprehensive-guide-to-preventing-ai-agent-drift-over-time/) — feedback loop degradation
+
+- [Instagram Trial Reels — Official Creator Guide](https://creators.instagram.com/blog/instagram-trial-reels) — Trial Reels workflow, 1,000 follower threshold
+- [Google Developers Blog: Gemini 2.5 Flash Image Generation](https://developers.googleblog.com/en/how-to-prompt-gemini-2-5-flash-image-generation-for-the-best-results/) — Reference image technique, negative prompts
+- [Instagram Reels Safe Zone Guide 2026](https://kreatli.com/guides/instagram-reels-safe-zone) — UI overlay pixel dimensions
+- `research/competitor-content-research-2026.md` — TotalBoat (163K), Rubio Monocoat, @earthandflax competitive positions
+- `research/car-detailing-aesthetic-transfer.md` — "The Soak" money shot, ASMR strategy, warm color grading
+- [Hootsuite: Instagram Reels for Business 2026](https://blog.hootsuite.com/instagram-reels/) — 3-5 reels/week quality-first frequency recommendation
+- [Wood Floor Business: Dony Buendia 38M views case study](https://www.woodfloorbusiness.com/business/social-media/article/15447867/applying-finish-to-the-tune-of-38million-instagram-views) — Viral content format validation
 
 ### Tertiary (LOW confidence)
-- [Mastering AI Feedback Loops — Prompt Engineering (Arsturn)](https://www.arsturn.com/blog/navigating-ai-feedback-loops-with-smart-prompt-engineering) — improvement workflow patterns
-- [Agentic AI Workflows 2026](https://www.myaiassistant.blog/2026/02/agentic-autonomous-ai-workflows-in-2026.html) — agentic workflow patterns
-- [Filestage — Video Feedback Tools comparison](https://filestage.io/blog/video-feedback-tools/) — competitor feature analysis
-- [Top Video Feedback Platforms 2025 (Clixie)](https://www.clixie.ai/blog/best-video-feedback-platforms-in-2025-ultimate-guide-for-teams-creators) — competitor feature analysis
+
+- [Cloudinary Ken Burns Effect Guide](https://cloudinary.com/guides/image-effects/ken-burns-effect-complete-guide-and-how-to-apply-it) — Easing requirement for professional motion (needs validation on Remotion's specific `interpolate()` API)
+- [Gemini + Veo temporal consistency — DEV Community](https://dev.to/jubinsoni/gemini-veo-a-deep-dive-into-googles-high-fidelity-video-generation-pipeline-78m) — Gemini Video limitations (community analysis, not official benchmark)
 
 ---
-*Research completed: 2026-03-26*
+
+*Research completed: 2026-03-28*
 *Ready for roadmap: yes*

@@ -1,16 +1,27 @@
 # Feature Research
 
-**Domain:** Content review/feedback dashboard + AI content generation pipeline
-**Researched:** 2026-03-26
-**Confidence:** HIGH (core features), MEDIUM (cron/pipeline architecture specifics)
+**Domain:** Instagram product showcase reels — premium heritage wood finish brand (Le Tonkinois / Kodok)
+**Researched:** 2026-03-28
+**Confidence:** HIGH (content formats, visual quality, iteration workflow — verified against multiple sources + existing project research)
 
 ---
 
 ## Context
 
-This research covers the milestone being added to an existing Next.js video dashboard. The app already has: gallery view, video detail pages, Remotion video pipeline, asset catalog, branding, Vercel deployment. The new milestone adds: Supabase auth (invite-only), star-rating + pros/cons feedback, feedback persistence, cron-based generation, and cron-based prompt improvement from feedback.
+This research covers the v1.1 milestone: creating the first post-worthy Kodok Product Showcase reel. The pipeline (Remotion, Gemini Image, asset catalog, Supabase) is already built. The gap is entirely on the content side: what does a postable product showcase reel actually look like, what separates it from amateur output, and how do you iterate toward it systematically?
 
-The audience is a small internal team (2-5 reviewers). This is not a public product. The core value is the feedback loop: generate shorts → team rates → feedback improves the next generation.
+Focus areas from the milestone:
+1. Instagram channel style/identity design
+2. Product showcase reel formats that work for premium brands
+3. Content creation workflow (concept to postable)
+4. Style iteration process (systematic testing and refinement)
+
+Existing validated knowledge from prior research (incorporated here, not re-derived):
+- Competitor analysis: TotalBoat (163K), Rubio Monocoat (16K–245K US), Epifanes (3.7K), @hermannsachse (3.5K)
+- Viral formats: "First Coat Moment" 10-15s, Before/After, ASMR application, 38M+ views benchmarks
+- Car Detailing aesthetic transfer: 12 must-have shots, "The Soak" as money shot equivalent
+- Reel design rules: min 3.3s/scene, max 1-3 words text, Playfair Display + Brand Red
+- Composition template: Hook→Vorher→Steps→Nachher→Produkt→EndCard, 24-30s total
 
 ---
 
@@ -18,195 +29,268 @@ The audience is a small internal team (2-5 reviewers). This is not a public prod
 
 ### Table Stakes (Users Expect These)
 
-Features the review team assumes exist. Missing these = the workflow breaks and reviewers give up.
+"Users" here = Instagram audience. Missing these = reel gets skipped, not shared, not saved.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Login / Auth gate | Without auth, any rating is anonymous noise — can't attribute feedback | LOW | Supabase Auth + `@supabase/ssr` for Next.js App Router. Cookie-based sessions for SSR compatibility. |
-| Invite-only access | Team is 2-5 people; no self-registration should exist | LOW | `supabase.auth.admin.inviteUserByEmail()` — admin sends invite from Supabase dashboard or a thin admin UI. Disable email signups in Supabase Auth settings. |
-| Star rating per video | Core feedback signal — 1-5 stars. Every review tool has this. | LOW | Single row per (user, video) in Supabase. Upsert on re-rating. Display aggregate (average + count). |
-| Pros/Cons text fields | Structured free text is more actionable than open comments. Star rating without text = weak signal for prompt improvement. | LOW | Two `text` fields per feedback row: `pros`, `cons`. Optional, but prompted. |
-| Feedback persistence | Ratings must survive page reload. JSON-only is the current gap — this is why the milestone exists. | MEDIUM | Migrate `videos.json` → Supabase `videos` table. Feedback table with `video_id`, `user_id`, `stars`, `pros`, `cons`, `created_at`. |
-| My rating visible on return | Reviewer must see their existing rating when revisiting a video — otherwise they re-rate blind | LOW | Query own feedback row on page load. Pre-fill stars + text. |
-| Pending / Approved / Rejected status | Gallery currently has these states in JSON. Status must persist to Supabase and be changeable. | LOW | `status` column on `videos` table. Admin-only mutation. Filter by status remains functional. |
-| "New feedback" indicator for cron agent | Improvement cron must know what feedback is unprocessed | LOW | `processed_at` nullable timestamp on feedback rows. Cron queries WHERE `processed_at IS NULL`. After processing: set `processed_at = now()`. |
+| Strong hook in first 1.5 seconds | Algorithm distributes based on watch-time; first 1-3s determines whether a reel reaches non-followers at all | LOW | Either the strongest "satisfying" moment (oil hitting dry wood) or the sharpest "problem" moment (grey weathered surface). Never start with logo or product name. |
+| 9:16 vertical format, 1080×1920px | Instagram Reels are exclusively consumed vertical on mobile; horizontal content looks amateur | LOW | Already enforced by Remotion pipeline and existing compositions. |
+| Safe zone compliance | Instagram UI overlays username (top) and like/caption (bottom); content outside safe zones is partially hidden | LOW | Top: 140px, Bottom: 380px — already in composition template. |
+| Consistent brand visual identity | Viewers associate style with brand; inconsistency reads as "no brand" | MEDIUM | Rot #B50606 + Weiss + Playfair Display. NOT dark brown, NOT amber — strictly per letonkinois.de. |
+| Minimum scene duration (3.3s) | Scenes shorter than ~3s feel frantic; audiences abandon over-cut content | LOW | Validated by iteration on 2026-03-25. 3.3–3.7s per scene minimum. |
+| Real product photos (no AI-generated cans) | AI-generated cans look wrong; brand trust requires product authenticity | LOW | Hard constraint. Dose from asset catalog only. Never Gemini-generated. |
+| Completion-rate optimized length | 7-30s achieves highest completion rates, which is the primary algorithmic distribution signal | LOW | Sweet spot: 15-25s for pure visual satisfaction; 25-35s for how-to/before-after. Existing compositions at 24-30s are in range. |
+| Intelligible caption with keyword SEO | Instagram search in 2026 treats captions like Google — keywords determine discoverability | LOW | Caption carries explanatory text that the video deliberately avoids. "Speicher dir das!" CTA drives saves. |
 
 ### Differentiators (Competitive Advantage)
 
-Features that go beyond what a generic review tool offers — specific to this feedback-loop use case.
+These separate a good reel from a forgettable one for Le Tonkinois specifically.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Aggregate rating display on gallery cards | Reviewers see consensus at a glance without opening each video. Reduces review fatigue. | LOW | Compute average stars + count from feedback table. Show on VideoCard. Optional: badge for "needs attention" (< 3 stars). |
-| Feedback-status tracking (new vs. processed) | Closes the loop: the improvement cron knows what it has already incorporated. Without this, the agent re-reads the same feedback repeatedly. | LOW | `processed_at` column + admin-visible "X feedbacks pending" counter on dashboard header. |
-| Per-video generation metadata display | Reviewers can see which pipeline, which prompts, which assets were used — so their feedback is specific ("the Schleifen scene is too dark") not vague. | LOW | Already partially in VideoEntry type (pipeline field). Extend to show composition name + asset paths on detail page. |
-| Cron-based daily generation | Removes the need for a developer to manually trigger each new video. Enables rhythm: 1 new Short per day, team reviews the next morning. | MEDIUM | Vercel cron job → Next.js API route → Claude Code CLI subprocess OR separate GitHub Action. Key constraint: Vercel Hobby = once/day max; Pro = per-minute. Generation likely exceeds 60s → needs Fluid Compute or external trigger. |
-| Prompt improvement workflow (automated) | The core value proposition. Human ratings + text feedback flow back into the Gemini/Remotion prompts automatically. No other small-team video tool does this. | HIGH | Separate cron or manual trigger → Claude Code reads unprocessed feedback → updates prompt files or composition parameters → marks feedback as processed. Requires careful prompt versioning strategy. |
-| Prompt version history | Know what prompt produced each video. When quality improves, understand why. When it regresses, roll back. | MEDIUM | Store `prompt_version` on each generated video record. Keep prompt snapshots in git or a `prompt_versions` Supabase table. |
+| "The Soak" money shot (oil-into-grain macro) | The moment oil first touches dry wood and grain "awakens" is the strongest satisfying moment in the category — no competitor has made it their signature shot | MEDIUM | Requires Gemini Image or real footage macro. Zeitlupe / slow-motion approach if using video. This is Le Tonkinois' equivalent to car detailing's "water beading" shot. |
+| 50/50 split frame (oiled/unoiled in one shot) | Single frame shows the entire product benefit; most powerful thumbnail and hook image in the category | MEDIUM | Can be produced with Gemini Image (split-frame prompt) or Remotion Wipe transition. The "border line" moving across the frame is hypnotic. |
+| Warm color grading (golden hour palette) | "Vorher" desaturated/cool → "Nachher" warm honey/gold: maximizes perceived transformation even if the real diff is subtle | LOW | Color grading is a Remotion-layer decision, not a separate filming step. Rule: Vorher = cool, Nachher = warm. |
+| ASMR sound design layer | 50% of reel impact is audio; brush-on-wood sounds + oil absorption trigger sensorische Befriedigung that silent or music-only content cannot | HIGH | Requires curated Foley library: brush stroke, oil drip, wood tap, linen wipe. Option C hybrid (ambient + foley) is right for AI-generated pipeline. Hard to produce for v1 without real recordings. |
+| Product reveal scene (Dose auf Cream-BG) | Connects satisfying content to purchasable product; the dose IS the brand; this moment is what makes the reel an ad without feeling like one | LOW | Already implemented as `ProductReveal` component. Dose prominent 440×440px, red divider, Playfair Display name. |
+| Marine/nautical context shots | No German-language competitor makes Instagram Reels about boat wood care; Le Tonkinois' heritage is French maritime — this niche is completely unoccupied | MEDIUM | Requires Gemini Image prompts for boat deck, teak planks, harbor/water context. Strong differentiator vs. Rubio, Osmo, Biopin. |
+| Heritage story integration ("Seit 1906") | Heritage positioning builds trust without a single word of advertising copy; no other wood finish brand has 120 years of origin story | LOW | Already in EndCard component. Can be extended to Hook scene ("Seit 1906 vertrauen Segler diesem Öl") |
+| Product-specific accent colors | Each Le Tonkinois product variant has a secondary color (Vernis → Gold+Navy; Marine N°1 → Navy+Cream); matching reel style to product reinforces "product family" coherence | LOW | Color map exists in branding memory. Kodok product color scheme needs to be defined before reel production. |
+| Loop-optimized ending | Seamless loop tricks watch-time algorithm into counting repeat views; makes reel feel "infinite" | LOW | End frame should match or deliberately contrast with first frame so replaying feels intentional. |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Real-time collaborative review (WebSockets, live cursors) | Feels modern; teams like seeing each other's activity | Adds significant infra complexity (Supabase Realtime or Pusher). For a 2-5 person team reviewing async, it provides zero workflow value. | Simple page refresh or SWR polling every 60s is sufficient. Mark feedback with reviewer name so others see who has rated. |
-| In-browser video editing / trimming | Reviewers might want to suggest edits inline | Remotion renders server-side. Browser video editing (WebCodecs/FFmpeg.wasm) is complex, slow, and redundant — feedback text achieves the same goal. | Pros/Cons text fields. Reviewer writes "cut first 2 seconds of Schleifen scene" — cron agent acts on that text. |
-| Self-service account registration | Simpler onboarding | Public registration defeats the invite-only control requirement. Any account could rate videos or see brand strategy content. | Invite-only via Supabase admin. Permanent policy, not a temporary shortcut. |
-| Per-frame timestamp comments (like Frame.io) | Precise feedback on specific video moments | Overkill for 25-30 second Reels with 6-7 fixed scenes. Adds UI complexity that slows review. The scene structure is already fixed by Remotion compositions. | Reference scenes by name in Pros/Cons: "Vorher scene: too dark". Scene labels are already on the detail page. |
-| Email notifications on new videos | Keeps team informed automatically | Adds SMTP/email service dependency. For a 2-5 person team, a Slack message or manual ping is operationally simpler. | Manual notification or a single Slack webhook call from the generation cron (one `fetch()` call, no dependency). |
-| Voting / upvote system (separate from star rating) | Gamification of review | Two parallel rating systems create confusion. Which one feeds the prompt improvement agent? | Keep a single signal: 1-5 star rating with optional pros/cons. One signal, one source of truth. |
-| Video storage in Supabase Storage | Centralized asset management | Videos are already in `public/videos/` (Vercel-served). Migrating to Supabase Storage adds CDN cost, URL changes across all metadata, and a new dependency — for no user-facing improvement. | Keep videos in `public/videos/`. Supabase stores metadata only. This is explicitly in project constraints. |
+| Logo/brand intro at start | "Brand recognition" | First 1.5 seconds determine algorithmic distribution; starting with a logo kills watch-time and signals "advertisement" to skip-trained audiences | Show product in scene context; logo belongs only in EndCard (last 3s) |
+| Full sentences as text overlays | "More information" | Viewers cannot read full sentences at reel pacing; text becomes visual noise; educational content belongs in caption | Max 1-3 words per scene (validated rule: "Vorher", "Fertig.", "Schritt 2"). Explanation → caption. |
+| Voiceover narration (German) | "Professional" | Requires native-quality voice recording, mixing, and re-recording for each variation; dramatically increases production friction; silent ASMR content outperforms narrated in the satisfying genre | Caption carries the narrative voice. For how-to reels: text-on-screen labels only. |
+| Stock footage of wood projects | "Fills scenes without filming" | Stock footage reads as generic; the Le Tonkinois positioning requires authenticity and the specific warm-German-garden aesthetic; stock footage undermines premium feel | Gemini Image with precise prompts delivers the exact Le Tonkinois visual world; stock cannot do this at the specificity required. |
+| Complex motion graphics / animated infographics | "Explains the product better" | Over-production signals "ad" not "content"; the 2026 audience is highly trained to skip polished ad-style content | Simple Remotion animations (Ken Burns zoom, fade, slide) keep the content feeling authentic while still being produced. |
+| Multiple CTAs in one reel | "Maximize conversions" | Competing CTAs dilute each other; audiences do not act on more than one CTA per short video | One CTA per reel. Product showcase → "Link in Bio" (or "Shop jetzt"). How-to → "Speicher dir das!" Educational → "Teile das mit jemandem". |
+| AI-generated product cans/bottles in scene | "Easier product integration" | AI-generated product packaging looks wrong at close range; damages trust; this is an absolute brand constraint | Real product photo composited into Remotion scene on cream background. Already implemented in `ProductReveal`. |
+| Per-reel music licensing | "Professional soundtrack" | Each track needs a license or must be from Instagram's royalty-free library; custom tracks require a production budget; trending audio requires manual monitoring | Option B for v1: use ambient/Foley-only approach. Trending audio can be added manually in the Instagram app after upload — no Remotion-level integration needed. |
+| Posting 3-4 reels per day (Buendia volume) | "More posts = more reach" | Buendia is a flooring contractor posting raw phone footage; Le Tonkinois is a premium heritage brand where over-posting degrades brand value and overwhelms the team's review capacity | 3-5 reels/week is the growth-optimized frequency for quality-first accounts (Hootsuite, TrueFuture Media); 1 high-quality reel/day beats 4 mediocre ones for premium brands. |
 
 ---
 
 ## Feature Dependencies
 
 ```
-[Supabase Integration]
-    └──required by──> [Auth / Login Gate]
-    └──required by──> [Feedback Persistence]
-    └──required by──> [Status Persistence]
-    └──required by──> [Feedback-Status Tracking]
+[Channel Style Identity Document]
+    └──required by──> [Kodok Product Showcase Reel]
+    └──required by──> [Future reel compositions]
+    └──required by──> [Style Iteration Framework]
 
-[Auth / Login Gate]
-    └──required by──> [Star Rating]
-    └──required by──> [Pros/Cons Text Feedback]
-    └──required by──> [My Rating Visible on Return]
+[Remotion Composition Pipeline]  (already exists)
+    └──required by──> [Kodok Product Showcase Reel]
+    └──enhanced by──> [ASMR Sound Design Layer]
+    └──enhanced by──> [Warm Color Grading Rule]
 
-[Star Rating] ──enhances──> [Aggregate Rating on Gallery Cards]
+[Asset Catalog]  (already exists)
+    └──required by──> [Product Reveal Scene]
+    └──required by──> [Real Product Photo Integration]
 
-[Feedback Persistence]
-    └──required by──> [Feedback-Status Tracking (new vs. processed)]
-    └──required by──> [Prompt Improvement Workflow]
+[Gemini Image Prompts (Kodok-specific)]
+    └──required by──> [The Soak Money Shot]
+    └──required by──> [50/50 Split Frame]
+    └──required by──> [Marine Context Shots]
+    └──requires──> [Channel Style Identity Document]  (prompts must match defined style)
 
-[Feedback-Status Tracking]
-    └──required by──> [Prompt Improvement Workflow]
-    └──enables──> [Cron-based Prompt Improvement]
+[Style Iteration Framework]
+    └──requires──> [v1 Reel Output]  (needs something to iterate on)
+    └──enhanced by──> [Instagram Trial Reels Feature]
+    └──enables──> [Systematically Postable Quality]
 
-[Cron-based Daily Generation]
-    └──independent of──> [Feedback features]
-    └──feeds into──> [Feedback Persistence] (generates new videos to rate)
+[Instagram Trial Reels Feature]  (external, Instagram-native)
+    └──independent of──> [Remotion pipeline]
+    └──requires──> [1,000+ followers threshold]
 
-[Prompt Improvement Workflow]
-    └──requires──> [Feedback-Status Tracking]
-    └──enhanced by──> [Prompt Version History]
-
-[Video Metadata in Supabase]
-    └──required by──> [Feedback Persistence] (foreign key: video_id)
-    └──required by──> [Aggregate Rating Display]
-    └──required by──> [Status Persistence]
+[Postable Quality Gate]
+    └──requires──> [Correct safe zones]
+    └──requires──> [Brand-compliant visual identity]
+    └──requires──> [Hook in first 1.5s]
+    └──requires──> [Correct duration range]
+    └──enhanced by──> [Money shot present]
+    └──enhanced by──> [Product reveal scene]
 ```
 
 ### Dependency Notes
 
-- **Supabase Integration is the foundation gate:** Everything in this milestone depends on it. Must be Phase 1.
-- **Auth before Feedback:** Rating without identity is noise. Auth and feedback must be built together or auth before.
-- **Video metadata migration is a prerequisite for feedback persistence:** The feedback table needs a `videos` table with stable IDs as foreign keys. JSON IDs are not stable foreign keys.
-- **Feedback-status tracking is cheap but critical:** A single `processed_at` nullable column. Must exist before the improvement cron is built, otherwise the cron has no way to de-duplicate.
-- **Cron-based generation is independent:** Does not depend on auth or feedback. Can be built in parallel or after. However, its output (new videos) needs the Supabase `videos` table to exist.
-- **Prompt improvement workflow is the most complex and the last in the chain:** Requires everything else to be working. Appropriate for the final phase of this milestone.
+- **Channel Style Identity Document must come first:** Gemini Image prompts cannot be written without knowing what visual world the reel lives in. Defines: color temperature, scene context (garden/boat/interior), time of day, Kodok-specific accent colors, and "forbidden" aesthetics.
+- **The Soak money shot requires Gemini Image iteration:** The first-attempt macro prompt for oil-into-grain will almost certainly need 2-3 rounds of refinement. This is not a one-shot generation. Build prompt iteration time into the workflow.
+- **ASMR sound design is enhancement, not gate:** A reel without sound design can still be postable (ambient + Remotion-internal audio). ASMR foley elevates to premium but is HIGH complexity for v1. Defer to v1.1 unless real recordings are available.
+- **Trial Reels require 1,000 followers:** Le Tonkinois Instagram account does not currently exist independently. Trial Reels feature available only after account creation and initial growth. For v1, standard posting with manual performance monitoring is the iteration method.
 
 ---
 
 ## MVP Definition
 
-### Launch With (v1 — This Milestone)
+### Launch With (v1 — This Milestone: Kodok Product Showcase)
 
-Minimum feature set to activate the feedback loop.
+The minimum that makes a reel "postable" — not embarrassing for the brand, not visually amateurish, structurally sound.
 
-- [ ] Supabase project setup (Auth + DB schema) — foundation for everything
-- [ ] Video metadata migrated from JSON to Supabase `videos` table — required for feedback FK
-- [ ] Invite-only auth: Admin invites users via Supabase dashboard, login/logout in Next.js — access control
-- [ ] Star rating (1-5) per video, persisted per user — core feedback signal
-- [ ] Pros/Cons text per video, persisted per user — qualitative signal for prompt improvement
-- [ ] Feedback-status tracking: `processed_at` column, "X pending feedbacks" counter — enables cron agent
-- [ ] Cron job: daily video generation via Vercel cron + API route — content rhythm
-- [ ] Cron job: feedback improvement workflow (Claude Code reads pending feedback → updates prompts → marks processed) — closes the loop
+- [ ] Channel style identity defined — color temperature, scene context choices, Kodok accent color, list of forbidden aesthetics
+- [ ] 3-5 Gemini Image scenes generated to the defined style (with at least 1 money shot attempt: The Soak or 50/50)
+- [ ] Remotion composition using validated template (Hook→Vorher/Produkt→Szene→Nachher→Produkt→EndCard)
+- [ ] Safe zone compliance verified (top 140px, bottom 380px clear)
+- [ ] Scene timing at minimum 3.3s each
+- [ ] Max 1-3 words text per scene
+- [ ] Real product photo (Kodok can) in ProductReveal scene
+- [ ] EndCard with logo + "Seit 1906" + CTA
+- [ ] Warm color grading applied to "Nachher" scenes, cool/neutral for "Vorher"
+- [ ] Caption written (German, keywords, "Speicher dir das!" CTA, 20-25 hashtag mix)
+- [ ] Team review in dashboard — approved before posting
 
 ### Add After Validation (v1.x)
 
-Add once the loop is proven to improve quality:
+Add once v1 reel is posted and performance signal is available.
 
-- [ ] Aggregate rating display on VideoCard — after enough feedback exists to show meaningful averages (5+ ratings)
-- [ ] Prompt version history — after the improvement workflow has run 3-5 cycles and the team wants to audit changes
-- [ ] Per-video generation metadata expansion — after reviewers ask "what settings made this one good?"
+- [ ] ASMR Foley sound layer — trigger: v1 reel gets good performance but feedback says "audio is missing something"
+- [ ] Marine context variant — boat deck shots with Kodok — trigger: garden showcase is validated, expand to marine niche
+- [ ] Loop optimization — end frame matching start frame — trigger: after first iteration data shows watch-time drop-off at end
+- [ ] Style A/B variants — two different color grading or hook approaches in same week — trigger: when team has capacity to review 2 reels simultaneously
+- [ ] Instagram Trial Reels workflow — trigger: account has 1,000+ followers
 
 ### Future Consideration (v2+)
 
-Defer until post-milestone:
+Defer until content pipeline is in regular rhythm.
 
-- [ ] Instagram API one-click publish — separate milestone, already in project roadmap
-- [ ] Admin UI for user management — Supabase dashboard is sufficient for 2-5 users; build only if team grows
-- [ ] Slack webhook notification on new generation — low value for current team size
+- [ ] UGC compilation format — requires active user community with tagged content
+- [ ] Voiceover narration track — requires voice talent or quality TTS; adds production complexity without proven payoff for this style
+- [ ] Split test infrastructure (automated performance comparison) — premature before 10+ reels posted
+- [ ] Full ASMR standalone reel (no text, no music, pure audio) — after ASMR foley library is built
 
 ---
 
 ## Feature Prioritization Matrix
 
-| Feature | User Value | Implementation Cost | Priority |
-|---------|------------|---------------------|----------|
-| Supabase integration (Auth + DB) | HIGH | MEDIUM | P1 |
-| Invite-only auth (login/logout) | HIGH | LOW | P1 |
-| Video metadata migration to Supabase | HIGH | MEDIUM | P1 |
-| Star rating (1-5), persisted | HIGH | LOW | P1 |
-| Pros/Cons text feedback, persisted | HIGH | LOW | P1 |
-| Feedback-status tracking (processed_at) | HIGH | LOW | P1 |
-| Cron: daily video generation | HIGH | MEDIUM | P1 |
-| Cron: prompt improvement from feedback | HIGH | HIGH | P1 |
-| Aggregate rating on gallery cards | MEDIUM | LOW | P2 |
-| Prompt version history | MEDIUM | MEDIUM | P2 |
-| Per-video generation metadata display | LOW | LOW | P2 |
-| Admin UI for user management | LOW | MEDIUM | P3 |
-| Slack webhook on new generation | LOW | LOW | P3 |
+| Feature | User Value (Audience) | Implementation Cost | Priority |
+|---------|----------------------|---------------------|----------|
+| Channel style identity document | HIGH — foundation for everything | LOW | P1 |
+| Gemini Image prompts (Kodok-specific) | HIGH — determines visual quality | LOW-MEDIUM | P1 |
+| Money shot: The Soak or 50/50 | HIGH — most viral single element | MEDIUM | P1 |
+| Safe zone + timing compliance | HIGH — postability gate | LOW | P1 |
+| Brand-compliant visual identity | HIGH — brand trust | LOW | P1 |
+| Real product photo in ProductReveal | HIGH — brand constraint | LOW | P1 |
+| Warm color grading rule | HIGH — transformation impact | LOW | P1 |
+| Caption with SEO + CTA | MEDIUM — discoverability | LOW | P1 |
+| ASMR sound design | HIGH — premium feel | HIGH | P2 |
+| Loop optimization | MEDIUM — watch time | LOW | P2 |
+| Marine context variant | HIGH — niche differentiation | MEDIUM | P2 |
+| Instagram Trial Reels workflow | MEDIUM — safer iteration | LOW | P2 |
+| Style A/B testing framework | MEDIUM — systematic improvement | LOW | P2 |
+| Voiceover narration | LOW — adds friction | HIGH | P3 |
+| UGC compilation | HIGH — community trust | HIGH | P3 |
 
 **Priority key:**
-- P1: Must have for this milestone — the feedback loop does not function without it
-- P2: Should have, add after core loop is validated
-- P3: Nice to have, future milestone consideration
+- P1: Required for first postable Kodok reel
+- P2: Add after v1 is posted and reviewed; enhances quality or iteration speed
+- P3: Future consideration; depends on channel growth or new capabilities
 
 ---
 
 ## Competitor Feature Analysis
 
-Relevant reference tools: Frame.io, Filestage (professional video review), Planable (social content approval).
+What the benchmark accounts do — and how Le Tonkinois can match or surpass.
 
-| Feature | Frame.io / Filestage | Planable | Our Approach |
-|---------|----------------------|----------|--------------|
-| Rating system | No star rating — comments + approve/reject | Approve/reject/needs revision | 1-5 stars + pros/cons — richer signal for ML feedback loop |
-| Status workflow | Pending → In Review → Approved → Published | Draft → Review → Approved → Scheduled | Pending → Approved → Rejected — minimal states matching team size |
-| Auth model | Enterprise multi-org | Team workspaces, invite-link | Supabase invite-only email — simplest that works |
-| Feedback targeting | Timestamped frame comments | In-line comments on content | Scene-name reference in text — Reels have fixed scene structure, timestamps add no value |
-| Automation | Limited (reminders, version tracking) | Publish scheduling | Generation cron + prompt improvement — no competitor does this at all |
-| Prompt feedback loop | Does not exist | Does not exist | Core differentiator — unique to this system |
+| Feature | TotalBoat (163K IG) | Rubio Monocoat (16K DE / 245K US) | @earthandflax (9.1K) | Le Tonkinois Approach |
+|---------|--------------------|------------------------------------|----------------------|----------------------|
+| Hook format | Before/After transformation | UGC repost (handwerker result) | Real hands-on application | Macro money shot (The Soak) OR 50/50 split |
+| Product placement | Featured in every video, always visible | Tag in description + occasional end screen | Casual mention, brand feels secondary | Dose in dedicated ProductReveal scene (3.3s), not intrusive |
+| Brand voice | Fun, creator-community, US-casual | "One coat solution", community-first | Authentic, educational, US indie | Heritage premium: "Seit 1906, weil es funktioniert" |
+| Sound design | Background music | Background music | Ambient + real sounds | Cinematic ambient + foley (v1.x), pure ambient (v1) |
+| Color grade | Clean, neutral-bright | Natural, studio-ish | Warm, real-life | Warm golden-hour throughout; Vorher desaturated |
+| Marine content | Strong — that's their niche | None | None | Strong differentiator — unoccupied niche in German market |
+| Text in video | Minimal labels | Minimal or none | None | 1-3 word labels only; explanation in caption |
+| Consistency | Consistent color/format identity | Consistent hashtag+UGC strategy | Inconsistent posting | Define and lock style in Channel Identity Document |
 
-**Key insight from competitor analysis:** No existing video review tool has a feedback-to-prompt-improvement loop. Frame.io and Filestage treat feedback as a human-to-human communication channel. This project's cron-based improvement workflow is genuinely novel for this use case and is the primary reason to build custom rather than use an existing tool.
+**Key insight:** No competitor does the macro money shot (oil-into-grain slow reveal). TotalBoat is close with varnishing process shots but not macro. This is the open lane for Le Tonkinois visual signature.
 
 ---
 
-## Technical Constraints That Shape Features
+## "Postable" Quality Gate: What Separates Amateur from Professional
 
-**Vercel cron on Hobby plan:** Once per day maximum. If the project runs on Hobby, the generation cron can only fire daily — which is acceptable (one new Short per day). For multiple crons per day, Pro plan is required. (Source: Vercel cron docs — confirmed HIGH confidence.)
+Based on research synthesis, these are the observable differences between a reel that gets posted and one that gets shelved.
 
-**Vercel Function timeout:** Default is 10s on Hobby, 60s on Pro. Video generation (Claude Code + Gemini + Remotion render) will exceed 60s. Options: (a) Vercel Fluid Compute (up to 800s on Pro), (b) trigger a separate process (GitHub Actions, external script) from the cron endpoint rather than running the full pipeline in the Function itself. The cron endpoint should be a lightweight trigger, not the pipeline runner. This is a critical architectural constraint.
+### Must-Pass Gates (any fail = not postable)
 
-**Supabase free tier:** Sufficient for 2-5 users with feedback records. No concern at this scale.
+1. **No logo/product name in first 1.5 seconds** — algorithm skip risk
+2. **All text stays in safe zones** — obscured text by Instagram UI = broken reel
+3. **No text violates the 1-3 word rule** — busy text signals "ad" to trained skip-reflex
+4. **Scene duration never below 3.0 seconds** — strobe effect, loses watch time
+5. **Warm color grade on Nachher scenes** — cold Nachher destroys the transformation impact
+6. **Real Kodok product photo used** — AI-generated can is disqualifying
+7. **EndCard has logo + Seit 1906** — brand closure required
+8. **Brand Red #B50606 is present** — without it, the reel has no visual identity
 
-**RLS (Row Level Security):** Must be enabled on feedback table. Policy: users can read/write their own rows only. Admins (role-based) can read all rows. This is standard Supabase pattern and required for the multi-user feedback model.
+### Quality Enhancers (separate "good" from "great")
+
+9. **Money shot present** (The Soak, 50/50, or Grain Awakening macro) — the single highest-impact frame
+10. **Warm/cool contrast between Vorher and Nachher** — perceived transformation is amplified
+11. **Ken Burns zoom is subtle** (1.0→1.06 or 1.0→1.08 max) — too much zoom = nausea
+12. **Transitions match content rhythm** — Wipe for before/after, Slide for steps, Fade for product/endcard
+13. **Caption has 20-25 hashtags** (Tier 1 mega + Tier 2 niche + Tier 3 branded)
+14. **Caption includes one CTA** ("Speicher dir das!" or "Link in Bio")
+15. **Loop potential** — last frame connects to first or deliberately creates re-watch curiosity
+
+---
+
+## Style Iteration Process
+
+How to systematically move from "first attempt" to "channel style" across multiple reels.
+
+### Phase 1: Define Before Building
+
+Create a Channel Style Identity Document (1-2 pages) that answers:
+- What is the primary scene context? (garden / marine / interior / workshop — pick one as "hero" for Kodok)
+- What time of day? (golden hour = warm = right; noon = harsh = wrong)
+- What is the "Vorher" state? (grey/dry/weathered — specific adjectives for Gemini prompts)
+- What is the "Nachher" state? (warm/oiled/glowing — specific adjectives)
+- What is Kodok's secondary accent color? (Navy? Gold? Define now, not during rendering)
+- What is forbidden? (dark backgrounds, amber tones, "modern craft" aesthetic, stock-look imagery)
+
+### Phase 2: Generate Variants Before Committing
+
+For the Kodok reel, generate at minimum:
+- 3 different hook images (The Soak, 50/50, Golden Hour Glow) — test which feels strongest
+- 2 Vorher images (different weathering levels) — confirm "realistically worn but not ruined"
+- 1 Nachher image with warm grade — confirm the transformation feels significant
+- 1 product reveal background color (cream vs white) — test against real product photo
+
+### Phase 3: Assembly in Remotion with Team Review
+
+Assemble in Remotion using validated composition template. Submit to team via Supabase dashboard for review. Star-rating + Pros/Cons generates specific feedback for iteration.
+
+### Phase 4: Iterate on Single Variable at a Time
+
+After team feedback, change ONLY ONE element per iteration:
+- Hook image changed? Everything else stays identical.
+- Text content changed? Timing and images stay identical.
+- Color grade changed? Everything else stays identical.
+
+This is how the feedback → prompt improvement loop from v1.0 produces useful signal. Multiple simultaneous changes make it impossible to know what worked.
+
+### Phase 5: Instagram Trial Reels (Post-Launch, When Available)
+
+Once the account has 1,000+ followers: use Trial Reels to A/B test hooks with non-followers before committing to main feed. Instagram allows up to 20 trial reels/day. Detects duplicate content with different text only — hooks need genuinely different imagery to avoid suppression.
 
 ---
 
 ## Sources
 
-- [Vercel Cron Jobs — Usage and Pricing](https://vercel.com/docs/cron-jobs/usage-and-pricing) — HIGH confidence, official docs
-- [Vercel Functions — Duration configuration](https://vercel.com/docs/functions/configuring-functions/duration) — HIGH confidence, official docs
-- [Supabase Auth — inviteUserByEmail](https://supabase.com/docs/reference/javascript/auth-admin-inviteuserbyemail) — HIGH confidence, official docs
-- [Supabase Auth with Next.js App Router](https://supabase.com/docs/guides/auth/quickstarts/nextjs) — HIGH confidence, official docs
-- [Filestage — Video Feedback Tools comparison](https://filestage.io/blog/video-feedback-tools/) — MEDIUM confidence, vendor analysis
-- [Frame.io vs Filestage comparison](https://filestage.io/filestage-vs-frame-io/) — MEDIUM confidence, vendor analysis
-- [Top Video Feedback Platforms 2025](https://www.clixie.ai/blog/best-video-feedback-platforms-in-2025-ultimate-guide-for-teams-creators) — MEDIUM confidence, review aggregator
-- [Mastering AI Feedback Loops — Prompt Engineering](https://www.arsturn.com/blog/navigating-ai-feedback-loops-with-smart-prompt-engineering) — LOW confidence, blog post
-- [Agentic AI Workflows 2026](https://www.myaiassistant.blog/2026/02/agentic-autonomous-ai-workflows-in-2026.html) — LOW confidence, blog post
+- [Wood Floor Business: 38 Million Instagram Views (Dony Buendia)](https://www.woodfloorbusiness.com/business/social-media/article/15447867/applying-finish-to-the-tune-of-38million-instagram-views) — HIGH confidence, documented case study
+- [Wood Floor Business: Oddly Satisfying Videos Relax Millions (CMC Floors)](https://www.woodfloorbusiness.com/business/social-media/article/15135502/wood-floor-companys-oddly-satisfying-videos-relax-millions) — HIGH confidence, documented case study
+- [Rubio Monocoat Digital Brandbook](http://www.rubiomonocoatbrandbook.com/profile/) — MEDIUM confidence, competitor brand strategy
+- [Instagram Trial Reels — Official Creator Guide](https://creators.instagram.com/blog/instagram-trial-reels) — HIGH confidence, official Instagram documentation
+- [Hootsuite: Instagram Reels for Business 2026](https://blog.hootsuite.com/instagram-reels/) — MEDIUM confidence, industry analysis
+- [TrueFuture Media: Instagram Reels Reach 2026](https://www.truefuturemedia.com/articles/instagram-reels-reach-2026-business-growth-guide) — MEDIUM confidence, industry guide
+- [Versa Creative: Instagram Reels Marketing 2026 Guide](https://versacreative.com/blog/instagram-reels-marketing-2026-guide/) — MEDIUM confidence, industry guide
+- Project research files: competitor-content-research-2026.md, car-detailing-aesthetic-transfer.md, satisfying-wood-finishing-trend.md, instagram-reels-strategy-2026.md — HIGH confidence (multi-source synthesis, validated against real account data)
+- Memory files: feedback_reel_design_rules.md, feedback_reel_composition_template.md, feedback_branding_identity.md, project_content_strategy.md — HIGH confidence (validated by iteration with Chris on 2026-03-25)
+- POC evidence: research/poc-woodporn/ — 5 generated assets confirming Gemini Image can produce the target visual style
 
 ---
 
-*Feature research for: Content review dashboard + AI generation pipeline (Le Tonkinois Shorts)*
-*Researched: 2026-03-26*
+*Feature research for: Instagram product showcase reels — Le Tonkinois / Kodok (v1.1 Content Quality Foundation)*
+*Researched: 2026-03-28*
