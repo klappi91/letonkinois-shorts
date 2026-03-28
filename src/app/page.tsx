@@ -36,6 +36,12 @@ export default async function Home() {
           </div>
           <div className="flex items-center gap-4 text-sm">
             <Link
+              href="/moodboard"
+              className="px-3 py-1.5 rounded-lg bg-bg-sepia text-text-muted hover:bg-wood-amber/30 transition-colors font-medium"
+            >
+              Moodboard
+            </Link>
+            <Link
               href="/assets"
               className="px-3 py-1.5 rounded-lg bg-bg-sepia text-text-muted hover:bg-wood-amber/30 transition-colors font-medium"
             >
