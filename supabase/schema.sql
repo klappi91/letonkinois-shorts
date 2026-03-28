@@ -19,7 +19,7 @@ create table if not exists public.videos (
   duration        integer,
   pipeline        text,
   status          text not null default 'draft' check (status in ('draft','approved','rejected')),
-  prompt_version  text,
+  prompt_version  uuid references public.prompt_versions(id),
   video_url       text,
   products        text[] default '{}',
   created_at      timestamptz not null default now()

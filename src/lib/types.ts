@@ -39,56 +39,6 @@ export interface Feedback {
   processed_at: string | null;
 }
 
-// Supabase-compatible PromptVersion type (mirrors public.prompt_versions table)
-// Content structure per D-07: keyed by VideoType
-export interface PromptVersionContent {
-  image_prompt?: string;
-  video_prompt?: string;
-  composition_config?: Record<string, unknown>;
-}
-
-export interface PromptVersion {
-  id: string;
-  version_number: number;
-  content: Record<VideoType, PromptVersionContent>;
-  created_at: string;
-  created_by: string | null;
-}
-
-// === Legacy Compatibility ===
-// Old Rating type maps to new VideoStatus
-/** @deprecated Use VideoStatus instead */
-export type Rating = VideoStatus;
-
-/** @deprecated Use Video instead — kept temporarily for Phase 2 migration */
-export interface VideoEntry {
-  id: string;
-  title: string;
-  type: VideoType;
-  /** ISO date string */
-  createdAt: string;
-  /** Relative path to video file in public/ */
-  videoFile: string;
-  /** Thumbnail image path (auto-generated or custom) */
-  thumbnail?: string;
-  /** Duration in seconds */
-  duration: number;
-  /** Instagram caption (German) */
-  captionDe: string;
-  /** Instagram caption (French) */
-  captionFr?: string;
-  /** Hashtags as array */
-  hashtags: string[];
-  /** Review rating */
-  rating: Rating;
-  /** Which products are featured */
-  products?: string[];
-  /** Generation pipeline used */
-  pipeline: "remotion" | "gemini-image+remotion" | "gemini-image+gemini-video+remotion";
-  /** Notes for review */
-  notes?: string;
-}
-
 // === Lookup Maps ===
 
 export const VIDEO_TYPE_LABELS: Record<VideoType, string> = {
