@@ -77,7 +77,7 @@ Source: Existing `globals.css` (@theme block: `--font-headline: "Lora"`, `--font
 | Role | Font | Size | Weight | Usage |
 |------|------|------|--------|-------|
 | Hook text | Playfair Display | 72–96px | 700 bold | Full-screen hook titles |
-| Scene label | Lora | 36px | 600 semibold | 1–3 word scene overlays |
+| Scene label | Lora | 36px | 700 bold | 1–3 word scene overlays |
 | Step badge | Lato | 24px | 700 bold | "1/3" step indicators |
 | End card CTA | Lato | 28px | 400 regular | Call-to-action line |
 
