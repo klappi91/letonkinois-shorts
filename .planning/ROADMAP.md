@@ -58,7 +58,9 @@ Plans:
   2. A reviewer can type pros and cons text and submit — text is visible after a page reload
   3. If the same reviewer rates the same video again, the previous rating is overwritten (not duplicated) in the database
   4. Every feedback row in the database has a `processed_at` column that is null after submission
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 03-01-PLAN.md — FeedbackForm component + video detail page integration (star rating, pros/cons, upsert)
 **UI hint**: yes
 
 ### Phase 4: Prompt Versioning
@@ -80,5 +82,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Supabase Foundation | 2/2 | Complete |  |
 | 2. Auth + Data Migration | 2/2 | Complete   | 2026-03-28 |
-| 3. Feedback UI | 0/? | Not started | - |
+| 3. Feedback UI | 0/1 | In Progress | - |
 | 4. Prompt Versioning | 0/? | Not started | - |
