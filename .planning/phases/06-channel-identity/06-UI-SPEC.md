@@ -61,16 +61,16 @@ Source: RESEARCH.md (Memory: feedback_reel_composition_template.md safe zone val
 | Role | Font | Size | Weight | Line Height |
 |------|------|------|--------|-------------|
 | Display | Lora (var(--font-headline)) | 28px | 700 bold | 1.2 |
-| Heading | Lora (var(--font-headline)) | 20px | 600 semibold | 1.2 |
+| Heading | Lora (var(--font-headline)) | 20px | 700 bold | 1.2 |
 | Body | Lato (var(--font-body)) | 16px | 400 regular | 1.5 |
 | Label / Badge | Lato (var(--font-body)) | 12px | 700 bold | 1.0 |
 
 Rules:
 - Exactly 2 font families: Lora (headlines), Lato (body/labels)
-- Exactly 2 weights used per family: regular (400) + bold (600-700)
+- Exactly 2 weights: 400 regular (Body only) + 700 bold (Display, Heading, Label/Badge)
 - No mixing: Playfair Display is Remotion-only, not used in the dashboard
 
-Source: Existing `globals.css` (@theme block: `--font-headline: "Lora"`, `--font-body: "Lato"`); observed in `page.tsx` and `VideoCard.tsx` font class usage.
+Source: Existing `globals.css` (@theme block: `--font-headline: "Lora"`, `--font-body: "Lato"`); observed in `page.tsx` and `VideoCard.tsx` font class usage. Heading weight corrected from 600 to 700 to maintain 2-weight rule (revision 2026-03-28).
 
 ### Remotion Compositions
 
@@ -179,6 +179,10 @@ Source: CONTEXT.md (D-05, D-06, D-07); RESEARCH.md (Pattern 3, car-detailing-aes
 
 ## /moodboard Page Layout Contract
 
+### Primary Focal Point
+
+The screenshot grid (first visible row above the fold) is the primary focal point of the /moodboard page. On all viewports, at least one full row of MoodboardCards is visible without scrolling. The page title and subtitle serve as orientation context only — the grid commands the majority of viewport height.
+
 ### Page Structure
 
 ```
@@ -249,18 +253,18 @@ Source: RESEARCH.md (Pattern 4 — moodboard data structure); competitor-content
 
 All copy in German (dashboard language is German throughout).
 
-| Element | Copy |
-|---------|------|
-| Primary CTA — Moodboard nav link | "Moodboard" |
-| Moodboard page heading | "Referenz-Moodboard" |
-| Moodboard page subheading | "Ziel-Stil für den Le Tonkinois Instagram-Kanal" |
-| Empty state — moodboard (0 entries) | "Noch keine Referenzen gesammelt. Screenshots in public/assets/moodboard/ ablegen." |
-| Error state — moodboard image not found | "Bild nicht verfügbar — Datei in public/assets/moodboard/ prüfen." |
-| Destructive actions | None in Phase 6 |
-| brand.ts forbidden aesthetics (code comments) | German strings in FORBIDDEN_AESTHETICS constant (see RESEARCH.md Pattern 1) |
-| globals.css sync comment | "MANUELLER SYNC AUS src/lib/brand.ts — zuletzt synchronisiert [Datum]" |
+| Element | Type | Copy |
+|---------|------|------|
+| Primary nav label — Moodboard link in dashboard header | Navigation label | "Moodboard" |
+| Moodboard page heading | Page title | "Referenz-Moodboard" |
+| Moodboard page subheading | Descriptive subtitle | "Ziel-Stil für den Le Tonkinois Instagram-Kanal" |
+| Empty state — moodboard (0 entries) | Empty state | "Noch keine Referenzen gesammelt. Screenshots in public/assets/moodboard/ ablegen." |
+| Error state — moodboard image not found | Error state | "Bild nicht verfügbar — Datei in public/assets/moodboard/ prüfen." |
+| Destructive actions | — | None in Phase 6 |
+| brand.ts forbidden aesthetics (code comments) | Code comment | German strings in FORBIDDEN_AESTHETICS constant (see RESEARCH.md Pattern 1) |
+| globals.css sync comment | Code comment | "MANUELLER SYNC AUS src/lib/brand.ts — zuletzt synchronisiert [Datum]" |
 
-No destructive actions exist in Phase 6 (no delete, no form submissions, no data mutations). The moodboard is read-only.
+Note: Phase 6 has no primary action CTA (no form submissions, no mutations). The "Moodboard" link is a navigation label, not a call-to-action verb. No destructive actions exist — the moodboard is read-only.
 
 Source: Inferred from phase scope (CONTEXT.md, RESEARCH.md); existing dashboard language pattern (German).
 
