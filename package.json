@@ -6,7 +6,8 @@
     "dev": "next dev -H 127.0.0.1 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx tsx scripts/seed-videos.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.1",
     "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0"
   }
 }
