@@ -1,0 +1,27 @@
+{
+  "name": "letonkinois-shorts-remotion",
+  "version": "1.0.0",
+  "description": "Le Tonkinois Instagram Reels — Remotion Video Templates",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts",
+    "render:gartenmoebel": "remotion render src/index.ts GartenmobelRenovation out/gartenmoebel-renovation.mp4",
+    "render:boot-deck": "remotion render src/index.ts BootDeckRenovation out/boot-deck-renovation.mp4",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.261",
+    "@remotion/google-fonts": "^4.0.261",
+    "@remotion/player": "4.0.261",
+    "@remotion/transitions": "^4.0.261",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.261"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "prompt": "Photorealistic 9:16 portrait photo of a classic wooden sailboat deck in a small European marina. The teak deck planks are grey, faded, and weathered from 2-3 seasons without care. No shine at all, wood grain visible but bleached out. Slight green algae buildup in corners and between planks. Brass fittings are dull and tarnished. Coiled rope on a cleat. Steering wheel visible in background. Overcast morning light, flat and unflattering. The deck surface is dry and lifeless. Camera angle: looking along the deck from bow towards stern, slightly elevated. NO people. Other boats visible in marina background.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/boot-deck-renovation/01-vorher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "1K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 portrait photo of the SAME classic wooden sailboat deck in a small European marina. A person (seen from behind, wearing work clothes and kneeling) scrubs the grey weathered teak deck with a stiff bristle brush. Soapy water and foam on the planks. A blue bucket beside them. The wood is wet and still grey. Brass fittings visible. Coiled rope on cleat. Steering wheel in background. Bright daylight, the wet deck reflecting light. Camera angle: looking along the deck from bow, person in mid-ground working methodically from one end. Other boats in marina background.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/boot-deck-renovation/02-reinigen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "1K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 portrait photo of the SAME classic wooden sailboat deck in a small European marina. A person (seen from behind/side, work clothes) sands the deck with a handheld orbital sander, leaning over and working methodically along the grain. Part of the deck is sanded to pale fresh wood, the rest still grey. The transition between sanded and unsanded is GRADUAL — zone of fine sawdust, partially sanded wood where grey and pale wood blend together, NOT a sharp line. Sawdust visible on surface. The sanded wood is pale and slightly dusty, NOT golden. Brass fittings, coiled rope, steering wheel in background. Afternoon sun. Camera angle: looking along the deck.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/boot-deck-renovation/03-schleifen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "1K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 portrait photo of the SAME classic wooden sailboat deck in a small European marina. A person (seen from behind/side) applies oil/varnish to the sanded teak deck with a wide flat brush. The treated part of the deck shows warm, rich, saturated wood color with slight sheen. The untreated part is pale sanded wood. Clear difference between oiled and unoiled sections. A generic container (no brand visible) sits beside the person. Warm afternoon sunlight. Brass fittings beginning to look better. Coiled rope, steering wheel in background. Camera angle: along the deck from bow. The surface being treated is CLEAN — no dust, no debris.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/boot-deck-renovation/04-auftragen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "1K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 portrait photo of the SAME classic wooden sailboat deck in a small European marina at GOLDEN HOUR. The entire teak deck gleams warm and alive — rich honey-brown wood grain beautifully visible. Brass fittings polished and gleaming. Rope neatly coiled on cleats. Steering wheel catches the warm light. NO tools, NO cans, NO people — just the beautifully finished boat. Warm golden hour sun creates long shadows and water reflections. The deck surface is IMMACULATE — no dust, no leaves, no debris. Other boats soft in background. Camera angle: looking along the deck from bow, warm light streaming from the side. The wood looks protected, rich, and deeply nourished.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/boot-deck-renovation/05-ergebnis.png",
+    "aspect_ratio": "9:16",
+    "image_size": "1K"
+  }
+]

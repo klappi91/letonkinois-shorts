@@ -20,9 +20,27 @@ Automatisierte Video-Erstellung mit Content-Rotation für den Le Tonkinois Insta
 
 3 Generierungs-Pfade (je nach Komplexität):
 
-1. **Remotion Only** — Produktfotos + Animation/Text-Overlays → MP4
-2. **Gemini Image + Remotion** — KI-generierte Szenen + Compositing → MP4
-3. **Gemini Image + Gemini Video + Remotion** — KI-Bild → KI-Video → Compositing → MP4
+1. **Remotion Only** — Produktfotos + Animation/Text-Overlays → MP4 (Slideshows, Before/After, Listicles)
+2. **Gemini Image + Remotion** — KI-generierte Szenen + Ken Burns Compositing → MP4 (gut für Text-heavy Content)
+3. **Gemini Image + Gemini Video + Remotion** — KI-Bild → Veo 3.1 Video-Clips → FFmpeg Trimming → Remotion Schnitt → MP4 (echte Videos mit Bewegung)
+
+### Video Production Workflow (Pfad 3 — empfohlen für hochwertige Shorts)
+
+```
+1. workflow.json erstellen (Shot List, Prompts, Kamerawinkel)
+2. Gemini Image → Referenzbilder pro Szene (Stil-Anker)
+3. Gemini Video (Veo 3.1) → 3-5 Clips à 4-8s (Image-to-Video)
+4. Review: Clips bewerten, beste Sekunden identifizieren
+5. FFmpeg → Trimming (nur gute Teile)
+6. Remotion → Clips cutten (OffthreadVideo) + Overlays + ProductReveal + EndCard
+7. Judge → Iterate
+```
+
+**Skills:** `gemini-image`, `gemini-video`, `ffmpeg`, `remotion-best-practices`
+**Referenz:** ClawVid-Architektur in `research/clawvid-reference/`
+**Template:** `scripts/workflow-template.json`
+**Komponente:** `remotion/src/components/VideoScene.tsx` (OffthreadVideo-basiert)
+**Doku:** Memory `reference_video_production_pipeline.md`
 
 ## Content-Rotation
 
@@ -98,6 +116,11 @@ npm run lint       # ESLint
 # Remotion (im remotion/ Verzeichnis)
 cd remotion && npm run studio          # Vorschau im Browser
 cd remotion && npm run render:gartenmoebel  # MP4 rendern
+
+# Video Judge (Gemini 3.1 Pro — bewertet Shorts nach 7 Kriterien)
+python3 scripts/judge-video.py <video.mp4> [--context "..."]
+python3 scripts/judge-video.py public/videos/gartenmoebel-renovation.mp4
+python3 scripts/judge-video.py out.mp4 -o bewertung.json    # JSON speichern
 ```
 
 ## Roadmap

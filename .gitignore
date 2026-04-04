@@ -35,3 +35,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# remotion
+remotion/node_modules/
+remotion/out/
+
+# generated video clips (intermediate, can be regenerated)
+assets/clips/
+
+# research reference code
+research/

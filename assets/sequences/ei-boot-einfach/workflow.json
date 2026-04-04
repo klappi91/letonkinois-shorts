@@ -1,0 +1,64 @@
+{
+  "name": "Ei-Boot-Einfach",
+  "description": "Geköpftes Ei von oben, Mini-Holzboot schwimmt auf Eigelb, schaukelt sanft",
+  "type": "seasonal",
+  "aspect_ratio": "9:16",
+  "target_duration_seconds": 15,
+  "fps": 30,
+
+  "consistency": {
+    "reference_prompt": "Top-down view, warm morning light, German Easter breakfast table, white linen tablecloth, pastel Easter decoration, spring flowers, soft shadows, photorealistic, high quality",
+    "lighting": "warm morning side-lighting from left window, golden tones",
+    "color_temperature": "warm, golden hour tones",
+    "negative_global": "ugly, distorted, text, watermark, logo, product cans, bottles, brand names, plastic, AI artifacts, cartoon, illustration, blurry, low quality"
+  },
+
+  "clips": [
+    {
+      "id": "clip_01_overhead",
+      "type": "video",
+      "description": "Top-down: geköpftes Ei im Eierbecher, dann kommt ein Mini-Boot ins Bild",
+      "image_prompt": "Photorealistic 9:16 top-down bird's-eye view of a soft-boiled egg in a white ceramic egg cup, cleanly cracked open revealing bright orange yolk. A tiny handcrafted wooden sailboat (2-3cm) with a small white fabric sail floats on the yolk surface. White linen tablecloth. Scattered pastel Easter eggs and small spring flowers around the egg cup. Warm morning light from upper left. Shallow depth of field.",
+      "video_prompt": "Tiny wooden sailboat gently rocking and slowly rotating on egg yolk, subtle ripples in yolk surface, warm light plays on oiled wood grain of boat. Camera holds steady from above, very slight breathing motion. Calm, mesmerizing.",
+      "duration_seconds": 8,
+      "use_seconds": [0, 6],
+      "camera": "static top-down, subtle float",
+      "effects": ["vignette_subtle"]
+    },
+    {
+      "id": "clip_02_closer",
+      "type": "video",
+      "description": "Leichter Zoom auf Boot-Detail, Holzmaserung sichtbar",
+      "image_prompt": "Photorealistic 9:16 close-up from slightly elevated angle (30 degrees) of tiny wooden sailboat floating on bright orange egg yolk inside cracked egg. Beautiful oiled wood grain clearly visible on boat hull. Small white fabric sail. Yolk surface looks like golden miniature sea. Creamy bokeh background showing blurred Easter table setting. Warm morning light.",
+      "video_prompt": "Slow gentle zoom into the wooden boat on yolk, light catches the oiled wood surface creating warm reflections. Boat rocks gently side to side. Very shallow depth of field, dreamy quality.",
+      "duration_seconds": 8,
+      "use_seconds": [0, 5],
+      "camera": "slow zoom in from elevated angle",
+      "effects": []
+    }
+  ],
+
+  "overlays": {
+    "hook_text": { "text": "Ostereier...\nanders.", "font": "Playfair Display", "position": "top_safe", "appear_at": 0.5 },
+    "scene_label": { "text": "Geölt.", "font": "Lora", "on_clip": "clip_02_closer", "appear_at": 0.5 },
+    "product_reveal": { "product": "vernis", "cutout": "product-cutouts/vernis.png", "name": "Le Tonkinois Vernis" },
+    "end_card": { "cta": "Frohe Ostern!", "logo": "brand/logo.png" }
+  },
+
+  "audio": {
+    "music": { "style": "gentle acoustic guitar, morning mood, Easter spring feeling", "volume": 0.3 },
+    "sfx": [
+      { "on_clip": "clip_01_overhead", "sound": "soft egg crack, tiny splash", "at_second": 0.3, "volume": 0.5 }
+    ]
+  },
+
+  "generation_config": {
+    "image_model": "gemini-image",
+    "image_size": "2K",
+    "video_model": "gemini-video",
+    "video_duration": 8,
+    "video_resolution": "720p",
+    "video_quality": "fast",
+    "video_aspect_ratio": "9:16"
+  }
+}

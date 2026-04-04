@@ -64,18 +64,8 @@ export const assets: AssetEntry[] = [
   { path: "/assets/products/beize-schwarz/13.png", category: "products", subcategory: "Beize Schwarz", name: "Holzprobe 3" },
 
   // === BEFORE/AFTER ===
-  { path: "/assets/before-after/garden-furniture-before.png", category: "before-after", subcategory: "Gartenmöbel", name: "Vorher" },
-  { path: "/assets/before-after/garden-furniture-after.png", category: "before-after", subcategory: "Gartenmöbel", name: "Nachher" },
-  { path: "/assets/before-after/garden-fence-before.png", category: "before-after", subcategory: "Gartenzaun", name: "Vorher" },
-  { path: "/assets/before-after/garden-fence-after.png", category: "before-after", subcategory: "Gartenzaun", name: "Nachher" },
-  { path: "/assets/before-after/boat-deck-before.png", category: "before-after", subcategory: "Bootsdeck", name: "Vorher" },
-  { path: "/assets/before-after/boat-deck-after.png", category: "before-after", subcategory: "Bootsdeck", name: "Nachher" },
-  { path: "/assets/before-after/parquet-before.png", category: "before-after", subcategory: "Parkett", name: "Vorher" },
-  { path: "/assets/before-after/parquet-after.png", category: "before-after", subcategory: "Parkett", name: "Nachher" },
-  { path: "/assets/before-after/wood-door-before.png", category: "before-after", subcategory: "Holztür", name: "Vorher" },
-  { path: "/assets/before-after/wood-door-after.png", category: "before-after", subcategory: "Holztür", name: "Nachher" },
-  { path: "/assets/before-after/window-frame-before.png", category: "before-after", subcategory: "Fensterrahmen", name: "Vorher" },
-  { path: "/assets/before-after/window-frame-after.png", category: "before-after", subcategory: "Fensterrahmen", name: "Nachher" },
+  // Gelöscht: Alle AI-generierten Before/After waren unrealistisch (zu extrem zerfallen → zu perfekt).
+  // Einzig brauchbare Referenz: /assets/blog/vorher-verwitterte-gartenmoebel.jpg (realistisch verwittert, nicht zerfallen)
 
   // === SCENES: Garten ===
   { path: "/assets/scenes/garden/garden-furniture.png", category: "scenes", subcategory: "Garten", name: "Gartenmöbel" },

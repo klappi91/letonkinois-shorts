@@ -1,0 +1,62 @@
+{
+  "name": "Holz-Osterhase-Video",
+  "description": "Wasser perlt auf geöltem Holz-Osterhasen ab — nur als Video überzeugend",
+  "type": "seasonal",
+  "aspect_ratio": "9:16",
+  "target_duration_seconds": 15,
+  "fps": 30,
+
+  "consistency": {
+    "reference_prompt": "Warm morning light, rustic German Easter setting, wooden surfaces, spring garden background, photorealistic, high quality",
+    "lighting": "warm morning side-lighting, golden tones",
+    "color_temperature": "warm, honey tones",
+    "negative_global": "ugly, distorted, text, watermark, logo, product cans, bottles, brand names, plastic, AI artifacts, cartoon, illustration"
+  },
+
+  "clips": [
+    {
+      "id": "clip_01_hase",
+      "type": "image",
+      "description": "Hook: Holz-Osterhase Reveal auf Gartentisch",
+      "source": "assets/sequences/oster-hase-reveal/01-hook.png",
+      "duration_seconds": 3,
+      "effects": ["ken_burns_zoom_in"]
+    },
+    {
+      "id": "clip_02_water_beading",
+      "type": "video",
+      "description": "THE MONEY SHOT: Wasser perlt auf geöltem Holz-Hasen ab — Beweis dass das Öl schützt",
+      "image_prompt": "Photorealistic 9:16 close-up of a handcarved wooden Easter bunny figurine (15cm) with beautiful oiled wood surface. A few water droplets sit perfectly beaded on the oiled wood surface, catching warm morning light. Wood grain clearly visible through the oil finish. Warm honey-colored oiled wood. Spring garden setting softly blurred in background with Easter eggs and flowers. Shallow depth of field.",
+      "video_prompt": "Water droplets slowly roll down the oiled wooden Easter bunny surface, beading perfectly, not absorbing. Light catches each droplet creating tiny highlights. One droplet rolls off the edge and drops. Satisfying proof of wood protection. Camera steady, close-up macro.",
+      "duration_seconds": 8,
+      "use_seconds": [0, 6],
+      "camera": "static close-up macro",
+      "effects": []
+    },
+    {
+      "id": "clip_03_reveal",
+      "type": "image",
+      "description": "Reveal: Hase in Oster-Szene, geschützt und schön",
+      "source": "assets/sequences/oster-hase-reveal/03-reveal.png",
+      "duration_seconds": 3,
+      "effects": ["ken_burns_zoom_out"]
+    }
+  ],
+
+  "overlays": {
+    "hook_text": { "text": "Wasser...\nperlt ab.", "font": "Playfair Display", "position": "top_safe", "appear_at": 0.5 },
+    "scene_label": { "text": "Geschützt.", "font": "Lora", "on_clip": "clip_02_water_beading", "appear_at": 0.5 },
+    "product_reveal": { "product": "vernis", "cutout": "product-cutouts/vernis.png", "name": "Le Tonkinois Vernis" },
+    "end_card": { "cta": "Frohe Ostern!", "logo": "brand/logo.png" }
+  },
+
+  "generation_config": {
+    "image_model": "gemini-image",
+    "image_size": "2K",
+    "video_model": "gemini-video",
+    "video_duration": 8,
+    "video_resolution": "720p",
+    "video_quality": "fast",
+    "video_aspect_ratio": "9:16"
+  }
+}

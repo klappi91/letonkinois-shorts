@@ -1,0 +1,44 @@
+[
+  {
+    "prompt": "Overhead flat lay photo of three beautiful oiled wooden items on a bright natural wood table: a cutting board, a set of three wooden cooking spoons in a white ceramic jar, and a small wooden jewelry box. All items have rich warm wood grain from fresh oil treatment. Soft warm daylight from a window, clean bright kitchen setting, white walls in background. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "01-hook-alle-drei.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Close-up photo of an untreated dry wooden cutting board on a bright white kitchen countertop. The wood is pale, slightly grayish, with visible dryness and faint stains. Natural soft daylight from left side. Clean modern kitchen background, white tiles. The board looks neglected but not destroyed - just dry and in need of care. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "02-schneidebrett-vorher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Close-up photo of the same style wooden cutting board, now freshly oiled with natural wood oil. Rich warm honey-toned wood grain visible, slightly satin finish not overly glossy. On the same bright white kitchen countertop with same lighting from left. A small sprig of fresh rosemary beside it for freshness. The wood looks nourished and alive. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "03-schneidebrett-nachher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photo of 3-4 untreated dry wooden cooking spoons and spatulas standing upright in a white ceramic jar on a bright kitchen countertop. The wood is pale, grayish, dry-looking. Same bright kitchen setting with soft natural daylight from left. The spoons look worn and thirsty for oil. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "04-loeffel-vorher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photo of the same 3-4 wooden cooking spoons and spatulas standing upright in the same white ceramic jar on a bright kitchen countertop. Now freshly oiled - warm rich wood tones, beautiful grain visible, slight satin sheen. Same bright kitchen, same lighting from left. The wood looks nourished and warm. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "05-loeffel-nachher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photo of a small decorative wooden jewelry box, half open, on a bright surface. The left half shows the box dry and pale untreated wood, the right half shows it freshly oiled with warm rich grain. Inside the box are a few colorful painted Easter eggs as a playful detail. Soft warm daylight, bright clean setting. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "06-kaestchen-vorher-nachher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Warm inviting overhead photo of all three oiled wooden gifts arranged on a bright natural wood table: a cutting board with a bow ribbon, wooden spoons in a ceramic jar with a ribbon, and a small wooden jewelry box. Subtle Easter decoration around them - a few pastel colored eggs, small spring flowers, a tiny ceramic bunny figurine. Gift wrapping paper partially visible. Warm golden daylight, festive but elegant and natural. No text, no product cans, no bottles, no logos, no plastic, no brand names. 9:16 portrait orientation.",
+    "output": "07-alle-zusammen-oster.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

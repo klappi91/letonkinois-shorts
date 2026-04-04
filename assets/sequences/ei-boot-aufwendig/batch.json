@@ -1,0 +1,20 @@
+[
+  {
+    "prompt": "Photorealistic 9:16 close-up of hands holding a butter knife about to crack open a soft-boiled egg in a white ceramic egg cup. Fingers gripping knife gently. White tablecloth, Easter decoration blurred in background. Warm morning light from left. Focus on hands and egg. Anticipation moment.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/ei-boot-aufwendig/01-crack.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 top-down view of cracked open soft-boiled egg revealing bright orange yolk with a tiny handcrafted wooden sailboat (2-3cm) floating on the yolk surface. Beautiful oiled wood hull, small white fabric sail. Yolk looks like a golden miniature ocean. White ceramic egg cup on white tablecloth. Warm morning light.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/ei-boot-aufwendig/02-reveal.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 POV shot from the deck of a tiny wooden sailboat. Camera is AT boat level looking forward across a vast golden egg yolk sea. The white egg shell walls rise up like cliffs on either side. In the far background, enormously scaled kitchen items visible — giant salt shaker, massive Easter eggs like boulders, huge spring flowers like trees. Dramatic scale shift. Warm golden light reflecting off yolk surface. Cinematic, surreal, miniature world perspective.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/ei-boot-aufwendig/03-captain-pov.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

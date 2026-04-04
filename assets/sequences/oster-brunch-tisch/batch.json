@@ -1,0 +1,26 @@
+[
+  {
+    "prompt": "Top-down overhead photograph of an untreated light oak oval wooden serving platter (approximately 50cm) on a rustic dark wood dining table. The platter is freshly sanded, pale, dry, showing raw wood grain. Beside it: a natural-bristle paint brush and a small generic ceramic bowl with golden oil (no brand labels, no product cans, no bottles). Warm afternoon side lighting from the left, golden hour warmth, honey tones. German kitchen-dining room background slightly blurred: white walls, simple window with sheer curtain letting warm light in. Photorealistic, editorial food photography style. No text, no logos, no plastic, no brand names.",
+    "output": "01-hook.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Top-down overhead photograph of the same oval oak wooden serving platter on the same rustic dark wood dining table. A hand is applying golden wood oil with a natural-bristle brush. Clear visible contrast: the left half of the platter is already oiled — warm, rich, dark honey color with enhanced grain — while the right half is still raw, pale and dry. The oil is visibly soaking into the wood at the boundary line. Same warm afternoon side lighting from the left, golden hour warmth. Same German kitchen-dining room background. Same ceramic bowl with oil nearby. The 'first coat moment' — oil penetrating fresh wood. Photorealistic, editorial photography. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "02-first-coat.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Top-down overhead photograph close-up of the fully oiled oval oak wooden serving platter on the same rustic dark wood dining table. The entire platter now has a warm, rich, satin-sheen finish. The beautiful wood grain is dramatically enhanced by the oil — golden-honey tones, visible figure and texture brought to life. Warm afternoon side lighting from the left creates a gentle highlight on the oiled surface. Same German kitchen-dining room background. Photorealistic, editorial detail shot. No product cans, no bottles, no logos, no text, no plastic, no brand names, no leaves, no debris.",
+    "output": "03-ergebnis.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Slightly elevated angle photograph of a beautifully set Easter brunch table in a warm German dining room. Center focus: the same oiled oval oak wooden serving platter (warm honey finish, visible grain) with artisan sourdough bread, butter in a ceramic dish, and a small jar of honey on it. Around the platter on the table: pastel-colored Easter eggs in a woven nest, small ceramic Easter bunny figurines, a vase with fresh spring flowers (tulips, ranunculus in soft pink and white), linen napkins in natural tones, simple white plates and cups. Warm golden morning light streaming from a window on the left. Cozy, inviting atmosphere. German suburban home, not staged-looking — lived-in and authentic. Photorealistic, editorial food and lifestyle photography. No product cans, no bottles, no logos, no text, no plastic packaging, no brand names.",
+    "output": "04-oster-tisch.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

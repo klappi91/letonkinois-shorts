@@ -1,0 +1,26 @@
+[
+  {
+    "prompt": "Close-up of a soft-boiled egg in a beautiful ceramic egg cup, cleanly decapitated with the orange yolk visible inside. Set on a white-linen Easter breakfast table with subtle pastel decoration: a small bouquet of spring flowers, a few painted pastel eggs nearby. Soft warm morning light from the left. Shallow depth of field. Photorealistic food photography, 9:16 portrait composition, warm golden tones. No text, no logos, no product cans, no bottles, no plastic, no brand names, no AI artifacts.",
+    "output": "01-hook.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Same soft-boiled egg in the same ceramic egg cup on the same white-linen Easter breakfast table with the same pastel decoration and spring flowers. But now a tiny handcrafted wooden sailboat (about 3cm) is floating on top of the orange yolk. The miniature boat has a beautifully oiled warm wood surface with visible grain, and a small fabric sail. The yolk looks like a tiny golden sea. Same warm morning light from the left. Photorealistic food photography, shallow depth of field, 9:16 portrait composition, warm golden tones. Whimsical but realistic. No text, no logos, no product cans, no bottles, no plastic, no brand names, no AI artifacts.",
+    "output": "02-boot-reveal.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Extreme macro close-up of a tiny handcrafted wooden sailboat floating on orange egg yolk. The camera is very close, showing the beautiful wood grain texture in detail — the oiled surface has a warm satin sheen. The miniature fabric sail is slightly tilted. The orange yolk surrounds the boat like a golden ocean. Very shallow depth of field, only the boat hull in sharp focus. Warm side-lighting from the left. Photorealistic macro photography, 9:16 portrait composition. No text, no logos, no product cans, no bottles, no plastic, no brand names, no AI artifacts.",
+    "output": "03-detail.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Wider view of an Easter breakfast table: the soft-boiled egg with the tiny wooden sailboat on the yolk is in the center in its ceramic egg cup. Around it we see the full table setting: more eggs in pastel colors, a small chocolate Easter bunny, toast with butter, jam jars, a coffee cup, and a vase with spring flowers. Warm morning sunlight streams through a window, casting soft shadows. The scene is inviting, warm, and slightly surreal because of the miniature boat. Photorealistic, editorial food photography, 9:16 portrait composition, warm golden tones. No text, no logos, no product cans, no bottles, no plastic, no brand names, no AI artifacts.",
+    "output": "04-zoom-out.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

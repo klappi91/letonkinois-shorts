@@ -1,0 +1,44 @@
+[
+  {
+    "prompt": "A renovated wooden garden bench (classic 3-seater with armrests and backrest) in a German suburban backyard. The bench wood is warm honey-toned, freshly oiled and protected. On the bench: two soft linen cushions, a small wooden Easter bunny figurine, and a wicker Easter basket with colorful painted eggs. Next to the bench on the grass: a small vase with spring flowers (daffodils, tulips). Lush green lawn, trimmed hedge in the background, mature fruit tree. Warm golden hour spring sunlight, side-lit from the left. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/01-hook.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "The same classic 3-seater wooden garden bench with armrests and backrest in the same German suburban backyard. The bench wood is weathered grey, faded, with slight surface roughness — NOT broken or rotten, just neglected and sun-bleached. No cushions, no decoration, no objects on the bench. Same hedge and fruit tree in background. Slightly overcast flat daylight, less warm than golden hour. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/02-vorher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A person seen from behind (wearing casual work clothes: jeans, dark t-shirt, no gloves) wiping down a weathered grey wooden garden bench (classic 3-seater with armrests and backrest) with a damp cloth. The bench surface is wet and still grey. A small bucket with water sits on the grass next to the bench. German suburban backyard, trimmed hedge, fruit tree in background. Slightly overcast daylight. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/03-reinigen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A person seen from behind (wearing casual work clothes: jeans, dark t-shirt) sanding a wooden garden bench (classic 3-seater with armrests and backrest) with a hand sanding block and sandpaper. About half the bench seat is freshly sanded — the sanded portion is pale, matte, dusty-looking raw wood (NOT golden, NOT warm-toned). The other half is still weathered grey. Fine sanding dust visible on the surface. Gradual transition between sanded and unsanded areas, not a sharp line. German suburban backyard, hedge, fruit tree. Afternoon daylight. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/04-schleifen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A person seen from behind (wearing casual work clothes: jeans, dark t-shirt) applying oil with a wide natural bristle brush to a wooden garden bench (classic 3-seater with armrests and backrest). The brushed section shows warm, rich, honey-toned oiled wood. The unbrushed section is pale raw sanded wood. A generic small container (plain metal tin, no label, no brand) with oil sits on the grass nearby. Warm afternoon sunlight, golden tones. German suburban backyard, hedge, fruit tree. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/05-oelen.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A renovated wooden garden bench (classic 3-seater with armrests and backrest) in a German suburban backyard. The entire bench is freshly oiled with a warm honey glow, smooth and protected-looking surface. No tools, no cans, no rags, no supplies around. Clean scene. Lush green lawn, trimmed hedge, fruit tree. Warm golden hour sunlight from the left. The wood looks alive and nourished. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names, no decoration.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/06-nachher.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A beautifully renovated wooden garden bench (classic 3-seater with armrests and backrest, warm honey-toned oiled wood) in a German suburban backyard decorated for Easter. On the bench: two soft linen cushions, a small carved wooden Easter bunny figurine, and a wicker Easter basket with pastel-colored painted eggs. Next to the bench: a small glass vase with spring flowers (yellow daffodils, pink tulips). The scene looks inviting for an Easter brunch in the garden. Golden hour sunlight, warm and festive spring atmosphere. Lush green lawn, trimmed hedge, fruit tree with early blossoms. 9:16 portrait orientation. Photorealistic. No product cans, no bottles, no logos, no text, no plastic, no brand names.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/oster-gartenmoebel/07-oster-deko.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

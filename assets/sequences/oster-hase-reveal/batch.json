@@ -1,0 +1,26 @@
+[
+  {
+    "prompt": "Extreme close-up of a beautifully oiled wood surface, warm golden grain visible, light reflections dancing across the polished surface. The wood has a rich honey-amber tone from natural oil treatment. You cannot tell what object this is — just gorgeous wood texture filling the entire frame. Warm afternoon side-lighting from the left, golden hour warmth. Shallow depth of field. German suburban backyard setting implied by soft warm background bokeh. Photorealistic, editorial quality. Portrait orientation 9:16.",
+    "output": "01-hook.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Close-up of oiled wood surface with 4-5 crystal-clear water droplets beading up and rolling off the protected surface. The droplets are perfectly round, showing the hydrophobic protection of the oil finish. The warm honey-toned wood grain is visible beneath and around the water beads. Slightly wider angle than extreme close-up, but still cannot identify the object. Warm afternoon side-lighting from the left, golden hour warmth. Photorealistic macro photography style. Portrait orientation 9:16. No product cans, no bottles, no logos, no text, no plastic, no AI artifacts.",
+    "output": "02-wasser.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "A hand-carved wooden Easter bunny figure, approximately 30cm tall, standing on a rustic weathered wooden garden table. The bunny has a beautifully oiled warm finish that catches the light, showing detailed wood grain and craftsmanship. The figure is a classic sitting bunny shape with upright ears. Background: softly blurred German suburban backyard garden in early spring, green lawn, hedge, maybe a fruit tree with first blossoms. Warm afternoon side-lighting from the left, golden hour warmth. The bunny is the clear subject, centered in frame. Photorealistic, editorial photography. Portrait orientation 9:16. No product cans, no bottles, no logos, no text, no plastic, no AI artifacts.",
+    "output": "03-reveal.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "The same hand-carved wooden Easter bunny figure (~30cm, warm oiled finish, detailed wood grain) now sitting beside a natural Easter nest made of woven twigs, dry grass and fresh green moss on the same rustic weathered wooden garden table. In the nest are 3-4 hand-painted Easter eggs in soft pastel colors (pale blue, soft pink, light yellow, mint green). A few small spring flowers (daisies, primroses) are scattered around. Same German suburban backyard garden background (softly blurred, green lawn, hedge). Same warm afternoon side-lighting from the left, golden hour warmth. Cozy spring atmosphere. Photorealistic, editorial photography. Portrait orientation 9:16. No product cans, no bottles, no logos, no text, no plastic, no AI artifacts.",
+    "output": "04-osternest.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

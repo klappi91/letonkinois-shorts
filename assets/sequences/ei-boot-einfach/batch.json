@@ -1,0 +1,14 @@
+[
+  {
+    "prompt": "Photorealistic 9:16 top-down bird's-eye view of a soft-boiled egg in a white ceramic egg cup, cleanly cracked open revealing bright orange yolk. A tiny handcrafted wooden sailboat (2-3cm) with a small white fabric sail floats on the yolk surface. White linen tablecloth. Scattered pastel Easter eggs and small spring flowers around the egg cup. Warm morning light from upper left. Shallow depth of field.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/ei-boot-einfach/01-overhead.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  },
+  {
+    "prompt": "Photorealistic 9:16 close-up from slightly elevated angle (30 degrees) of tiny wooden sailboat floating on bright orange egg yolk inside cracked egg. Beautiful oiled wood grain clearly visible on boat hull. Small white fabric sail. Yolk surface looks like golden miniature sea. Creamy bokeh background showing blurred Easter table setting. Warm morning light.",
+    "output": "/home/chris/projects/letonkinois-shorts/assets/sequences/ei-boot-einfach/02-closer.png",
+    "aspect_ratio": "9:16",
+    "image_size": "2K"
+  }
+]

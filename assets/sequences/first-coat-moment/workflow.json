@@ -1,0 +1,62 @@
+{
+  "name": "First-Coat-Moment",
+  "description": "Öl wird auf Holz aufgetragen, zieht ein — DER Money Shot. Easter-Setting mit Oster-Brunch-Tisch",
+  "type": "seasonal",
+  "aspect_ratio": "9:16",
+  "target_duration_seconds": 15,
+  "fps": 30,
+
+  "consistency": {
+    "reference_prompt": "Warm morning light, rustic German kitchen, wooden surfaces, Easter spring decoration, photorealistic, high quality",
+    "lighting": "warm morning side-lighting, golden tones, catches wood grain",
+    "color_temperature": "warm, honey tones",
+    "negative_global": "ugly, distorted, text, watermark, logo, product cans, bottles, brand names, plastic, AI artifacts, cartoon, illustration"
+  },
+
+  "clips": [
+    {
+      "id": "clip_01_hook",
+      "type": "image",
+      "description": "Hook: Oster-Brunch-Tisch Szene, schöner Holztisch",
+      "source": "assets/sequences/oster-brunch-tisch/01-hook.png",
+      "duration_seconds": 3,
+      "effects": ["ken_burns_zoom_in"]
+    },
+    {
+      "id": "clip_02_first_coat",
+      "type": "video",
+      "description": "THE MONEY SHOT: Öl wird mit Pinsel auf Holzoberfläche aufgetragen, zieht ins Holz ein",
+      "image_prompt": "Photorealistic 9:16 close-up of a hand holding a natural bristle brush applying clear wood oil to a beautiful oak wood surface. Oil is wet and glistening on the wood, halfway applied showing contrast between dry and freshly oiled wood. Wood grain clearly visible, the oiled portion has rich warm honey color, dry portion lighter. Warm morning light from left catches the wet oil surface. Shallow depth of field. Easter spring flowers softly blurred in far background.",
+      "video_prompt": "Brush slowly applying wood oil across surface left to right, oil soaking into wood grain in real-time. The dry wood transforms to rich warm honey color as oil is absorbed. Glistening wet oil surface catches warm morning light. Satisfying, mesmerizing application moment. Camera slowly follows the brush stroke.",
+      "duration_seconds": 8,
+      "use_seconds": [0, 6],
+      "camera": "slow track following brush, close-up",
+      "effects": []
+    },
+    {
+      "id": "clip_03_result",
+      "type": "image",
+      "description": "Ergebnis: wunderschön geölter Tisch mit Oster-Brunch",
+      "source": "assets/sequences/oster-brunch-tisch/03-ergebnis.png",
+      "duration_seconds": 3,
+      "effects": ["ken_burns_zoom_out"]
+    }
+  ],
+
+  "overlays": {
+    "hook_text": { "text": "First Coat\nMoment.", "font": "Playfair Display", "position": "top_safe", "appear_at": 0.5 },
+    "scene_label": { "text": "So befriedigend.", "font": "Lora", "on_clip": "clip_02_first_coat", "appear_at": 0.5 },
+    "product_reveal": { "product": "vernis", "cutout": "product-cutouts/vernis.png", "name": "Le Tonkinois Vernis" },
+    "end_card": { "cta": "Frohe Ostern!", "logo": "brand/logo.png" }
+  },
+
+  "generation_config": {
+    "image_model": "gemini-image",
+    "image_size": "2K",
+    "video_model": "gemini-video",
+    "video_duration": 8,
+    "video_resolution": "720p",
+    "video_quality": "fast",
+    "video_aspect_ratio": "9:16"
+  }
+}

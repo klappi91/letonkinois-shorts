@@ -1,0 +1,77 @@
+{
+  "name": "Ei-Boot-Aufwendig",
+  "description": "Ei köpfen → harter Cut zu Boot auf Eigelb → Kapitäns-POV auf Eigelb-See → Dose-Reveal",
+  "type": "seasonal",
+  "aspect_ratio": "9:16",
+  "target_duration_seconds": 18,
+  "fps": 30,
+
+  "consistency": {
+    "reference_prompt": "Warm morning light, German Easter breakfast table, white tablecloth, photorealistic, cinematic quality, high detail",
+    "lighting": "warm morning side-lighting from left window, golden tones",
+    "color_temperature": "warm, golden hour tones",
+    "negative_global": "ugly, distorted, text, watermark, logo, product cans, bottles, brand names, plastic, AI artifacts, cartoon, illustration, blurry"
+  },
+
+  "clips": [
+    {
+      "id": "clip_01_crack",
+      "type": "video",
+      "description": "Hände köpfen ein Frühstücksei — Close-up, TikTok Hook",
+      "image_prompt": "Photorealistic 9:16 close-up of hands holding a butter knife about to crack open a soft-boiled egg in a white ceramic egg cup. Fingers gripping knife gently. White tablecloth, Easter decoration blurred in background. Warm morning light from left. Focus on hands and egg. Anticipation moment.",
+      "video_prompt": "Hands crack open the top of the soft-boiled egg with a butter knife, clean decisive motion. Egg top lifts off revealing bright orange yolk inside. Satisfying crack sound moment. Camera steady, close-up on hands and egg.",
+      "duration_seconds": 6,
+      "use_seconds": [0, 3],
+      "camera": "static close-up, eye-level",
+      "effects": []
+    },
+    {
+      "id": "clip_02_reveal",
+      "type": "video",
+      "description": "HARTER CUT: Boot schwimmt plötzlich auf Eigelb — WTF-Moment",
+      "image_prompt": "Photorealistic 9:16 top-down view of cracked open soft-boiled egg revealing bright orange yolk with a tiny handcrafted wooden sailboat (2-3cm) floating on the yolk surface. Beautiful oiled wood hull, small white fabric sail. Yolk looks like a golden miniature ocean. White ceramic egg cup on white tablecloth. Warm morning light.",
+      "video_prompt": "Tiny wooden sailboat gently bobbing on egg yolk, slight rotation, yolk ripples subtly. Warm light reflects off the oiled wood surface. Camera holds steady from above. Magical, unexpected moment.",
+      "duration_seconds": 6,
+      "use_seconds": [0, 4],
+      "camera": "static top-down",
+      "effects": ["vignette_subtle"]
+    },
+    {
+      "id": "clip_03_captain_pov",
+      "type": "video",
+      "description": "Perspektivwechsel: Kapitäns-POV auf dem Boot, Eigelb-See, Küche als Riesenumgebung",
+      "image_prompt": "Photorealistic 9:16 POV shot from the deck of a tiny wooden sailboat. Camera is AT boat level looking forward across a vast golden egg yolk sea. The white egg shell walls rise up like cliffs on either side. In the far background, enormously scaled kitchen items visible — giant salt shaker, massive Easter eggs like boulders, huge spring flowers like trees. Dramatic scale shift. Warm golden light reflecting off yolk surface. Cinematic, surreal, miniature world perspective.",
+      "video_prompt": "POV from tiny sailboat deck, camera gently rocking with boat motion. Golden yolk sea stretches ahead with small waves. Gigantic kitchen items loom in background. Light plays across the golden yolk surface. Magical miniature world feeling, gentle boat sway.",
+      "duration_seconds": 8,
+      "use_seconds": [0, 5],
+      "camera": "POV from boat deck, gentle rocking",
+      "effects": ["vignette_subtle"]
+    }
+  ],
+
+  "overlays": {
+    "hook_text": { "text": "Ostereier...\nanders.", "font": "Playfair Display", "position": "top_safe", "appear_at": 0.3 },
+    "scene_label": { "text": "Bon voyage.", "font": "Lora", "on_clip": "clip_03_captain_pov", "appear_at": 0.5 },
+    "product_reveal": { "product": "vernis", "cutout": "product-cutouts/vernis.png", "name": "Le Tonkinois Vernis" },
+    "end_card": { "cta": "Frohe Ostern!", "logo": "brand/logo.png" }
+  },
+
+  "audio": {
+    "music": { "style": "cinematic build-up, Easter mood, triumphant reveal", "volume": 0.3 },
+    "sfx": [
+      { "on_clip": "clip_01_crack", "sound": "sharp egg crack", "at_second": 1.0, "volume": 0.7 },
+      { "on_clip": "clip_02_reveal", "sound": "tiny splash, wonder chime", "at_second": 0.2, "volume": 0.5 },
+      { "on_clip": "clip_03_captain_pov", "sound": "ocean waves, wind, seagull distant", "at_second": 0.0, "volume": 0.4 }
+    ]
+  },
+
+  "generation_config": {
+    "image_model": "gemini-image",
+    "image_size": "2K",
+    "video_model": "gemini-video",
+    "video_duration": 8,
+    "video_resolution": "720p",
+    "video_quality": "fast",
+    "video_aspect_ratio": "9:16"
+  }
+}
