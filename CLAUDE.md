@@ -58,10 +58,10 @@ Video-Typen rotieren für Abwechslung auf dem Instagram-Kanal:
 ## Branding
 
 Übernommen von letonkinois-content:
-- **Fonts:** Lora (Headlines) + Lato (Body)
-- **Farben:** Brand Red #B50606, Warm Woods (#D4A76A, #E8B84B, #6B4226), Cream #FFF8F0
-- **Ton:** Premium & authentisch, kein Stock-Photo-Look. Deutsche Vorstadtgarten-Atmosphäre.
-- **WICHTIG:** Produkt-Dosen/Flaschen NIEMALS von Gemini generieren — immer echte Produktfotos aus dem Katalog verwenden.
+- **Fonts:** Playfair Display (Headlines), Lora (Scenes), Lato (Body)
+- **Farben:** Brand Red #B50606, Navy #1A2744, Cream #FFF8F0
+- **WICHTIG:** Produkt-Dosen/Flaschen NIEMALS von KI generieren — immer echte Produktfotos.
+- **Stil:** Wird noch gesucht. Keine Ästhetik, Beleuchtung oder Stimmung vorgeben — kreativ frei experimentieren.
 
 ## Struktur
 
@@ -152,8 +152,8 @@ Eine automatisierte Content-Pipeline für Le Tonkinois Instagram Reels & Shorts.
 - **Tech Stack:** Next.js 16 + Supabase (Auth + DB) + Vercel — keine zusätzlichen Services
 - **Auth:** Supabase Auth mit Invite-Only (Admin erstellt Accounts per Supabase Dashboard oder API)
 - **Video-Storage:** Videos bleiben in `public/videos/` (Vercel-hosted), keine Supabase Storage für Videos
-- **Branding:** Strikt nach letonkinois.de — Rot+Weiß+Playfair Display, keine "moderne Craft" Ästhetik
 - **Produktfotos:** NIEMALS KI-generierte Dosen/Flaschen — immer echte Fotos aus dem Katalog
+- **Stil:** Noch in der Findungsphase — keine ästhetischen Einschränkungen vorgeben
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:codebase/STACK.md -->

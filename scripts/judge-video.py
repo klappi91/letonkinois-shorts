@@ -70,14 +70,11 @@ Premium-Holzöle und -lacke mit maritimem Erbe. Shop: letonkinois.de (gehört zu
 - Text: #777777 (Body), #333333 (Dunkel)
 
 ### Brand-Fit Checkliste
-✓ Rot + Weiß als Hauptfarben (wie die Website)
-✓ Serif-Fonts für Headlines (Lora/Playfair Display — NICHT generische Sans-Serif)
-✓ Echte Produktfotos (niemals KI-generierte Dosen/Flaschen)
-✓ Maritime/Handwerk-Atmosphäre (Bootsdeck, Werkstatt, Garten)
-✓ Premium-Nostalgie — traditionell, nicht modern-minimalistisch
-✗ KEIN High-Tech, Start-up-Clean, Neon, Plastik
-✗ KEINE generischen Stock-Video-Vibes
-✗ KEIN Dark-Mode oder dunkle Hintergründe als Hauptästhetik
+✓ Echte Produktfotos wenn Produkte gezeigt werden (niemals KI-generierte Dosen/Flaschen)
+✓ Brand Red (#B50606) als Wiedererkennungswert wo sinnvoll
+✓ Serif-Fonts für Headlines wenn Text verwendet wird (Playfair Display / Lora)
+
+Ansonsten: Kreative Freiheit. Stil wird aktuell noch gesucht — nicht einschränken.
 """
 
 JUDGE_PROMPT = f"""\

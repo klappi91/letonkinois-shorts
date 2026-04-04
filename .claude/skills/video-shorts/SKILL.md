@@ -56,12 +56,7 @@ Jedes Short beginnt mit einer `workflow.json` — die Shot List. Erstelle sie un
   "target_duration_seconds": 15,
   "fps": 30,
 
-  "consistency": {
-    "reference_prompt": "Globaler Stil für alle Szenen...",
-    "lighting": "z.B. warm morning side-lighting from left window",
-    "color_temperature": "warm, golden hour tones",
-    "negative_global": "ugly, distorted, text, watermark, logo, product cans, bottles, brand names, plastic, AI artifacts, cartoon, illustration"
-  },
+  "consistency": {},
 
   "clips": [
     {
@@ -101,12 +96,10 @@ Jedes Short beginnt mit einer `workflow.json` — die Shot List. Erstelle sie un
 - `"type": "video"` — Veo-Clip generieren (Image-to-Video). `image_prompt` + `video_prompt` nötig.
 - `"type": "image"` — Ken Burns Standbild. Nur `image_prompt` oder `source` (Pfad zu bestehendem Bild).
 
-### Konsistenz-Regeln
+### Konsistenz (optional)
 
-Die `consistency`-Sektion gilt für ALLE Clips:
-- **reference_prompt**: Gleiche Umgebung, gleicher Stil, gleiche Dekoration
-- **lighting**: Identische Lichtbeschreibung in jedem Clip
-- **negative_global**: An jeden Prompt anhängen
+Die `consistency`-Sektion ist **optional** und nur nötig wenn mehrere Clips zusammenpassen sollen.
+In der Stilfindungsphase: Weglassen und frei prompten. Keine Beleuchtung, keinen Stil, keine Negative vorgeben.
 
 ## Schritt 3: Referenzbilder generieren
 
@@ -131,14 +124,11 @@ $HOME/.claude/skills/_image-shared/ensure_env.sh \
 
 **Kosten:** ~$0.10 pro Bild bei 2K
 
-### Prompt-Regeln für Referenzbilder
+### Prompt-Tipps für Referenzbilder
 
-- Immer `"Photorealistic 9:16"` am Anfang
-- `consistency.reference_prompt` einbauen (gleiche Umgebung)
-- `consistency.lighting` beschreiben
-- `consistency.negative_global` NICHT in den Prompt — wird separat übergeben
-- Max 25 Wörter Kernbeschreibung, dann Details
-- KEINE Produktdosen/Flaschen generieren — immer echte Fotos
+- Frei prompten — kein festes Format erzwingen
+- Einzige harte Regel: KEINE KI-generierten Produktdosen/Flaschen — immer echte Fotos
+- IMMER absolute Pfade für output-Dateien verwenden
 
 ## Schritt 4: Video-Clips generieren (Veo 3.1)
 
@@ -400,11 +390,10 @@ Agents nutzen **separate Entry Points** (`remotion/src/entries/`), um Konflikte 
 | Product Cutout | `product-cutouts/vernis.png` (echtes Foto!) |
 | Logo | `brand/logo.png` |
 
-**VERBOTEN:**
-- KI-generierte Produktdosen — IMMER echte Fotos
-- Dark Brown Backgrounds — Website ist weiß/cream
-- Amber als Akzent — Brand Red ist der Akzent
-- "Moderne Craft" Ästhetik — Le Tonkinois ist Vintage-Maritime
+**Einzige harte Regel:** KI-generierte Produktdosen/Flaschen — IMMER echte Fotos verwenden.
+
+Ansonsten: Kreativ frei. Kein Stil, keine Beleuchtung, keine Stimmung vorgegeben.
+Wir sind in der Stilfindungsphase.
 
 Vollständige Brand-Tokens: `src/lib/brand.ts`
 

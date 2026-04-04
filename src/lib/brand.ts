@@ -42,14 +42,14 @@ export const SAFE_ZONES = {
   contentSide: 80,  // px — inner content margin (for SceneLabel text)
 } as const;
 
-// === Color Grading — Golden Hour Look (per D-05, D-06, D-07) ===
-// Starting values — must be visually validated in Remotion Studio before freezing.
+// === Color Grading — OPTIONAL, nicht automatisch anwenden ===
+// Nur verwenden wenn explizit gewünscht. Kein Default-Look aufzwingen.
 export const COLOR_GRADE = {
-  sepia: 0.15,       // 0-1 range — slight sepia warmth
-  saturate: 1.2,     // 1.0 = unchanged; >1 = warmer/richer
-  brightness: 1.05,  // 1.0 = unchanged; slight lift
-  contrast: 1.08,    // 1.0 = unchanged; micro contrast boost
-  hueRotate: 5,      // degrees; slight warm shift
+  sepia: 0.15,
+  saturate: 1.2,
+  brightness: 1.05,
+  contrast: 1.08,
+  hueRotate: 5,
 } as const;
 
 // === Typography — font names only (per research: loadFont stays in remotion/src/utils/fonts.ts) ===
@@ -59,20 +59,8 @@ export const FONTS = {
   body: "Lato",                  // Badges, subtitles, UI
 } as const;
 
-// === Forbidden Aesthetics — documented for AI prompts and code review ===
-export const FORBIDDEN_AESTHETICS = [
-  "Dark Brown background (#3E2723) — Website ist weiß, nicht dunkel",
-  "Amber (#D4A76A) als Akzent — Brand Red ist der Akzent, nicht Amber",
-  "Lora als Headline — Playfair Display fuer Headlines",
-  "Moderne Craft-Aesthetik — Le Tonkinois ist Vintage-Maritime Heritage",
-  "KI-generierte Produktdosen — immer echte Fotos aus dem Asset-Katalog",
-  "Dunkle/moody Hintergruende fuer Produktszenen — Cream (#FFF8F0) oder Weiß verwenden",
+// === Brand Rules — nur harte Marken-Regeln, KEINE kreativen Einschränkungen ===
+export const BRAND_RULES = [
+  "KI-generierte Produktdosen/Flaschen — immer echte Fotos aus dem Asset-Katalog",
+  "Playfair Display fuer Headlines, Lora fuer Scene Labels, Lato fuer Body",
 ] as const;
-
-// === Gemini Prompt Fragments — reusable for consistent AI generation ===
-export const PROMPT_FRAGMENTS = {
-  lighting: "side lighting from the left, golden hour warmth, honey tones",
-  woodStyle: "German suburban backyard atmosphere, realistic wood texture, no new garden elements added",
-  colorGrade: "warm color temperature, golden afternoon light, no oversaturation",
-  forbidden: "no product cans or bottles, no logo, no text",
-} as const;
